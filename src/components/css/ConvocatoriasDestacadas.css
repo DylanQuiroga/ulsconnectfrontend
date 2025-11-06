@@ -1,0 +1,126 @@
+.convocatorias-section {
+  padding: 80px 60px;
+  background-color: #ffffff;
+}
+
+/* Título principal */
+.convocatorias-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: left;
+  margin-bottom: 50px;
+  color: #222;
+  position: relative;
+}
+
+/* Título con ligera inclinación */
+.convocatorias-title::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background-color: #16a34a;
+  transform: skewX(-25deg);
+}
+
+/* Contenedor de las tarjetas */
+.convocatorias-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+/* Tarjeta individual */
+.convocatoria-card {
+  background: #f9fafb;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  flex: 1 1 calc(33.33% - 30px);
+  min-width: 280px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.convocatoria-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.convocatoria-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.convocatoria-categoria {
+  margin: 15px 20px 5px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #16a34a;
+  text-transform: uppercase;
+}
+
+.convocatoria-titulo {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 20px 10px 20px;
+  color: #111;
+}
+
+.convocatoria-descripcion {
+  font-size: 1rem;
+  color: #555;
+  margin: 0 20px 20px 20px;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+/* Botón */
+.btn-saber-mas {
+  background-color: #16a34a;
+  color: white;
+  border: none;
+  margin: 0 20px 20px 20px;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-saber-mas:hover {
+  background-color: #128a3f;
+}
+
+/* 📱 Responsivo */
+@media (max-width: 1024px) {
+  .convocatoria-card {
+    flex: 1 1 calc(50% - 20px);
+  }
+}
+
+@media (max-width: 600px) {
+  .convocatorias-section {
+    padding: 60px 20px;
+  }
+
+  .convocatorias-title {
+    text-align: center;
+  }
+
+  .convocatorias-grid {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .convocatoria-card {
+    flex: 1 1 100%;
+  }
+}
