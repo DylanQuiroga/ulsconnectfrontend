@@ -8,13 +8,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 70px; /* para que no tape el navbar */
+  margin-top: 70px;
+  /* para que no tape el navbar */
   z-index: 0;
 }
 
 /* Capa oscura encima de la imagen */
 .hero-overlay {
-  position: absolute;
+  position: relative;
   inset: 0;
   background: rgba(0, 0, 0, 0.35);
   display: flex;
@@ -28,7 +29,7 @@
   position: relative;
   text-align: left;
   color: white;
-  padding: 20px;
+  padding: 200px;
   max-width: 800px;
   z-index: 1;
 }
@@ -89,6 +90,10 @@
 
 /* Responsivo */
 @media (max-width: 768px) {
+  .hero-content {
+    padding: 20px;
+  }
+
   .hero-section {
     height: 70vh;
   }
