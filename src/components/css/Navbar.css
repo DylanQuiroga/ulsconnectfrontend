@@ -166,6 +166,19 @@
     transform: translateY(-200%);
     opacity: 0;
     transition: all 0.3s ease-in-out;
+    box-sizing: border-box;
+  }
+
+  .nav-links li {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .nav-links li a {
+    width: auto;
+    min-width: 200px;
+    text-align: center;
   }
 
   .nav-links li a::after {
@@ -187,10 +200,12 @@
     gap: 12px;
     margin-top: 12px;
     width: 100%;
+    align-items: center;
   }
 
   .mobile-buttons .btn-login,
   .mobile-buttons .btn-register {
-    width: 100%;
+    width: 250px;
+    box-sizing: border-box;
   }
 }
