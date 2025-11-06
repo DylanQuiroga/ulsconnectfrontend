@@ -3,7 +3,7 @@ import "./css/HeroSection.css";
 
 const HeroSection: React.FC = () => {
   return (
-    <section className="hero">
+    <section className="hero-section">
       <div className="hero-overlay">
         <div className="hero-content">
           <h1>Conecta, ayuda, transforma: Tu viaje de voluntariado comienza aquí</h1>
