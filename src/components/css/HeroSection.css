@@ -55,7 +55,7 @@
 }
 
 .btn-green {
-  background: #16a34a;
+  background: #0160b4;
   color: white;
   border: none;
   padding: 12px 24px;
@@ -64,11 +64,13 @@
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s ease;
+
+  &:hover {
+    background: #222b45;
+  }
 }
 
-.btn-green:hover {
-  background: #128a3f;
-}
+
 
 .btn-white {
   background: white;

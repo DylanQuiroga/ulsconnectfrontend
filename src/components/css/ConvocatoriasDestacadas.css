@@ -11,19 +11,21 @@
   margin-bottom: 50px;
   color: #222;
   position: relative;
+
+  /* Título con ligera inclinación */
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background-color: #fe6970;
+    transform: skewX(-25deg);
+  }
 }
 
-/* Título con ligera inclinación */
-.convocatorias-title::after {
-  content: "";
-  position: absolute;
-  bottom: -10px;
-  left: 0;
-  width: 60px;
-  height: 4px;
-  background-color: #16a34a;
-  transform: skewX(-25deg);
-}
+
 
 /* Contenedor de las tarjetas */
 .convocatorias-grid {
@@ -45,12 +47,14 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  }
 }
 
-.convocatoria-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-}
+
 
 .convocatoria-img {
   width: 100%;
@@ -62,7 +66,7 @@
   margin: 15px 20px 5px 20px;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #16a34a;
+  color: #0160b4;
   text-transform: uppercase;
 }
 
@@ -83,7 +87,7 @@
 
 /* Botón */
 .btn-saber-mas {
-  background-color: #16a34a;
+  background-color: #0160b4;
   color: white;
   border: none;
   margin: 0 20px 20px 20px;
@@ -93,11 +97,13 @@
   font-weight: 600;
   cursor: pointer;
   transition: background 0.2s ease;
+
+  &:hover {
+    background-color: #128a3f;
+  }
 }
 
-.btn-saber-mas:hover {
-  background-color: #128a3f;
-}
+
 
 /* 📱 Responsivo */
 @media (max-width: 1024px) {
