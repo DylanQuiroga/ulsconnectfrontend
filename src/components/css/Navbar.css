@@ -1,12 +1,18 @@
 /* --- Estilos generales del navbar --- */
 .navbar {
   background-color: white;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   position: relative;
   width: 100%;
   top: 0;
   z-index: 1000;
   font-family: Arial, sans-serif;
+
+  img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
 }
 
 .navbar-container {
@@ -22,7 +28,8 @@
 .logo {
   font-size: 1.8rem;
   font-weight: bold;
-  color: #16a34a; /* verde */
+  color: #16a34a;
+  /* verde */
 }
 
 /* --- Enlaces del menú --- */
@@ -40,7 +47,7 @@
 }
 
 .nav-links li a:hover {
-  color: #16a34a;
+  color: #fe6970;
 }
 
 /* --- Botones (desktop) --- */
@@ -64,17 +71,17 @@
 }
 
 .btn-register {
-  background: #16a34a;
+  background: #0160b4;
   border: none;
   color: white;
   padding: 8px 14px;
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s ease;
-}
 
-.btn-register:hover {
-  background: #128a3f;
+  &:hover {
+    background: #222b45;
+  }
 }
 
 /* --- Botón hamburguesa --- */

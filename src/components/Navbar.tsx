@@ -7,7 +7,7 @@ const Navbar: React.FC = () => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <div className="logo">Souls</div>
+        <div className="logo"><img src="/src/public/logo_souls.png" alt="logo souls" style={{ height: "50px" }}></img></div>
 
         <button
           className="menu-toggle"
