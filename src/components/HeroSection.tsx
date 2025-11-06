@@ -3,16 +3,72 @@ import "./css/HeroSection.css";
 
 const HeroSection: React.FC = () => {
   return (
-    <section className="hero-section">
-      <div className="hero-overlay">
-        <div className="hero-content">
-          <h1>Conecta, ayuda, transforma: Tu viaje de voluntariado comienza aquí</h1>
-          <p>Descubre cómo puedes marcar la diferencia en la comunidad junto a Souls y la Universidad de La Serena</p>
+    <section className="hero-section" aria-label="Sección principal">
+      <div className="hero-overlay" aria-hidden="true" />
+
+      <div className="hero-inner">
+        <div className="hero-left">
+          <span className="hero-kicker">Voluntariado Estudiantil</span>
+
+          <h1 className="hero-title">
+            Conecta con oportunidades de voluntariado que transforman tu comunidad
+          </h1>
+
+          <p className="hero-subtitle">
+            Encuentra convocatorias, proyectos y eventos en la Universidad de La Serena.
+            Participar es fácil — inscríbete y aporta con tus habilidades.
+          </p>
+
           <div className="hero-buttons">
-            <button className="btn-green">Ver Convocatorias</button>
-            <button className="btn-white">Únete ahora</button>
+            <button
+              className="btn-primary"
+              onClick={() => {
+                /* navegar a convocatorias */
+              }}
+              aria-label="Ver convocatorias"
+            >
+              Ver convocatorias
+            </button>
+
+            <button
+              className="btn-ghost"
+              onClick={() => {
+                /* navegar a registro */
+              }}
+              aria-label="Registrarse"
+            >
+              Registrarse
+            </button>
           </div>
         </div>
+
+        <aside className="hero-right" aria-label="Información destacada">
+          <div className="card">
+            <div className="card-header">
+              <strong>Participa hoy</strong>
+              <span className="card-sub">Próximas convocatorias</span>
+            </div>
+
+            <ul className="card-list" aria-hidden="false">
+              <li>
+                <strong>Campaña Ambiental</strong>
+                <span> — 12 mayo</span>
+              </li>
+              <li>
+                <strong>Apoyo Escolar</strong>
+                <span> — 18 mayo</span>
+              </li>
+              <li>
+                <strong>Jornada Salud</strong>
+                <span> — 25 mayo</span>
+              </li>
+            </ul>
+
+            <div className="card-actions">
+              <button className="card-btn">Ver todas</button>
+            </div>
+          </div>
+        </aside>
       </div>
     </section>
   );
