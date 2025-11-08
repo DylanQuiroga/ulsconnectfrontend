@@ -8,7 +8,7 @@ const RegisterSection: React.FC = () => {
         <div className="register-content">
           <h1 className="register-title">Únete a Souls</h1>
           <p className="register-subtitle">
-            Crea tu cuenta y comienza tu viaje de voluntariado con la Universidad de La Serena
+            Crea tu cuenta y comienza tu viaje de voluntariado con Souls.
           </p>
 
           <form className="register-form">

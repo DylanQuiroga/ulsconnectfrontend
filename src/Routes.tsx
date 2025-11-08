@@ -2,14 +2,14 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 
 // Importa las páginas o secciones
-import HeroSection from "./components/HeroSection";
-import RegisterSection from "./components/RegisterSection";
+import Home from "./pages/Home";
+import Register from "./pages/Register";
 
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
-      <Route path="/" element={<HeroSection />} />
-      <Route path="/register" element={<RegisterSection />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/register" element={<Register/>} />
     </Routes>
   );
 };

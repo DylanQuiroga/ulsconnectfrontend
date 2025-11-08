@@ -1,7 +1,9 @@
 import React from "react";
 import "./css/HeroSection.css";
+import { useNavigate } from "react-router-dom";
 
 const HeroSection: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <section className="hero-section" aria-label="Sección principal">
       <div className="hero-overlay" aria-hidden="true" />
@@ -29,12 +31,9 @@ const HeroSection: React.FC = () => {
             >
               Ver convocatorias
             </button>
-
             <button
               className="btn-ghost"
-              onClick={() => {
-                /* navegar a registro */
-              }}
+              onClick={() => navigate("/register")}
               aria-label="Registrarse"
             >
               Registrarse
