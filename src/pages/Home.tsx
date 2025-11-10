@@ -8,9 +8,9 @@ const Home: React.FC = () => {
   return (
     <>
       <HeroSection />
-      <VoluntariosEnAccion />
       <ConvocatoriasDestacadas />
       <SobreSouls />
+      <VoluntariosEnAccion />
     </>
   );
 };

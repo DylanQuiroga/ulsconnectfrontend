@@ -1,22 +1,22 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
 import Footer from "./components/Footer";
+import AppRoutes from "./Routes";
 
 function App() {
+  const location = useLocation();
+  const hideNavAndFooter = ["/register", "/login"].includes(location.pathname);
   return (
-    <Router>
-      <div className="flex flex-col min-h-screen">
-        <Navbar />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
-    </Router>
+    <div className="flex flex-col min-h-screen">
+      {!hideNavAndFooter && <Navbar />}
+      <main className="flex-grow">
+        <AppRoutes/>
+      </main>
+      {!hideNavAndFooter && <Footer />}
+    </div>
   );
 }
 
 export default App;
+
+
