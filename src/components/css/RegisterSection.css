@@ -64,11 +64,11 @@
 }
 
 .register-form input:focus {
-  box-shadow: 0 0 0 2px #16a34a;
+  box-shadow: 0 0 0 2px var(--blue-600);
 }
 
-.btn-green {
-  background: #16a34a;
+.register__btn {
+  background: var(--blue-700);
   color: white;
   border: none;
   padding: 12px;
@@ -79,8 +79,8 @@
   transition: background 0.2s ease;
 }
 
-.btn-green:hover {
-  background: #128a3f;
+.register__btn:hover {
+  background: var(--blue-600);
 }
 
 .register-login {
@@ -90,7 +90,7 @@
 }
 
 .register-login a {
-  color: #16a34a;
+  color: var(--pink-600);
   text-decoration: none;
   font-weight: 600;
 }

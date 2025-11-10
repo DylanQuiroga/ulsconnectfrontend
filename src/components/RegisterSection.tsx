@@ -16,7 +16,7 @@ const RegisterSection: React.FC = () => {
             <input type="email" placeholder="Correo institucional" required />
             <input type="password" placeholder="Contraseña" required />
             <input type="password" placeholder="Confirmar contraseña" required />
-            <button type="submit" className="btn-green">Registrarme</button>
+            <button type="submit" className="register__btn">Registrarme</button>
           </form>
 
           <p className="register-login">

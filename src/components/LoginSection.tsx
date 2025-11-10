@@ -14,7 +14,7 @@ const LoginSection: React.FC = () => {
           <form className="login-form">
             <input type="email" placeholder="Correo institucional" required />
             <input type="password" placeholder="Contraseña" required />
-            <button type="submit" className="btn-green">Iniciar sesión</button>
+            <button type="submit" className="login__btn">Iniciar sesión</button>
           </form>
 
           <p className="login-register">
