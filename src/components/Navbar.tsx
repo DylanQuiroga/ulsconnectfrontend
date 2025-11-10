@@ -30,7 +30,7 @@ const Navbar: React.FC = () => {
 
 
         <div className="nav-buttons">
-          <button className="btn-login">Inicio de sesión</button>
+          <button className="btn-login" onClick={() => navigate("/login")}>Inicio de sesión</button>
           <button className="btn-register" onClick={() => navigate("/register")}>Registrarse</button>
         </div>
       </div>

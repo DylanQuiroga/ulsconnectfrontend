@@ -19,7 +19,7 @@
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(110deg, rgba(1, 96, 180, 0.72) 0%, rgba(254, 105, 112, 0.14) 55%, rgba(0, 0, 0, 0.12) 100%);
+  background: linear-gradient(110deg, rgba(1, 96, 180, 0.72) 0%, rgba(254, 105, 112, 0.61) 55%, rgba(117, 23, 23, 0.59) 100%);
   z-index: 1;
 }
 

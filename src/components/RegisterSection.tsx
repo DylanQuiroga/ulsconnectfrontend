@@ -20,7 +20,7 @@ const RegisterSection: React.FC = () => {
           </form>
 
           <p className="register-login">
-            ¿Ya tienes cuenta? <a href="#">Inicia sesión</a>
+            ¿Ya tienes cuenta? <a href="/login">Inicia sesión</a>
           </p>
         </div>
       </div>
