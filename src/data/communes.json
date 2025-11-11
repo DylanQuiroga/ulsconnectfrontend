@@ -1,0 +1,17 @@
+{
+  "communes": [
+    {"value": "andacollo", "label": "Andacollo"},
+    {"value": "canela", "label": "Canela"},
+    {"value": "combarbala", "label": "Combarbalá"},
+    {"value": "coquimbo", "label": "Coquimbo"},
+    {"value": "illapel", "label": "Illapel"},
+    {"value": "la_higuera", "label": "La Higuera"},
+    {"value": "la_serena", "label": "La Serena"},
+    {"value": "los_vilos", "label": "Los Vilos"},
+    {"value": "monte_patria", "label": "Monte Patria"},
+    {"value": "ovalle", "label": "Ovalle"},
+    {"value": "rio_hurtado", "label": "Río Hurtado"},
+    {"value": "punitaqui", "label": "Punitaqui"},
+    {"value": "otros", "label": "Otros"}
+  ]
+}

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./css/Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
+import logo_souls from "../public/logo_souls.png";
 
 
 const Navbar: React.FC = () => {
@@ -10,7 +11,7 @@ const Navbar: React.FC = () => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        <div className="logo"><img src="/src/public/logo_souls.png" alt="logo souls" style={{ height: "50px" }}></img></div>
+        <div className="logo"><img src={logo_souls} alt="logo souls" style={{ height: "50px" }}></img></div>
 
         <button
           className="menu-toggle"
