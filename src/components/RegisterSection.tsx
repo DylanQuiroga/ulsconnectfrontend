@@ -1,40 +1,108 @@
 import React, {useState} from "react";
+import axios from "axios";
 import "./css/RegisterSection.css";
+
+// Importar los datos desde los archivos JSON
+import careersData from "../data/careers.json";
+import communesData from "../data/communes.json";
+
+// Interfaz para los datos del formulario
+interface FormData {
+  fullName: string;
+  age: string;
+  phone: string;
+  email: string;
+  career: string;
+  commune: string;
+  causes: string[];
+}
 
 const RegisterSection: React.FC = () => {
   const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(""); // Limpiar errores previos
+    setError("");
+    setSuccess(false);
+    setLoading(true);
 
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
-    const age = formData.get("age");
-    
-    // Validar que la edad no sea negativa
-    if (age && parseInt(age as string) < 0) {
+    const age = formData.get("age") as string;
+
+    // Validaciones
+    if (age && parseInt(age) < 0) {
       setError("La edad no puede ser negativa");
+      setLoading(false);
       return;
     }
 
-    // Validar que la edad esté en un rango razonable
-    if (age && (parseInt(age as string) < 0 || parseInt(age as string) > 100)) {
+    if (age && (parseInt(age) < 0 || parseInt(age) > 100)) {
       setError("Por favor ingresa una edad válida (0-100 años)");
+      setLoading(false);
       return;
     }
 
-    // Validar correo userena.cl
     if (!email.endsWith('@userena.cl')) {
       setError("Por favor ingresa un correo institucional válido (@userena.cl)");
+      setLoading(false);
       return;
     }
 
-    // Si pasa todas las validaciones, procesar el formulario
-    console.log("Formulario válido, procesando...");
-    // Aquí iría tu lógica para enviar los datos al servidor
-  };
+    // Preparar datos para enviar
+    const causes = formData.getAll("causes") as string[];
+    
+    const submitData: FormData = {
+      fullName: formData.get("fullName") as string,
+      age: age,
+      phone: formData.get("phone") as string,
+      email: email,
+      career: formData.get("career") as string,
+      commune: formData.get("commune") as string,
+      causes: causes
+    };
 
+    try {
+      // Simular petición al backend con Axios
+      const response = await axios.post('https://jsonplaceholder.typicode.com/posts', submitData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        timeout: 10000, // 10 segundos timeout
+      });
+
+      // Simular un delay para ver mejor el loading (opcional)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      console.log("Respuesta del servidor:", response.data);
+      setSuccess(true);
+      
+      // Opcional: Resetear el formulario
+      (e.target as HTMLFormElement).reset();
+
+    } catch (error) {
+      console.error("Error al enviar el formulario:", error);
+      
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          // El servidor respondió con un código de error
+          setError(`Error del servidor: ${error.response.status} - ${error.response.data?.message || 'Intenta nuevamente'}`);
+        } else if (error.request) {
+          // La petición fue hecha pero no se recibió respuesta
+          setError("No se pudo conectar con el servidor. Verifica tu conexión a internet.");
+        } else {
+          // Algo pasó en la configuración de la petición
+          setError("Error al configurar la petición: " + error.message);
+        }
+      } else {
+        setError("Error inesperado: " + (error as Error).message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section className="register-section">
@@ -44,6 +112,34 @@ const RegisterSection: React.FC = () => {
           <p className="register-subtitle">
             Crea tu cuenta y comienza tu viaje de voluntariado con Souls.
           </p>
+
+          {/* Mensaje de éxito */}
+          {success && (
+            <div style={{
+              backgroundColor: '#d4edda',
+              color: '#155724',
+              padding: '12px',
+              borderRadius: '4px',
+              marginBottom: '16px',
+              border: '1px solid #c3e6cb'
+            }}>
+              ¡Registro exitoso! Te contactaremos pronto.
+            </div>
+          )}
+
+          {/* Mensaje de error */}
+          {error && (
+            <div style={{
+              backgroundColor: '#f8d7da',
+              color: '#721c24',
+              padding: '12px',
+              borderRadius: '4px',
+              marginBottom: '16px',
+              border: '1px solid #f5c6cb'
+            }}>
+              {error}
+            </div>
+          )}
 
           <form className="register-form" onSubmit={handleSubmit}>
             <div className="register-grid">
@@ -55,6 +151,7 @@ const RegisterSection: React.FC = () => {
                   type="text"
                   placeholder="Ingresa tu nombre y apellido"
                   required
+                  disabled={loading}
                 />
               </div>
 
@@ -69,6 +166,7 @@ const RegisterSection: React.FC = () => {
                   max="100"
                   step="1"
                   required
+                  disabled={loading}
                 />
               </div>
 
@@ -79,6 +177,7 @@ const RegisterSection: React.FC = () => {
                   name="phone"
                   type="tel"
                   placeholder="+56 9 1234 5678"
+                  disabled={loading}
                 />
               </div>
 
@@ -88,131 +187,48 @@ const RegisterSection: React.FC = () => {
                   id="email"
                   name="email"
                   type="email"
-                  pattern="[a-zA-Z0-9._%+-]+@userena\.cl"
+                  pattern="[a-zA-Z0-9._%+\-]+@userena\.cl"
                   placeholder="nombre@userena.cl"
                   required
+                  disabled={loading}
                 />
               </div>
 
               <div className="register-field">
                 <label htmlFor="career">Carrera</label>
-                <select id="career" name="career" defaultValue="">
+                <select 
+                  id="career" 
+                  name="career" 
+                  defaultValue=""
+                  disabled={loading}
+                >
                   <option value="" disabled>
                     Selecciona tu carrera
                   </option>
-                  <option value="administracion_publica">
-                    Administración Pública
-                  </option>
-                  <option value="arquitectura">Arquitectura</option>
-                  <option value="auditoria">Auditoría</option>
-                  <option value="derecho">Derecho</option>
-                  <option value="diseño">Diseño</option>
-                  <option value="enfermeria">Enfermería</option>
-                  <option value="ingenieria_administracion_empresas">
-                    Ingeniería en Administración de Empresas
-                  </option>
-                  <option value="ingenieria_biotecnologia_mencion_alimentos_procesos_sustentables">
-                    Ingeniería en Biotecnología con mención Alimentos o Procesos
-                    Sustentables
-                  </option>
-                  <option value="ingenieria_civil">Ingeniería Civil</option>
-                  <option value="ingenieria_civil_ambiental">
-                    Ingeniería Civil Ambiental
-                  </option>
-                  <option value="ingenieria_civil_computacion_informatica">
-                    Ingeniería Civil en Computación e Informática
-                  </option>
-                  <option value="ingenieria_civil_industrial">
-                    Ingeniería Civil Industrial
-                  </option>
-                  <option value="ingenieria_civil_mecanica">
-                    Ingeniería Civil Mecánica
-                  </option>
-                  <option value="ingenieria_civil_minas">
-                    Ingeniería Civil de Minas
-                  </option>
-                  <option value="ingenieria_comercial">
-                    Ingeniería Comercial
-                  </option>
-                  <option value="ingenieria_computacion">
-                    Ingeniería en Computación 💀
-                  </option>
-                  <option value="ingenieria_construcción">
-                    Ingeniería en Construcción
-                  </option>
-                  <option value="ingenieria_mecanica">
-                    Ingeniería Mecánica
-                  </option>
-                  <option value="ingenieria_minas">Ingeniería de Minas</option>
-                  <option value="kinesiologia">Kinesiología</option>
-                  <option value="licenciatura_astronomia">
-                    Licenciatura en Astronomía
-                  </option>
-                  <option value="licenciatura_musica">
-                    Licenciatura en Música
-                  </option>
-                  <option value="medicina">Medicina</option>
-                  <option value="odontologia">Odontología</option>
-                  <option value="pedagogia_biologia_ciencias_naturales">
-                    Pedagogía en Biología y Ciencias Naturales
-                  </option>
-                  <option value="pedagogia_castellano_filosofia">
-                    Pedagogía en Castellano y Filosofía
-                  </option>
-                  <option value="pedagogia_educacion_diferencial">
-                    Pedagogía en Educación Diferencial
-                  </option>
-                  <option value="pedagogia_educacion_general_basica_laserena">
-                    Pedagogía en Educación General Básica (La Serena)
-                  </option>
-                  <option value="pedagogia_educacion_general_basica_ovalle">
-                    Pedagogía en Educación General Básica (Ovalle)
-                  </option>
-                  <option value="pedagogia_educacion_musical">
-                    Pedagogía en Educación Musical
-                  </option>
-                  <option value="pedagogia_educacion_parvularia">
-                    Pedagogía en Educación Parvularia
-                  </option>
-                  <option value="pedagogia_historia_geografia">
-                    Pedagogía en Historia y Geografía
-                  </option>
-                  <option value="pedagogia_ingles">Pedagogía en Inglés</option>
-                  <option value="pedagogia_matematicas">
-                    Pedagogía en Matemáticas
-                  </option>
-                  <option value="pedagogia_matematias_fisica">
-                    Pedagogía en Matemáticas y Física
-                  </option>
-                  <option value="periodismo">Periodismo</option>
-                  <option value="psicologia">Psicología</option>
-                  <option value="quimica">Química</option>
-                  <option value="quimica_y_farmacia">Química y Farmacia</option>
-                  <option value="traduccion_ingles_español">
-                    Traducción Inglés-Español
-                  </option>
+                  {careersData.careers.map((career) => (
+                    <option key={career.value} value={career.value}>
+                      {career.label}
+                    </option>
+                  ))}
                 </select>
               </div>
 
               <div className="register-field">
                 <label htmlFor="commune">Comuna de residencia</label>
-                <select id="commune" name="commune" defaultValue="">
+                <select 
+                  id="commune" 
+                  name="commune" 
+                  defaultValue=""
+                  disabled={loading}
+                >
                   <option value="" disabled>
                     Selecciona tu comuna
                   </option>
-                  <option value="andacollo">Andacollo</option>
-                  <option value="canela">Canela</option>
-                  <option value="combarbala">Combarbalá</option>
-                  <option value="coquimbo">Coquimbo</option>
-                  <option value="illapel">Illapel</option>
-                  <option value="la_higuera">La Higuera</option>
-                  <option value="la_serena">La Serena</option>
-                  <option value="los_vilos">Los Vilos</option>
-                  <option value="monte_patria">Monte Patria</option>
-                  <option value="ovalle">Ovalle</option>
-                  <option value="rio_hurtado">Río Hurtado</option>
-                  <option value="punitaqui">Punitaqui</option>
-                  <option value="otros">Otros</option>
+                  {communesData.communes.map((commune) => (
+                    <option key={commune.value} value={commune.value}>
+                      {commune.label}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -231,7 +247,12 @@ const RegisterSection: React.FC = () => {
                 <label
                   style={{ display: "flex", alignItems: "center", gap: 8 }}
                 >
-                  <input type="checkbox" name="causes" value="infantes" />{" "}
+                  <input 
+                    type="checkbox" 
+                    name="causes" 
+                    value="infantes" 
+                    disabled={loading}
+                  />{" "}
                   Infantes
                 </label>
                 <label
@@ -241,13 +262,19 @@ const RegisterSection: React.FC = () => {
                     type="checkbox"
                     name="causes"
                     value="adultos-mayores"
+                    disabled={loading}
                   />{" "}
                   Adultos Mayores
                 </label>
                 <label
                   style={{ display: "flex", alignItems: "center", gap: 8 }}
                 >
-                  <input type="checkbox" name="causes" value="medio-ambiente" />{" "}
+                  <input 
+                    type="checkbox" 
+                    name="causes" 
+                    value="medio-ambiente" 
+                    disabled={loading}
+                  />{" "}
                   Medio Ambiente
                 </label>
               </div>
@@ -257,8 +284,9 @@ const RegisterSection: React.FC = () => {
               type="submit"
               className="register__btn"
               style={{ marginTop: 18 }}
+              disabled={loading}
             >
-              Enviar registro
+              {loading ? "Enviando..." : "Enviar registro"}
             </button>
           </form>
 
