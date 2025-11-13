@@ -177,6 +177,7 @@ const RegisterSection: React.FC = () => {
 
           <form className="register-form" onSubmit={handleSubmit}>
             <div className="register-grid">
+              {/* Fila 1: Nombre y Edad */}
               <div className="register-field">
                 <label htmlFor="fullName">Nombre completo</label>
                 <input
@@ -204,17 +205,7 @@ const RegisterSection: React.FC = () => {
                 />
               </div>
 
-              <div className="register-field">
-                <label htmlFor="phone">Teléfono de contacto</label>
-                <input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  placeholder="+56 9 1234 5678"
-                  disabled={loading}
-                />
-              </div>
-
+              {/* Fila 2: Email y Teléfono */}
               <div className="register-field">
                 <label htmlFor="email">Correo institucional</label>
                 <input
@@ -228,6 +219,47 @@ const RegisterSection: React.FC = () => {
                 />
               </div>
 
+              <div className="register-field">
+                <label htmlFor="phone">Teléfono de contacto</label>
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  placeholder="+56 9 1234 5678"
+                  disabled={loading}
+                />
+              </div>
+
+              {/* Fila 3: Contraseña y Confirmar */}
+              <div className="register-field">
+                <label htmlFor="password">Contraseña</label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="Crea una contraseña (mín. 8 caracteres)"
+                  required
+                  disabled={loading}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+
+              <div className="register-field">
+                <label htmlFor="confirmPassword">Confirmar contraseña</label>
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  placeholder="Confirma tu contraseña"
+                  required
+                  disabled={loading}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </div>
+
+              {/* Fila 4: Carrera y Comuna */}
               <div className="register-field">
                 <label htmlFor="career">Carrera</label>
                 <select
@@ -266,8 +298,8 @@ const RegisterSection: React.FC = () => {
                 </select>
               </div>
 
-              {/* campo de dirección */}
-              <div className="register-field">
+              {/* Fila 5: Dirección (span completo) */}
+              <div className="register-field" style={{ gridColumn: "1 / -1" }}>
                 <label htmlFor="direccion">Dirección</label>
                 <input
                   id="direccion"
@@ -275,35 +307,6 @@ const RegisterSection: React.FC = () => {
                   type="text"
                   placeholder="Calle, número, depto/casa"
                   disabled={loading}
-                />
-              </div>
-
-              {/* campos de contraseña */}
-              <div className="register-field">
-                <label htmlFor="password">Contraseña</label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  placeholder="Crea una contraseña (mín. 8 caracteres)"
-                  required
-                  disabled={loading}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-
-              <div className="register-field">
-                <label htmlFor="confirmPassword">Confirmar contraseña</label>
-                <input
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  type="password"
-                  placeholder="Confirma tu contraseña"
-                  required
-                  disabled={loading}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
                 />
               </div>
             </div>
