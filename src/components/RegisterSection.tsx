@@ -1,6 +1,7 @@
-import React, {useState} from "react";
-import axios from "axios";
+import React, { useState } from "react";
+import api from "../services/api";
 import "./css/RegisterSection.css";
+import axios from "axios";
 
 // Importar los datos desde los archivos JSON
 import careersData from "../data/careers.json";
@@ -8,19 +9,27 @@ import communesData from "../data/communes.json";
 
 // Interfaz para los datos del formulario
 interface FormData {
-  fullName: string;
-  age: string;
-  phone: string;
+  nombreCompleto: string;
+  edad: string;
+  telefono: string;
+  contrasena: string;
   email: string;
-  career: string;
-  commune: string;
-  causes: string[];
+  carrera: string;
+  comuna: string;
+  direccion: string;
+  causas: string[];
+  status: string;
+
 }
 
 const RegisterSection: React.FC = () => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
+
+  // nuevos estados para contraseña
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,16 +39,16 @@ const RegisterSection: React.FC = () => {
 
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
-    const age = formData.get("age") as string;
+    const edad = formData.get("edad") as string;
 
     // Validaciones
-    if (age && parseInt(age) < 0) {
+    if (edad && parseInt(edad) < 0) {
       setError("La edad no puede ser negativa");
       setLoading(false);
       return;
     }
 
-    if (age && (parseInt(age) < 0 || parseInt(age) > 100)) {
+    if (edad && (parseInt(edad) < 0 || parseInt(edad) > 100)) {
       setError("Por favor ingresa una edad válida (0-100 años)");
       setLoading(false);
       return;
@@ -51,49 +60,74 @@ const RegisterSection: React.FC = () => {
       return;
     }
 
-    // Preparar datos para enviar
-    const causes = formData.getAll("causes") as string[];
-    
+    // validar contraseñas
+    if (!password || !confirmPassword) {
+      setError("Ingresa y confirma la contraseña.");
+      setLoading(false);
+      return;
+    }
+    if (password.length < 8) {
+      setError("La contraseña debe tener al menos 8 caracteres.");
+      setLoading(false);
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Las contraseñas no coinciden.");
+      setLoading(false);
+      return;
+    }
+
+    // Preparar datos para enviar (manteniendo los campos del formulario)
+    const causas = formData.getAll("causes") as string[];
+
     const submitData: FormData = {
-      fullName: formData.get("fullName") as string,
-      age: age,
-      phone: formData.get("phone") as string,
+      nombreCompleto: formData.get("fullName") as string,
+      edad: edad,
+      telefono: formData.get("phone") as string,
       email: email,
-      career: formData.get("career") as string,
-      commune: formData.get("commune") as string,
-      causes: causes
+      carrera: formData.get("career") as string,
+      comuna: formData.get("commune") as string,
+      direccion: formData.get("direccion") as string, // <-- añadido
+      causas: causas,
+      contrasena: password,
+      status: "pendiente"
     };
 
     try {
-      // Simular petición al backend con Axios
-      const response = await axios.post('https://jsonplaceholder.typicode.com/posts', submitData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        timeout: 10000, // 10 segundos timeout
-      });
+      const payload = {
+        nombre: submitData.nombreCompleto,
+        correoUniversitario: submitData.email,
+        contrasena: submitData.contrasena,
+        status: "pendiente",
+        rol: "estudiante",
+        edad: submitData.edad,
+        telefono: submitData.telefono,
+        carrera: submitData.carrera,
+        comuna: submitData.comuna,
+        direccion: submitData.direccion, // <-- añadido
+        intereses: submitData.causas
+      };
 
-      // Simular un delay para ver mejor el loading (opcional)
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await api.post("/signup", payload);
 
-      console.log("Respuesta del servidor:", response.data);
-      setSuccess(true);
-      
-      // Opcional: Resetear el formulario
-      (e.target as HTMLFormElement).reset();
+      // Si backend hace redirect a /profile, forzar navegación; si devuelve OK, también
+      if (response.status >= 200 && response.status < 300) {
+        setSuccess(true);
+        (e.target as HTMLFormElement).reset();
+        setPassword("");
+        setConfirmPassword("");
+      } else {
+        setError("No se pudo registrar. Intenta nuevamente.");
+      }
 
     } catch (error) {
       console.error("Error al enviar el formulario:", error);
-      
       if (axios.isAxiosError(error)) {
         if (error.response) {
-          // El servidor respondió con un código de error
-          setError(`Error del servidor: ${error.response.status} - ${error.response.data?.message || 'Intenta nuevamente'}`);
+          setError(`Error del servidor: ${error.response.status} - ${error.response.data?.error || error.response.data?.message || 'Intenta nuevamente'}`);
         } else if (error.request) {
-          // La petición fue hecha pero no se recibió respuesta
           setError("No se pudo conectar con el servidor. Verifica tu conexión a internet.");
         } else {
-          // Algo pasó en la configuración de la petición
           setError("Error al configurar la petición: " + error.message);
         }
       } else {
@@ -143,6 +177,7 @@ const RegisterSection: React.FC = () => {
 
           <form className="register-form" onSubmit={handleSubmit}>
             <div className="register-grid">
+              {/* Fila 1: Nombre y Edad */}
               <div className="register-field">
                 <label htmlFor="fullName">Nombre completo</label>
                 <input
@@ -156,15 +191,29 @@ const RegisterSection: React.FC = () => {
               </div>
 
               <div className="register-field">
-                <label htmlFor="age">Edad</label>
+                <label htmlFor="edad">Edad</label>
                 <input
-                  id="age"
-                  name="age"
+                  id="edad"
+                  name="edad"
                   type="number"
                   placeholder="Ingresa tu edad"
                   min="0"
                   max="100"
                   step="1"
+                  required
+                  disabled={loading}
+                />
+              </div>
+
+              {/* Fila 2: Email y Teléfono */}
+              <div className="register-field">
+                <label htmlFor="email">Correo institucional</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  pattern="[a-zA-Z0-9._%+\-]+@userena\.cl"
+                  placeholder="nombre@userena.cl"
                   required
                   disabled={loading}
                 />
@@ -181,24 +230,41 @@ const RegisterSection: React.FC = () => {
                 />
               </div>
 
+              {/* Fila 3: Contraseña y Confirmar */}
               <div className="register-field">
-                <label htmlFor="email">Correo institucional</label>
+                <label htmlFor="password">Contraseña</label>
                 <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  pattern="[a-zA-Z0-9._%+\-]+@userena\.cl"
-                  placeholder="nombre@userena.cl"
+                  id="password"
+                  name="password"
+                  type="password"
+                  placeholder="Crea una contraseña (mín. 8 caracteres)"
                   required
                   disabled={loading}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
 
               <div className="register-field">
+                <label htmlFor="confirmPassword">Confirmar contraseña</label>
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  placeholder="Confirma tu contraseña"
+                  required
+                  disabled={loading}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </div>
+
+              {/* Fila 4: Carrera y Comuna */}
+              <div className="register-field">
                 <label htmlFor="career">Carrera</label>
-                <select 
-                  id="career" 
-                  name="career" 
+                <select
+                  id="career"
+                  name="career"
                   defaultValue=""
                   disabled={loading}
                 >
@@ -215,9 +281,9 @@ const RegisterSection: React.FC = () => {
 
               <div className="register-field">
                 <label htmlFor="commune">Comuna de residencia</label>
-                <select 
-                  id="commune" 
-                  name="commune" 
+                <select
+                  id="commune"
+                  name="commune"
                   defaultValue=""
                   disabled={loading}
                 >
@@ -230,6 +296,18 @@ const RegisterSection: React.FC = () => {
                     </option>
                   ))}
                 </select>
+              </div>
+
+              {/* Fila 5: Dirección (span completo) */}
+              <div className="register-field" style={{ gridColumn: "1 / -1" }}>
+                <label htmlFor="direccion">Dirección</label>
+                <input
+                  id="direccion"
+                  name="direccion"
+                  type="text"
+                  placeholder="Calle, número, depto/casa"
+                  disabled={loading}
+                />
               </div>
             </div>
 
@@ -247,10 +325,10 @@ const RegisterSection: React.FC = () => {
                 <label
                   style={{ display: "flex", alignItems: "center", gap: 8 }}
                 >
-                  <input 
-                    type="checkbox" 
-                    name="causes" 
-                    value="infantes" 
+                  <input
+                    type="checkbox"
+                    name="causes"
+                    value="infantes"
                     disabled={loading}
                   />{" "}
                   Infantes
@@ -269,10 +347,10 @@ const RegisterSection: React.FC = () => {
                 <label
                   style={{ display: "flex", alignItems: "center", gap: 8 }}
                 >
-                  <input 
-                    type="checkbox" 
-                    name="causes" 
-                    value="medio-ambiente" 
+                  <input
+                    type="checkbox"
+                    name="causes"
+                    value="medio-ambiente"
                     disabled={loading}
                   />{" "}
                   Medio Ambiente
