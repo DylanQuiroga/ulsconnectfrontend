@@ -145,6 +145,74 @@
   display: none;
 }
 
+/* --- Mejoras visuales para nombre de usuario y botón de cerrar sesión (sin modificar HTML) */
+.nav-user {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: linear-gradient(90deg, rgba(1,96,180,0.06), rgba(254,105,112,0.04));
+  border: 1px solid rgba(1,96,180,0.12);
+  color: #013f7a;
+  font-weight: 700;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  line-height: 1;
+  box-shadow: 0 1px 4px rgba(1,96,180,0.06);
+}
+
+/* Pequeño avatar circular con la primera letra visual (usa ::first-letter del texto) */
+.nav-user::first-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0160b4, #fe6970);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+/* Botón de cerrar sesión: compacto, claro y consistente con el estilo */
+.btn-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid rgba(254,105,112,0.12);
+  color: #fe6970;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  box-shadow: 0 1px 4px rgba(254,105,112,0.06);
+  font-size: 0.9rem;
+}
+
+/* Icono textual antes del texto del botón (no requiere cambio de HTML) */
+.btn-logout::before {
+  content: "⎋";
+  display: inline-block;
+  font-size: 0.95rem;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+/* Hover / foco para el botón, sutil y contrastado */
+.btn-logout:hover,
+.btn-logout:focus {
+  background: linear-gradient(90deg, rgba(254,105,112,0.08), rgba(1,96,180,0.04));
+  color: #000000;
+  border-color: rgba(254,105,112,0.18);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(254,105,112,0.12);
+}
+
 /* --- Responsivo --- */
 @media (max-width: 768px) {
   .menu-toggle {
@@ -207,5 +275,14 @@
   .mobile-buttons .btn-register {
     width: 250px;
     box-sizing: border-box;
+  }
+
+  .nav-user {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+  }
+  .btn-logout {
+    padding: 8px 14px;
+    font-size: 0.95rem;
   }
 }
