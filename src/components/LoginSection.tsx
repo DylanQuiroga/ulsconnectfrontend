@@ -18,8 +18,7 @@ const LoginSection: React.FC = () => {
         contrasena,
       });
 
-      // Si todo OK, redirigir a profile (el backend actualmente hace redirect en servidor;
-      // aquí forzamos la navegación del cliente)
+      // Si todo OK, redirigir a profile
       if (res.status >= 200 && res.status < 300) {
         window.location.href = "/profile";
       } else {
@@ -34,26 +33,42 @@ const LoginSection: React.FC = () => {
 
   return (
     <section className="login-section">
-      <form onSubmit={handleSubmit} className="login-form">
-        <input
-          type="email"
-          placeholder="Correo institucional"
-          required
-          value={correo}
-          onChange={(e) => setCorreo(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          required
-          value={contrasena}
-          onChange={(e) => setContrasena(e.target.value)}
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? "Ingresando..." : "Iniciar sesión"}
-        </button>
-        {error && <p className="login-error">{error}</p>}
-      </form>
+      <div className="login-overlay">
+        <div className="login-content">
+          <h1 className="login-title">Bienvenido de nuevo</h1>
+          <p className="login-subtitle">
+            Inicia sesión para continuar ayudando con Souls.
+          </p>
+
+          {error && <p className="login-error">{error}</p>}
+
+          <form className="login-form" onSubmit={handleSubmit}>
+            <input
+              type="email"
+              placeholder="Correo institucional"
+              required
+              value={correo}
+              onChange={(e) => setCorreo(e.target.value)}
+              disabled={loading}
+            />
+            <input
+              type="password"
+              placeholder="Contraseña"
+              required
+              value={contrasena}
+              onChange={(e) => setContrasena(e.target.value)}
+              disabled={loading}
+            />
+            <button type="submit" className="login__btn" disabled={loading}>
+              {loading ? "Ingresando..." : "Iniciar sesión"}
+            </button>
+          </form>
+
+          <p className="login-register">
+            ¿No tienes cuenta? <a href="/register">Regístrate</a>
+          </p>
+        </div>
+      </div>
     </section>
   );
 };

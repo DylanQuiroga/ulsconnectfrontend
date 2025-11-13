@@ -14,7 +14,8 @@
 .login-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: var(--overlay-dark);
+  /* mismo overlay que register */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,77 +24,103 @@
 
 .login-content {
   position: absolute;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--content-glass);
+  /* mismo glass effect */
   backdrop-filter: blur(6px);
   padding: 50px;
   border-radius: 16px;
-  color: white;
+  color: var(--text-900);
   text-align: center;
   width: 100%;
   max-width: 420px;
   z-index: 2;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 20px var(--shadow);
 }
 
 .login-title {
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 10px;
+  color: white;
 }
 
 .login-subtitle {
   font-size: 1.1rem;
   margin-bottom: 30px;
-  color: #f3f3f3;
+  color: var(--muted-200);
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 18px;
 }
 
 .login-form input {
-  padding: 12px 15px;
-  border-radius: 6px;
-  border: none;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(15, 23, 32, 0.06);
   outline: none;
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.9);
-  color: #333;
+  background: var(--input-bg);
+  color: var(--text-700);
+  transition:
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .login-form input:focus {
-  box-shadow: 0 0 0 2px var(--blue-600);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+  border-color: var(--primary);
 }
 
-/* renamed .btn-green -> .login__btn to avoid collisions */
 .login__btn {
-  background: var(--blue-700);
-  color: white;
+  background: var(--primary);
+  color: var(--white);
   border: none;
-  padding: 12px;
-  border-radius: 6px;
+  padding: 14px 18px;
+  border-radius: 8px;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition:
+    background 0.15s ease,
+    transform 0.08s ease;
+  width: 100%;
 }
 
 .login__btn:hover {
   background: var(--blue-600);
+  transform: translateY(-1px);
+}
+
+.login__btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-error {
+  margin-top: 12px;
+  padding: 12px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  font-size: 0.9rem;
 }
 
 .login-register {
-  margin-top: 20px;
+  margin-top: 18px;
   font-size: 0.95rem;
-  color: #ddd;
+  color: white;
 }
 
 .login-register a {
   color: var(--pink-600);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .login-register a:hover {
@@ -103,7 +130,7 @@
 /* Responsivo */
 @media (max-width: 768px) {
   .login-content {
-    padding: 25px;
+    padding: 28px;
   }
 
   .login-title {
