@@ -16,7 +16,7 @@ interface FormData {
   email: string;
   carrera: string;
   comuna: string;
-  direccion: string; // <-- añadido
+  direccion: string;
   causas: string[];
   status: string;
 
