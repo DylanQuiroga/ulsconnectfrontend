@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import api from "../lib/api";
+import api from "../services/api";
 import "./css/LoginSection.css";
 
 const LoginSection: React.FC = () => {
