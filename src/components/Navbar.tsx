@@ -48,7 +48,7 @@ const Navbar: React.FC = () => {
 
         <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
           <li><Link to="/">Inicio</Link></li>
-          <li><Link to="/convocatorias">Convocatorias</Link></li>
+          <li><Link to="/convocatorias_panel">Convocatorias</Link></li>
           <li><Link to="/quienes-somos">Quiénes Somos</Link></li>
           <li><Link to="/noticias">Noticias</Link></li>
           <li><Link to="/contacto">Contacto</Link></li>
