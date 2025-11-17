@@ -20,7 +20,7 @@ const LoginSection: React.FC = () => {
 
       // Si todo OK, redirigir a profile
       if (res.status >= 200 && res.status < 300) {
-        window.location.href = "/profile";
+        window.location.href = "/perfil_voluntario";
       } else {
         setError("Credenciales inválidas");
       }
