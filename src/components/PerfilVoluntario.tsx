@@ -4,13 +4,6 @@ import './css/PerfilVoluntario.css';
 
 const PerfilVoluntario: React.FC = () => {
 
-    // 🔥 Mapeo entre backend y frontend
-    const BD_TO_FRONT: Record<string, string> = {
-        "infantes": "Infantil",
-        "adultos-mayores": "Adulto mayor",
-        "medio-ambiente": "Medio Ambiente"
-    };
-
     const FRONT_TO_BD: Record<string, string> = {
         "Infantil": "infantes",
         "Adulto mayor": "adultos-mayores",
