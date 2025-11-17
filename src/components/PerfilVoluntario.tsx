@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { FaPen } from 'react-icons/fa';
-import './css/PerfilVoluntario.css';
+import React, { useState, useEffect } from "react";
+import { FaPen } from "react-icons/fa";
+import "./css/PerfilVoluntario.css";
+import api from "../services/api";
 
 const PerfilVoluntario: React.FC = () => {
-
     const FRONT_TO_BD: Record<string, string> = {
-        "Infantil": "infantes",
+        Infantil: "infantes",
         "Adulto mayor": "adultos-mayores",
-        "Medio Ambiente": "medio-ambiente"
+        "Medio Ambiente": "medio-ambiente",
     };
 
     const preferences = ["Medio Ambiente", "Infantil", "Adulto mayor"];
 
     const [form, setForm] = useState({
-        name: '',
-        email: '',
-        phone: '',
+        name: "",
+        email: "",
+        phone: "",
         interests: [] as string[],
     });
 
@@ -29,53 +29,54 @@ const PerfilVoluntario: React.FC = () => {
 
     // ⬇ Obtener datos del usuario logueado
     useEffect(() => {
-    fetch('https://apiulsconnect.leapcell.app/me', {
-        method: 'GET',
-        credentials: 'include',
-    })
-        .then(res => res.json())
-        .then(data => {
-            if (data.user) {
-                const loaded = {
-                    name: data.user.nombre,
-                    email: data.user.correoUniversitario,
-                    phone: data.user.telefono || '',
-                    interests: data.user.intereses as string[] || [],
-                };
+        const loadProfile = async () => {
+            try {
+                const res = await api.get("/me"); // <<--- Igual que en login, usa api
 
-                setForm(loaded);
-                setOriginalForm(loaded);
+                if (res.data.user) {
+                    const user = res.data.user;
 
-                // 🔥 Mapear intereses del backend → frontend
-                if (loaded.interests.length > 0) {
+                    const loaded = {
+                        name: user.nombre,
+                        email: user.correoUniversitario,
+                        phone: user.telefono || "",
+                        interests: (user.intereses as string[]) || [],
+                    };
+
+                    setForm(loaded);
+
+                    // Mapear BD → labels visuales
                     const mapped = new Set<string>();
-
-                    loaded.interests.forEach(i => {
+                    loaded.interests.forEach((i) => {
                         if (i === "infantes") mapped.add("Infantil");
                         if (i === "adultos-mayores") mapped.add("Adulto mayor");
                         if (i === "medio-ambiente") mapped.add("Medio Ambiente");
                     });
-
                     setSelectedPrefs(mapped);
                 }
+            } catch (err) {
+                console.error("Error al cargar perfil:", err);
+            } finally {
+                setLoading(false);
             }
-            setLoading(false);
-        })
-        .catch(() => setLoading(false));
-}, []);
+        };
 
+        loadProfile();
+    }, []);
+
+    if (loading) return <p>Cargando perfil...</p>;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+        setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
     const togglePref = (p: string) => {
         const next = new Set(selectedPrefs);
         next.has(p) ? next.delete(p) : next.add(p);
         setSelectedPrefs(next);
-        setForm(prev => ({
+        setForm((prev) => ({
             ...prev,
-            interests: Array.from(next)
+            interests: Array.from(next),
         }));
     };
 
@@ -83,7 +84,7 @@ const PerfilVoluntario: React.FC = () => {
         e?.preventDefault();
 
         // Convierte preferencias frontend → formato BD
-        const prefsBD = Array.from(selectedPrefs).map(p => FRONT_TO_BD[p]);
+        const prefsBD = Array.from(selectedPrefs).map((p) => FRONT_TO_BD[p]);
 
         console.log("Guardando en BD:", prefsBD);
 
@@ -167,7 +168,11 @@ const PerfilVoluntario: React.FC = () => {
 
                             {editing && (
                                 <>
-                                    <button type="button" className="pv-btn pv-btn-cancel" onClick={onCancel}>
+                                    <button
+                                        type="button"
+                                        className="pv-btn pv-btn-cancel"
+                                        onClick={onCancel}
+                                    >
                                         Cancelar
                                     </button>
 
@@ -200,13 +205,13 @@ const PerfilVoluntario: React.FC = () => {
                     </div>
 
                     <div className="pv-badges">
-                        {preferences.map(p => {
+                        {preferences.map((p) => {
                             const active = selectedPrefs.has(p);
                             return (
                                 <button
                                     key={p}
                                     type="button"
-                                    className={`pv-badge ${active ? 'active' : ''}`}
+                                    className={`pv-badge ${active ? "active" : ""}`}
                                     onClick={() => editing && togglePref(p)}
                                     aria-pressed={active}
                                 >
