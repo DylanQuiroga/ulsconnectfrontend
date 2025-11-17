@@ -1,0 +1,468 @@
+/* layout */
+.cv-container {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 24px;
+    padding: 24px 6%;
+    max-width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    background-color: white;
+    color: var(--text-900);
+}
+
+/* sidebar */
+.cv-sidebar {
+    background: white;
+    border: 1px solid var(--bg-border);
+    padding: 18px;
+    border-radius: 10px;
+    box-shadow: 0 14px 40px var(--shadow-blue-1);
+}
+
+.cv-sidebar h3 {
+    margin: 0 0 12px 0;
+    font-size: 1.05rem;
+    color: var(--blue-700);
+}
+
+.cv-label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--text-700);
+    margin-bottom: 10px;
+}
+
+.cv-input {
+    width: 100%;
+    padding: 9px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--bg-border);
+    background: var(--input-bg);
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.cv-input:focus {
+    outline: none;
+    border-color: var(--blue-600);
+}
+
+/* checkbox list */
+.cv-check {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 6px 0;
+    font-size: 0.95rem;
+    color: var(--text-700);
+}
+
+.cv-check input[type="checkbox"]:checked {
+    accent-color: var(--pink-600);
+}
+
+.cv-apply {
+    margin-top: 12px;
+    width: 100%;
+    background: linear-gradient(135deg, var(--pink-600), var(--pink-400));
+    color: #fff;
+    border: none;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(254, 105, 112, 0.3);
+    transition: all 0.3s ease;
+}
+
+.cv-apply:hover {
+    background: linear-gradient(135deg, var(--blue-700), var(--blue-600));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(1, 96, 180, 0.4);
+}
+
+/* main */
+.cv-main {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.cv-hero h2 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--text-900);
+}
+
+.cv-sub {
+    margin: 6px 0 0;
+    color: var(--text-700);
+}
+
+/* grid of cards: 2 columnas en desktop, 1 en móvil */
+.cv-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+/* single card: sin imagen, más compacto */
+.cv-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--bg-border);
+    box-shadow: 0 8px 24px var(--shadow-blue-1);
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    box-sizing: border-box;
+    min-height: 240px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cv-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px var(--shadow-blue-2);
+}
+
+.cv-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+}
+
+.cv-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    background: linear-gradient(135deg, rgba(254, 105, 112, 0.1), rgba(1, 96, 180, 0.08));
+    color: var(--blue-700);
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    align-self: flex-start;
+    border: 1px solid rgba(1, 96, 180, 0.12);
+}
+
+.cv-title {
+    margin: 4px 0 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text-900);
+}
+
+.cv-excerpt {
+    margin: 4px 0 0;
+    color: var(--text-700);
+    font-size: 0.95rem;
+    flex: 1;
+    line-height: 1.5;
+}
+
+/* meta */
+.cv-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: var(--text-700);
+    font-size: 0.9rem;
+    margin-top: 8px;
+}
+
+.cv-meta-item {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    color: var(--text-700);
+}
+
+.cv-meta-item svg {
+    color: var(--blue-600);
+}
+
+/* actions */
+.cv-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+    align-items: center;
+}
+
+.cv-btn {
+    padding: 9px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    border: 1px solid transparent;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.cv-btn-ghost {
+    background: transparent;
+    color: var(--blue-700);
+    border: 1px solid rgba(1, 96, 180, 0.2);
+}
+
+.cv-btn-ghost:hover {
+    background: rgba(1, 96, 180, 0.08);
+    border-color: var(--blue-600);
+    transform: translateY(-2px);
+}
+
+.cv-btn-primary {
+    background: linear-gradient(135deg, var(--pink-600), var(--pink-400));
+    color: #fff;
+    border: none;
+    box-shadow: 0 2px 8px rgba(254, 105, 112, 0.3);
+}
+
+.cv-btn-primary:hover {
+    background: linear-gradient(135deg, var(--blue-700), var(--blue-600));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(1, 96, 180, 0.4);
+}
+
+/* pagination */
+.cv-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 24px;
+    padding: 12px 0;
+}
+
+.cv-page-btn {
+    background: white;
+    border: 1px solid var(--bg-border);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1.1rem;
+    color: var(--text-700);
+    min-width: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cv-page-btn:hover:not(:disabled) {
+    border-color: var(--blue-600);
+    background: rgba(1, 96, 180, 0.05);
+    color: var(--blue-700);
+}
+
+.cv-page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.cv-pages {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.cv-page {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--bg-border);
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-700);
+    min-width: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cv-page:hover {
+    border-color: var(--pink-600);
+    background: rgba(254, 105, 112, 0.08);
+    color: var(--pink-600);
+}
+
+.cv-page.active {
+    background: linear-gradient(135deg, var(--pink-600), var(--pink-400));
+    color: white;
+    border: none;
+    box-shadow: 0 2px 8px rgba(254, 105, 112, 0.3);
+}
+
+.cv-ellipsis {
+    color: var(--text-700);
+    padding: 0 4px;
+    font-weight: 600;
+}
+
+/* Estilos personalizados para react-calendar */
+.cv-calendar-widget {
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    font-family: inherit;
+    box-shadow: none;
+    background: white;
+    padding: 8px;
+}
+
+/* Navegación superior (mes/año y flechas) */
+.cv-calendar-widget .react-calendar__navigation {
+    display: flex;
+    height: 44px;
+    margin-bottom: 8px;
+    gap: 4px;
+}
+
+.cv-calendar-widget .react-calendar__navigation button {
+    min-width: 32px;
+    background: none;
+    font-size: 0.85rem;
+    color: var(--text-900);
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    padding: 4px;
+}
+
+/* Botón del label (mes y año) más angosto */
+.cv-calendar-widget .react-calendar__navigation__label {
+    flex-grow: 1 !important;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+}
+
+.cv-calendar-widget .react-calendar__navigation__arrow {
+    flex-grow: 0 !important;
+    flex-shrink: 0;
+}
+
+.cv-calendar-widget .react-calendar__navigation button:enabled:hover,
+.cv-calendar-widget .react-calendar__navigation button:enabled:focus {
+    background: rgba(1, 96, 180, 0.08);
+}
+
+.cv-calendar-widget .react-calendar__navigation button:disabled {
+    opacity: 0.4;
+}
+
+/* Nombres de días de la semana */
+.cv-calendar-widget .react-calendar__month-view__weekdays {
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-700);
+    text-transform: uppercase;
+}
+
+.cv-calendar-widget .react-calendar__month-view__weekdays__weekday {
+    padding: 8px 0;
+}
+
+.cv-calendar-widget .react-calendar__month-view__weekdays__weekday abbr {
+    text-decoration: none;
+}
+
+/* Tiles (días) */
+.cv-calendar-widget .react-calendar__tile {
+    padding: 10px 6px;
+    font-size: 0.9rem;
+    color: var(--text-900);
+    background: none;
+    border: none;
+    border-radius: 8px;
+    position: relative;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.cv-calendar-widget .react-calendar__tile:enabled:hover,
+.cv-calendar-widget .react-calendar__tile:enabled:focus {
+    background: rgba(1, 96, 180, 0.12);
+}
+
+/* Día actual (hoy) */
+.cv-calendar-widget .react-calendar__tile--now {
+    background: rgba(1, 96, 180, 0.15);
+    font-weight: 700;
+}
+
+.cv-calendar-widget .react-calendar__tile--now:enabled:hover {
+    background: rgba(1, 96, 180, 0.22);
+}
+
+/* Día seleccionado (activo) */
+.cv-calendar-widget .react-calendar__tile--active {
+    background: linear-gradient(135deg, var(--pink-600), var(--pink-400)) !important;
+    color: white !important;
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(254, 105, 112, 0.3);
+}
+
+.cv-calendar-widget .react-calendar__tile--active:enabled:hover {
+    background: linear-gradient(135deg, var(--blue-700), var(--blue-600)) !important;
+}
+
+/* Días de otros meses (fuera del mes actual) */
+.cv-calendar-widget .react-calendar__month-view__days__day--neighboringMonth {
+    color: #ccc;
+}
+
+/* Vista de mes */
+.cv-calendar-widget .react-calendar__month-view__days {
+    display: grid !important;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+/* Ajuste de sección */
+.cv-section {
+    margin-bottom: 18px;
+}
+
+.cv-section-title {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--blue-700);
+    margin-bottom: 10px;
+}
+
+/* responsive */
+@media (max-width: 1100px) {
+    .cv-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cv-container {
+        grid-template-columns: 220px 1fr;
+    }
+}
+
+@media (max-width: 780px) {
+    .cv-container {
+        grid-template-columns: 1fr;
+        padding: 18px 4%;
+    }
+
+    .cv-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cv-sidebar {
+        order: 2;
+    }
+}
