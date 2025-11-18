@@ -7,8 +7,8 @@ import { useAuthStore } from "../stores/sessionStore";
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const navigate = useNavigate();
-  
-  const { user, fetchUser, logout } = useAuthStore();
+
+  const { user, fetchUser, logout, isLoading } = useAuthStore();
 
   useEffect(() => {
     // Solo fetch si no hay user en el store
@@ -46,14 +46,20 @@ const Navbar: React.FC = () => {
         <div className="nav-buttons">
           {user ? (
             <>
-              <button 
-                className="nav-user" 
+              <button
+                className="nav-user"
                 onClick={() => navigate("/perfil_voluntario")}
                 style={{ cursor: "pointer" }}
               >
                 Hola, {user.nombre || user.correoUniversitario}
               </button>
-              <button className="btn-logout" onClick={handleLogout}>Cerrar sesión</button>
+              <button 
+                className="btn-logout" 
+                onClick={handleLogout}
+                disabled={isLoading}
+              >
+                {isLoading ? "Cerrando..." : "Cerrar sesión"}
+              </button>
             </>
           ) : (
             <>
