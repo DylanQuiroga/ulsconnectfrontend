@@ -36,17 +36,19 @@ export const useAuthStore = create<AuthState>()(
       },
 
       logout: async () => {
+        set({ isLoading: true });
         try {
           await api.post('/logout');
-          set({ user: null });
+          set({ user: null, isLoading: false });
         } catch (error) {
           console.error('Logout failed', error);
+          set({ user: null, isLoading: false });
         }
       },
     }),
     {
-      name: 'auth-storage', // nombre en localStorage
-      partialize: (state) => ({ user: state.user }), // solo persiste el user
+      name: 'auth-storage',
+      partialize: (state) => ({ user: state.user }),
     }
   )
 );
