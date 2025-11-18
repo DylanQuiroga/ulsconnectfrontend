@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import api from "../services/api";
+import { useAuthStore } from "../stores/sessionStore";
+import { useNavigate } from "react-router-dom";
 import "./css/LoginSection.css";
 
 const LoginSection: React.FC = () => {
@@ -7,6 +9,9 @@ const LoginSection: React.FC = () => {
   const [contrasena, setContrasena] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  
+  const { setUser } = useAuthStore();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,9 +23,10 @@ const LoginSection: React.FC = () => {
         contrasena,
       });
 
-      // Si todo OK, redirigir a profile
       if (res.status >= 200 && res.status < 300) {
-        window.location.href = "/perfil_voluntario";
+        // Guardar usuario en Zustand
+        setUser(res.data?.user ?? null);
+        navigate("/perfil_voluntario");
       } else {
         setError("Credenciales inválidas");
       }

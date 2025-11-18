@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { FaPen } from "react-icons/fa";
 import "./css/PerfilVoluntario.css";
-import api from "../services/api";
+import { useAuthStore } from "../stores/sessionStore";
 
 const PerfilVoluntario: React.FC = () => {
+    const { user, isLoading } = useAuthStore();
+    
     const FRONT_TO_BD: Record<string, string> = {
         Infantil: "infantes",
         "Adulto mayor": "adultos-mayores",
@@ -20,51 +22,31 @@ const PerfilVoluntario: React.FC = () => {
     });
 
     const [originalForm, setOriginalForm] = useState(form);
-
-    const [loading, setLoading] = useState(true);
     const [editing, setEditing] = useState(false);
-
-    // Preferencias seleccionadas (frontend)
     const [selectedPrefs, setSelectedPrefs] = useState(new Set<string>());
 
-    // ⬇ Obtener datos del usuario logueado
     useEffect(() => {
-        const loadProfile = async () => {
-            try {
-                const res = await api.get("/me"); // <<--- Igual que en login, usa api
+        if (user) {
+            const loaded = {
+                name: user.nombre,
+                email: user.correoUniversitario,
+                phone: user.telefono || "",
+                interests: (user.intereses as string[]) || [],
+            };
 
-                if (res.data.user) {
-                    const user = res.data.user;
+            setForm(loaded);
 
-                    const loaded = {
-                        name: user.nombre,
-                        email: user.correoUniversitario,
-                        phone: user.telefono || "",
-                        interests: (user.intereses as string[]) || [],
-                    };
+            const mapped = new Set<string>();
+            loaded.interests.forEach((i) => {
+                if (i === "infantes") mapped.add("Infantil");
+                if (i === "adultos-mayores") mapped.add("Adulto mayor");
+                if (i === "medio-ambiente") mapped.add("Medio Ambiente");
+            });
+            setSelectedPrefs(mapped);
+        }
+    }, [user]);
 
-                    setForm(loaded);
-
-                    // Mapear BD → labels visuales
-                    const mapped = new Set<string>();
-                    loaded.interests.forEach((i) => {
-                        if (i === "infantes") mapped.add("Infantil");
-                        if (i === "adultos-mayores") mapped.add("Adulto mayor");
-                        if (i === "medio-ambiente") mapped.add("Medio Ambiente");
-                    });
-                    setSelectedPrefs(mapped);
-                }
-            } catch (err) {
-                console.error("Error al cargar perfil:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        loadProfile();
-    }, []);
-
-    if (loading) return <p>Cargando perfil...</p>;
+    if (isLoading) return <p>Cargando perfil...</p>;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -82,14 +64,9 @@ const PerfilVoluntario: React.FC = () => {
 
     const onSave = (e?: React.FormEvent) => {
         e?.preventDefault();
-
-        // Convierte preferencias frontend → formato BD
         const prefsBD = Array.from(selectedPrefs).map((p) => FRONT_TO_BD[p]);
-
         console.log("Guardando en BD:", prefsBD);
-
         // TODO: POST hacia /api/updateProfile
-
         setOriginalForm(form);
         setEditing(false);
     };
@@ -99,8 +76,6 @@ const PerfilVoluntario: React.FC = () => {
         setSelectedPrefs(new Set(originalForm.interests));
         setEditing(false);
     };
-
-    if (loading) return <p>Cargando perfil...</p>;
 
     return (
         <main className="pv-container">
@@ -113,7 +88,6 @@ const PerfilVoluntario: React.FC = () => {
             </header>
 
             <section className="pv-grid">
-                {/* INFORMACIÓN GENERAL */}
                 <article className="pv-card">
                     <h3 className="pv-title">Información General</h3>
 
@@ -185,7 +159,6 @@ const PerfilVoluntario: React.FC = () => {
                     </form>
                 </article>
 
-                {/* PREFERENCIAS */}
                 <article className="pv-card pv-prefs-card">
                     <div className="pv-prefs-head">
                         <div>

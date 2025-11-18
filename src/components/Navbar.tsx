@@ -2,35 +2,24 @@ import React, { useState, useEffect } from "react";
 import "./css/Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import logo_souls from "../public/logo_souls.png";
-import api from "../services/api";
+import { useAuthStore } from "../stores/sessionStore";
 
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
-  const [user, setUser] = useState<any>(null);
   const navigate = useNavigate();
+  
+  const { user, fetchUser, logout } = useAuthStore();
 
   useEffect(() => {
-    let mounted = true;
-    api.get("/me")
-      .then((res) => {
-        if (!mounted) return;
-        setUser(res.data?.user ?? null);
-      })
-      .catch(() => {
-        if (!mounted) return;
-        setUser(null);
-      });
-    return () => { mounted = false; };
-  }, []);
+    // Solo fetch si no hay user en el store
+    if (!user) {
+      fetchUser();
+    }
+  }, [user, fetchUser]);
 
   const handleLogout = async () => {
-    try {
-      await api.post("/logout");
-      setUser(null);
-      navigate("/");
-    } catch (err) {
-      console.error("Logout failed", err);
-    }
+    await logout();
+    navigate("/");
   };
 
   return (
@@ -57,7 +46,13 @@ const Navbar: React.FC = () => {
         <div className="nav-buttons">
           {user ? (
             <>
-              <span className="nav-user">Hola, {user.nombre || user.correoUniversitario}</span>
+              <button 
+                className="nav-user" 
+                onClick={() => navigate("/perfil_voluntario")}
+                style={{ cursor: "pointer" }}
+              >
+                Hola, {user.nombre || user.correoUniversitario}
+              </button>
               <button className="btn-logout" onClick={handleLogout}>Cerrar sesión</button>
             </>
           ) : (
