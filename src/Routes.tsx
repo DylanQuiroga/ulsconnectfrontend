@@ -9,7 +9,10 @@ import Login from "./pages/Login";
 import VolunteerProfile from "./pages/VolunteerProfile";
 import PerfilVoluntario from "./components/PerfilVoluntario";
 import ConvocatoriasPanel from "./components/ConvocatoriasPanel";
-
+import WhoWeAre from "./pages/whoweare";
+import NewsSection from "./components/noticias";
+import ContactForm from "./pages/ContactForm";
+import Success from "./pages/Success";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -20,6 +23,10 @@ const AppRoutes: React.FC = () => {
       <Route path="/volunteer_dashboard" element={<VolunteerProfile />} />
       <Route path="/perfil_voluntario" element={<PerfilVoluntario />} />
       <Route path="/convocatorias_panel" element={<ConvocatoriasPanel />} />
+      <Route path="/quienes-somos" element={<WhoWeAre />} />
+      <Route path="/noticias" element={<NewsSection />} />
+      <Route path="/contacto" element={<ContactForm />} />
+      <Route path="/success" element={<Success />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

@@ -1,0 +1,32 @@
+.contact-section {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.contact-form {
+  width: 100%;
+  max-width: 450px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#submit-button {
+  background-color: #3b82f6;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#submit-button:hover {
+  background-color: #2563eb;
+}
