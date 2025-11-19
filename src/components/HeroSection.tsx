@@ -1,6 +1,6 @@
 import React from "react";
 import "./css/HeroSection.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const HeroSection: React.FC = () => {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const HeroSection: React.FC = () => {
           </p>
 
           <div className="hero-buttons">
-            <button
+            <Link to="/convocatorias_panel"><button
               className="btn-primary"
               onClick={() => {
                 /* navegar a convocatorias */
@@ -30,14 +30,13 @@ const HeroSection: React.FC = () => {
               aria-label="Ver convocatorias"
             >
               Ver convocatorias
-            </button>
-            <button
+            </button></Link>
+            <Link to="/register"><button
               className="btn-ghost"
-              onClick={() => navigate("/register")}
               aria-label="Registrarse"
             >
               Registrarse
-            </button>
+            </button></Link>
           </div>
         </div>
 
@@ -64,7 +63,7 @@ const HeroSection: React.FC = () => {
             </ul>
 
             <div className="card-actions">
-              <button className="card-btn">Ver todas</button>
+              <Link to="/convocatorias_panel"><button className="card-btn">Ver todas</button></Link>
             </div>
           </div>
         </aside>

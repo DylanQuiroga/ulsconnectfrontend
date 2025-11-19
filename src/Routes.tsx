@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-
+import ScrollToTop from "./components/ScrollToTop";
 // Importa las páginas o secciones
 import Home from "./pages/Home";
 import Register from "./pages/Register";
@@ -16,19 +16,23 @@ import Success from "./pages/Success";
 
 const AppRoutes: React.FC = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/volunteer_dashboard" element={<VolunteerProfile />} />
-      <Route path="/perfil_voluntario" element={<PerfilVoluntario />} />
-      <Route path="/convocatorias_panel" element={<ConvocatoriasPanel />} />
-      <Route path="/quienes-somos" element={<WhoWeAre />} />
-      <Route path="/noticias" element={<NewsSection />} />
-      <Route path="/contacto" element={<ContactForm />} />
-      <Route path="/success" element={<Success />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
+
+        <Route path="/" element={<Home />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/volunteer_dashboard" element={<VolunteerProfile />} />
+        <Route path="/perfil_voluntario" element={<PerfilVoluntario />} />
+        <Route path="/convocatorias_panel" element={<ConvocatoriasPanel />} />
+        <Route path="/quienes-somos" element={<WhoWeAre />} />
+        <Route path="/noticias" element={<NewsSection />} />
+        <Route path="/contacto" element={<ContactForm />} />
+        <Route path="/success" element={<Success />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
   );
 };
 

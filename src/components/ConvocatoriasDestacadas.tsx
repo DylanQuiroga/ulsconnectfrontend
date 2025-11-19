@@ -2,6 +2,7 @@ import "./css/ConvocatoriasDestacadas.css";
 import imagenInfancia from "../assets/imagesConvocatorias/image2_i.webp"
 import imagenAdulto from "../assets/imagesConvocatorias/image9_a.webp"
 import imagenMedioambiente from "../assets/imagesConvocatorias/image5_p.webp"
+import { Link } from "react-router-dom";
 
 const convocatorias = [
   {
@@ -69,7 +70,7 @@ export default function ConvocatoriasDestacadas() {
         </div>
 
         <div className="conv-footer">
-          <button className="conv-vermas" aria-label="Ver más convocatorias">VER MÁS</button>
+          <Link to="/convocatorias_panel"><button className="conv-vermas" aria-label="Ver más convocatorias">VER MÁS</button></Link>
         </div>
       </div>
     </section>
