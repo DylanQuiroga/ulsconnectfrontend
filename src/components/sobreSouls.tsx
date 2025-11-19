@@ -1,4 +1,5 @@
 import "./css/SobreSouls.css";
+import imagen from "../assets/imagesConvocatorias/image15_i.webp"
 
 export default function SobreSouls() {
   return (
@@ -6,7 +7,7 @@ export default function SobreSouls() {
       <div className="sobre-container">
         <div className="sobre-img-container">
           <img
-            src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70"
+            src={imagen}
             alt="Voluntariado Souls"
             className="sobre-img"
           />
