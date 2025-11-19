@@ -13,6 +13,7 @@ import WhoWeAre from "./pages/whoweare";
 import NewsSection from "./components/noticias";
 import ContactForm from "./pages/ContactForm";
 import Success from "./pages/Success";
+import AdminDashboard from "./pages/AdminDashboard";
 
 const AppRoutes: React.FC = () => {
   return (
@@ -30,6 +31,7 @@ const AppRoutes: React.FC = () => {
         <Route path="/noticias" element={<NewsSection />} />
         <Route path="/contacto" element={<ContactForm />} />
         <Route path="/success" element={<Success />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
