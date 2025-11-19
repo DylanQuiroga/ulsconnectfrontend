@@ -1,11 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./css/HeroSection.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const HeroSection: React.FC = () => {
-  const navigate = useNavigate();
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slides = [
+    "/src/assets/imagesConvocatorias/image10_a.webp",
+    "/src/assets/imagesConvocatorias/image15_i.webp ",
+    "/src/assets/imagesConvocatorias/image6_p.webp",
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000); // Cambia cada 5 segundos
+
+    return () => clearInterval(timer);
+  }, [slides.length]);
+
   return (
     <section className="hero-section" aria-label="Sección principal">
+      {slides.map((slide, index) => (
+        <div
+          key={index}
+          className={`hero-bg ${index === currentSlide ? 'active' : ''}`}
+          style={{ backgroundImage: `url(${slide})` }}
+        />
+      ))}
+
       <div className="hero-overlay" aria-hidden="true" />
 
       <div className="hero-inner">
@@ -22,21 +45,16 @@ const HeroSection: React.FC = () => {
           </p>
 
           <div className="hero-buttons">
-            <Link to="/convocatorias_panel"><button
-              className="btn-primary"
-              onClick={() => {
-                /* navegar a convocatorias */
-              }}
-              aria-label="Ver convocatorias"
-            >
-              Ver convocatorias
-            </button></Link>
-            <Link to="/register"><button
-              className="btn-ghost"
-              aria-label="Registrarse"
-            >
-              Registrarse
-            </button></Link>
+            <Link to="/convocatorias_panel">
+              <button className="btn-primary" aria-label="Ver convocatorias">
+                Ver convocatorias
+              </button>
+            </Link>
+            <Link to="/register">
+              <button className="btn-ghost" aria-label="Registrarse">
+                Registrarse
+              </button>
+            </Link>
           </div>
         </div>
 
@@ -67,6 +85,18 @@ const HeroSection: React.FC = () => {
             </div>
           </div>
         </aside>
+      </div>
+
+      {/* Indicadores del slider */}
+      <div className="slider-indicators">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            className={`indicator ${index === currentSlide ? 'active' : ''}`}
+            onClick={() => setCurrentSlide(index)}
+            aria-label={`Ir a imagen ${index + 1}`}
+          />
+        ))}
       </div>
     </section>
   );
