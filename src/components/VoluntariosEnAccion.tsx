@@ -31,43 +31,47 @@ const VoluntariosEnAccion: React.FC = () => {
 
   return (
     <section className="voluntarios-section" aria-labelledby="voluntarios-title">
-      <h2 id="voluntarios-title" className="voluntarios-title">Nuestros voluntarios en acción</h2>
+      <div className="voluntarios-inner">
+        <h2 id="voluntarios-title" className="voluntarios-title">Nuestros voluntarios en acción</h2>
 
-      <div className="voluntarios-grid" role="list">
-        {voluntarios.map((v, i) => (
-          <article
-            key={i}
-            className="voluntario-card"
-            role="listitem"
-            aria-labelledby={`v-title-${i}`}
-            tabIndex={0}
-          >
-            <div className="voluntario-media">
-              <img
-                src={v.img}
-                alt={v.titulo}
-                loading="lazy"
-                className="voluntario-img"
-              />
-              <div className="voluntario-badge">{i === 0 ? "Destacado" : "Voluntariado"}</div>
-            </div>
+        <div className="voluntarios-grid" role="list">
+          {voluntarios.map((v, i) => (
+            <article
+              key={i}
+              className="voluntario-card"
+              role="listitem"
+              aria-labelledby={`v-title-${i}`}
+              tabIndex={0}
+            >
+              <div className="voluntario-media">
+                <img
+                  src={v.img}
+                  alt={v.titulo}
+                  loading="lazy"
+                  className="voluntario-img"
+                />
+                <div className="voluntario-badge">{i === 0 ? "Destacado" : "Voluntariado"}</div>
+              </div>
 
-            <div className="voluntario-body">
-              <h3 id={`v-title-${i}`} className="voluntario-titulo">{v.titulo}</h3>
-              <p className="voluntario-descripcion">{v.descripcion}</p>
-            </div>
+              <div className="voluntario-body">
+                <div>
+                  <h3 id={`v-title-${i}`} className="voluntario-titulo">{v.titulo}</h3>
+                  <p className="voluntario-descripcion">{v.descripcion}</p>
+                </div>
+              </div>
 
-            <div className="voluntario-footer">
-              <button
-                className="voluntario-cta"
-                onClick={() => console.log("Ver detalle:", v.titulo)}
-                aria-label={`Ver más sobre ${v.titulo}`}
-              >
-                Ver más
-              </button>
-            </div>
-          </article>
-        ))}
+              <div className="voluntario-footer">
+                <button
+                  className="voluntario-cta"
+                  onClick={() => console.log("Ver detalle:", v.titulo)}
+                  aria-label={`Ver más sobre ${v.titulo}`}
+                >
+                  Ver más
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );

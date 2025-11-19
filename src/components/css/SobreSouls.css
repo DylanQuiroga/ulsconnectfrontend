@@ -45,7 +45,7 @@
   left: 0;
   width: 60px;
   height: 4px;
-  background-color: #16a34a;
+  background-color: var(--pink-600);
   transform: skewX(-25deg);
 }
 

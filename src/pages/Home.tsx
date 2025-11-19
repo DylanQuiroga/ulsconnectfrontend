@@ -9,8 +9,8 @@ const Home: React.FC = () => {
     <>
       <HeroSection />
       <ConvocatoriasDestacadas />
-      <SobreSouls />
       <VoluntariosEnAccion />
+      <SobreSouls />
     </>
   );
 };
