@@ -10,7 +10,7 @@ import VolunteerProfile from "./pages/VolunteerProfile";
 import PerfilVoluntario from "./components/PerfilVoluntario";
 import ConvocatoriasPanel from "./components/ConvocatoriasPanel";
 import WhoWeAre from "./pages/whoweare";
-import NewsSection from "./components/noticias";
+import NewsSection from "./components/Noticias";
 import ContactForm from "./pages/ContactForm";
 import Success from "./pages/Success";
 import AdminDashboard from "./pages/AdminDashboard";
