@@ -5,6 +5,7 @@ import "react-calendar/dist/Calendar.css";
 import "./css/ConvocatoriasPanel.css";
 import api from "../services/api";
 import { useAuthStore } from "../stores/sessionStore";
+import ActivityDetailModal from "./ActivityDetailModal"; // ✅ NUEVO
 
 type Convocatoria = {
     id: string;
@@ -16,11 +17,17 @@ type Convocatoria = {
     excerpt: string;
     image?: string;
     recommended?: boolean;
-    enrolled?: boolean; // ✅ NUEVO
-    isClosed?: boolean; // ✅ NUEVO
+    enrolled?: boolean;
+    isClosed?: boolean;
+    // ✅ NUEVO: Datos completos para el modal
+    fullData?: any;
 };
 
-const ConvocatoriaCard: React.FC<{ item: Convocatoria; onEnrollSuccess: (id: string) => void }> = ({ item, onEnrollSuccess }) => {
+const ConvocatoriaCard: React.FC<{
+    item: Convocatoria;
+    onEnrollSuccess: (id: string) => void;
+    onShowDetails: (item: Convocatoria) => void; // ✅ NUEVO
+}> = ({ item, onEnrollSuccess, onShowDetails }) => {
     const [enrolling, setEnrolling] = useState(false);
     const { user } = useAuthStore();
 
@@ -57,9 +64,8 @@ const ConvocatoriaCard: React.FC<{ item: Convocatoria; onEnrollSuccess: (id: str
                 err.response?.data?.message ||
                 'Error al inscribirse';
 
-            // Mensajes específicos según el error
             if (errorMsg.includes('Ya estás inscrito')) {
-                onEnrollSuccess(item.id); // Marcar como inscrito
+                onEnrollSuccess(item.id);
                 alert('Ya estás inscrito en esta actividad.');
             } else if (errorMsg.includes('ID de usuario requerido') || errorMsg.includes('No autenticado')) {
                 alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
@@ -110,7 +116,13 @@ const ConvocatoriaCard: React.FC<{ item: Convocatoria; onEnrollSuccess: (id: str
                 </div>
 
                 <div className="cv-actions">
-                    <button className="cv-btn cv-btn-ghost">Detalles</button>
+                    {/* ✅ MODIFICADO: Ahora abre el modal */}
+                    <button
+                        className="cv-btn cv-btn-ghost"
+                        onClick={() => onShowDetails(item)}
+                    >
+                        Detalles
+                    </button>
                     <button
                         className="cv-btn cv-btn-primary"
                         onClick={handleEnroll}
@@ -137,6 +149,10 @@ const ConvocatoriasPanel: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const ITEMS_PER_PAGE = 9;
 
+    // ✅ NUEVO: Estado para el modal
+    const [selectedActivity, setSelectedActivity] = useState<Convocatoria | null>(null);
+    const [showDetailModal, setShowDetailModal] = useState(false);
+
     const [types, setTypes] = useState<{ [k: string]: boolean }>({
         "Medio Ambiente": false,
         "Infantil": false,
@@ -160,11 +176,10 @@ const ConvocatoriasPanel: React.FC = () => {
                         .map((i: string) => INTEREST_TO_AREA[i])
                         .filter(Boolean);
 
-                    // ✅ Obtener inscripciones del usuario
                     let userEnrollments: string[] = [];
                     if (user) {
                         try {
-                            const enrollRes = await api.get('/volunteer/enrollments');
+                            const enrollRes = await api.get(`/inscripciones/${user.id}/activas`);
                             if (enrollRes.data.success) {
                                 userEnrollments = enrollRes.data.data.map((e: any) => e.idActividad);
                             }
@@ -190,11 +205,12 @@ const ConvocatoriasPanel: React.FC = () => {
                             location: act.ubicacion
                                 ? `${act.ubicacion.nombreLugar}, ${act.ubicacion.nombreComuna}`
                                 : 'Por definir',
-                            excerpt: act.descripcion || '',
+                            excerpt: act.descripcion?.substring(0, 150) + '...' || '',
                             image: act.imagenUrl || '',
                             recommended: recommendedAreas.includes(act.area),
-                            enrolled: userEnrollments.includes(act._id), // ✅ Marcar si está inscrito
-                            isClosed: act.estado === 'closed', // ✅ Marcar si está cerrada
+                            enrolled: userEnrollments.includes(act._id),
+                            isClosed: act.estado === 'closed',
+                            fullData: act, // ✅ NUEVO: Guardar datos completos
                         };
                     });
 
@@ -229,13 +245,27 @@ const ConvocatoriasPanel: React.FC = () => {
         fetchActivities();
     }, [user]);
 
-    // ✅ Handler para actualizar estado cuando se inscribe
     const handleEnrollSuccess = (activityId: string) => {
         setItems(prevItems =>
             prevItems.map(item =>
                 item.id === activityId ? { ...item, enrolled: true } : item
             )
         );
+    };
+
+    // ✅ NUEVO: Handlers para el modal
+    const handleShowDetails = (item: Convocatoria) => {
+        setSelectedActivity(item);
+        setShowDetailModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowDetailModal(false);
+        setSelectedActivity(null);
+    };
+
+    const handleModalEnrollSuccess = (activityId: string) => {
+        handleEnrollSuccess(activityId);
     };
 
     const toggleType = (t: string) => setTypes((s) => ({ ...s, [t]: !s[t] }));
@@ -379,6 +409,7 @@ const ConvocatoriasPanel: React.FC = () => {
                                     item={it}
                                     key={it.id}
                                     onEnrollSuccess={handleEnrollSuccess}
+                                    onShowDetails={handleShowDetails} // ✅ NUEVO
                                 />
                             ))}
                         </div>
@@ -429,6 +460,33 @@ const ConvocatoriasPanel: React.FC = () => {
                     </>
                 )}
             </section>
+
+            {/* ✅ NUEVO: Modal de detalles */}
+            {showDetailModal && selectedActivity && selectedActivity.fullData && (
+                <ActivityDetailModal
+                    activity={{
+                        _id: selectedActivity.id,
+                        titulo: selectedActivity.fullData.titulo,
+                        descripcion: selectedActivity.fullData.descripcion,
+                        area: selectedActivity.fullData.area,
+                        tipo: selectedActivity.fullData.tipo,
+                        fechaInicio: selectedActivity.fullData.fechaInicio,
+                        fechaTermino: selectedActivity.fullData.fechaTermino,
+                        horaInicio: selectedActivity.fullData.horaInicio,
+                        horaTermino: selectedActivity.fullData.horaTermino,
+                        ubicacion: selectedActivity.fullData.ubicacion,
+                        cuposDisponibles: selectedActivity.fullData.cuposDisponibles,
+                        estado: selectedActivity.fullData.estado,
+                        imagenUrl: selectedActivity.fullData.imagenUrl,
+                        requisitos: selectedActivity.fullData.requisitos,
+                        contacto: selectedActivity.fullData.contacto,
+                        enrolled: selectedActivity.enrolled,
+                        isClosed: selectedActivity.isClosed,
+                    }}
+                    onClose={handleCloseModal}
+                    onEnrollSuccess={handleModalEnrollSuccess}
+                />
+            )}
         </main>
     );
 };

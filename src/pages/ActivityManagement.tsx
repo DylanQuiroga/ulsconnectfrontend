@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { FaPlus, FaEdit, FaTrash, FaLock, FaUnlock, FaSearch } from "react-icons/fa";
+import { FaPlus, FaEdit, FaTrash, FaLock, FaSearch, FaEye } from "react-icons/fa"; // ✅ Agregar FaEye
 import "./css/ActivityManagement.css";
 import api from "../services/api";
 import ActivityFormModal from "../components/admin/ActivityFormModal";
 import ConfirmModal from "../components/admin/ConfirmModal";
 import CloseActivityModal from "../components/admin/CloseActivityModal";
+import ActivityDetailModal from "../components/ActivityDetailModal"; // ✅ NUEVO
 
 interface Activity {
     _id: string;
@@ -42,6 +43,9 @@ export default function ActivityManagement() {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showCloseModal, setShowCloseModal] = useState(false);
     const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
+
+    // ✅ NUEVO: Estado para el modal de detalles
+    const [showDetailModal, setShowDetailModal] = useState(false);
 
     useEffect(() => {
         loadActivities();
@@ -125,6 +129,12 @@ export default function ActivityManagement() {
     const handleCloseClick = (activity: Activity) => {
         setSelectedActivity(activity);
         setShowCloseModal(true);
+    };
+
+    // ✅ NUEVO: Handler para ver detalles
+    const handleViewDetails = (activity: Activity) => {
+        setSelectedActivity(activity);
+        setShowDetailModal(true);
     };
 
     const handleFormSuccess = () => {
@@ -276,6 +286,15 @@ export default function ActivityManagement() {
                                     </td>
                                     <td>
                                         <div className="am-actions">
+                                            {/* ✅ NUEVO: Botón para ver detalles */}
+                                            <button
+                                                className="am-action-btn am-action-view"
+                                                onClick={() => handleViewDetails(activity)}
+                                                title="Ver detalles"
+                                            >
+                                                <FaEye />
+                                            </button>
+
                                             <button
                                                 className="am-action-btn am-action-edit"
                                                 onClick={() => handleEdit(activity)}
@@ -336,6 +355,17 @@ export default function ActivityManagement() {
                     activity={selectedActivity}
                     onClose={() => setShowCloseModal(false)}
                     onSuccess={handleCloseSuccess}
+                />
+            )}
+
+            {/* ✅ NUEVO: Modal de detalles */}
+            {showDetailModal && selectedActivity && (
+                <ActivityDetailModal
+                    activity={selectedActivity}
+                    onClose={() => {
+                        setShowDetailModal(false);
+                        setSelectedActivity(null);
+                    }}
                 />
             )}
         </div>

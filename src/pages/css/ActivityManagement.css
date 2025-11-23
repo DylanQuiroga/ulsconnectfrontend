@@ -356,6 +356,17 @@
     transform: scale(1.05);
 }
 
+/* ✅ NUEVO: Botón de ver detalles */
+.am-action-view {
+    background: #e0e7ff;
+    color: #4338ca;
+}
+
+.am-action-view:hover {
+    background: #c7d2fe;
+    transform: scale(1.05);
+}
+
 /* Empty state */
 .am-empty {
     text-align: center;

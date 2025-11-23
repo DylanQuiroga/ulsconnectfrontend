@@ -1,0 +1,342 @@
+.adm-modal {
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 0;
+}
+
+/* Header con imagen */
+.adm-header {
+    position: relative;
+    min-height: 200px;
+    background: linear-gradient(135deg, #0160b4, #0373d1);
+    border-radius: 16px 16px 0 0;
+}
+
+.adm-header-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    border-radius: 16px 16px 0 0;
+    opacity: 0.3;
+}
+
+.adm-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(255, 255, 255, 0.9);
+    z-index: 10;
+}
+
+.adm-close:hover {
+    background: white;
+}
+
+.adm-header-content {
+    position: relative;
+    padding: 32px;
+    z-index: 1;
+}
+
+.adm-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.adm-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.adm-badge-medio-ambiente {
+    color: #065f46;
+    background: #d1fae5;
+}
+
+.adm-badge-infantil {
+    color: #1e40af;
+    background: #dbeafe;
+}
+
+.adm-badge-adulto-mayor {
+    color: #9f1239;
+    background: #fce7f3;
+}
+
+.adm-badge-type {
+    color: #7c3aed;
+    background: #ede9fe;
+}
+
+.adm-badge-enrolled {
+    color: #065f46;
+    background: #d1fae5;
+}
+
+.adm-badge-closed {
+    color: #991b1b;
+    background: #fee2e2;
+}
+
+.adm-title {
+    margin: 0;
+    color: white;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Body */
+.adm-body {
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.adm-section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.adm-section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #0160b4;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.adm-section-header svg {
+    font-size: 1.3rem;
+}
+
+.adm-description {
+    color: #4b5563;
+    font-size: 1rem;
+    line-height: 1.7;
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+/* Info Grid */
+.adm-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.adm-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+    background: #f9fafb;
+    border-radius: 10px;
+    border-left: 4px solid #0160b4;
+}
+
+.adm-info-label {
+    color: #6b7280;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.adm-info-value {
+    color: #1f2937;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.adm-info-time {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #0160b4;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Location Card */
+.adm-location-card {
+    padding: 20px;
+    background: #f9fafb;
+    border-radius: 10px;
+    border-left: 4px solid #10b981;
+}
+
+.adm-location-card h4 {
+    margin: 0 0 8px 0;
+    color: #1f2937;
+    font-size: 1.1rem;
+}
+
+.adm-location-card p {
+    margin: 4px 0;
+    color: #4b5563;
+    font-size: 0.95rem;
+}
+
+.adm-location-region {
+    color: #6b7280;
+    font-size: 0.9rem;
+}
+
+.adm-map-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    color: #10b981;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.adm-map-link:hover {
+    color: #059669;
+    text-decoration: underline;
+}
+
+/* Cupos Card */
+.adm-cupos-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+    border-radius: 10px;
+    border-left: 4px solid #0160b4;
+}
+
+.adm-cupos-number {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #0160b4;
+}
+
+.adm-cupos-label {
+    color: #1f2937;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* Requirements List */
+.adm-requirements-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.adm-requirements-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #f9fafb;
+    border-radius: 8px;
+    color: #1f2937;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.adm-requirements-list li svg {
+    color: #10b981;
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* Contact Card */
+.adm-contact-card {
+    padding: 20px;
+    background: #f9fafb;
+    border-radius: 10px;
+    border-left: 4px solid #8b5cf6;
+}
+
+.adm-contact-card p {
+    margin: 8px 0;
+    color: #1f2937;
+    font-size: 0.95rem;
+}
+
+.adm-contact-card strong {
+    color: #6b7280;
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+.adm-contact-card a {
+    color: #0160b4;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.adm-contact-card a:hover {
+    color: #014a8a;
+    text-decoration: underline;
+}
+
+/* Footer */
+.adm-footer {
+    padding: 24px 32px;
+    border-top: 2px solid #e5e7eb;
+    background: #f9fafb;
+    border-radius: 0 0 16px 16px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .adm-modal {
+        max-width: 100%;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+
+    .adm-header {
+        min-height: 150px;
+    }
+
+    .adm-header-content {
+        padding: 20px;
+    }
+
+    .adm-title {
+        font-size: 1.4rem;
+    }
+
+    .adm-body {
+        padding: 20px;
+    }
+
+    .adm-info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .adm-footer {
+        padding: 20px;
+    }
+}
