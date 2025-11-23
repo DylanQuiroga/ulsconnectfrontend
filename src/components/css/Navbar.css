@@ -7,12 +7,12 @@
   top: 0;
   z-index: 1000;
   font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
 
-  img {
-    display: block;
-    max-width: 100%;
-    height: auto;
-  }
+.navbar img {
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
 
 .navbar-container {
@@ -41,6 +41,8 @@
   list-style: none;
   display: flex;
   gap: 8px;
+  margin: 0;
+  padding: 0;
 }
 
 .nav-links li {
@@ -61,7 +63,6 @@
 .nav-links li a:hover {
   color: #fe6970;
   background-color: #fff5f6;
-  transform: translateY(-2px);
 }
 
 .nav-links li a::after {
@@ -85,6 +86,7 @@
 .nav-buttons {
   display: flex;
   gap: 12px;
+  align-items: center;
 }
 
 .btn-login {
@@ -102,7 +104,6 @@
 .btn-login:hover {
   background-color: #0160b4;
   color: white;
-  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(1, 96, 180, 0.3);
 }
 
@@ -117,12 +118,11 @@
   transition: all 0.3s ease;
   font-size: 0.95rem;
   box-shadow: 0 2px 8px rgba(254, 105, 112, 0.3);
+}
 
-  &:hover {
-    background: linear-gradient(135deg, #0160b4, #0373d1);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(1, 96, 180, 0.4);
-  }
+.btn-register:hover {
+  background: linear-gradient(135deg, #0160b4, #0373d1);
+  box-shadow: 0 6px 16px rgba(1, 96, 180, 0.4);
 }
 
 /* --- Botón hamburguesa --- */
@@ -145,72 +145,133 @@
   display: none;
 }
 
-/* --- Mejoras visuales para nombre de usuario y botón de cerrar sesión (sin modificar HTML) */
+/* --- User Menu Dropdown --- */
+.user-menu {
+  position: relative;
+}
+
 .nav-user {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 12px;
-  background: linear-gradient(90deg, rgba(1,96,180,0.06), rgba(254,105,112,0.04));
-  border: 1px solid rgba(1,96,180,0.12);
-  color: #013f7a;
-  font-weight: 700;
-  border-radius: 999px;
-  font-size: 0.95rem;
-  line-height: 1;
-  box-shadow: 0 1px 4px rgba(1,96,180,0.06);
-}
-
-/* Pequeño avatar circular con la primera letra visual (usa ::first-letter del texto) */
-.nav-user::first-letter {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  margin-right: 6px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #0160b4, #fe6970);
-  color: #fff;
-  font-weight: 800;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-}
-
-/* Botón de cerrar sesión: compacto, claro y consistente con el estilo */
-.btn-logout {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: transparent;
-  border: 1px solid rgba(254,105,112,0.12);
-  color: #fe6970;
-  font-weight: 700;
+  padding: 10px 16px;
+  background: white;
+  border: 2px solid #0160b4;
+  border-radius: 10px;
+  color: #0160b4;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.18s ease;
-  box-shadow: 0 1px 4px rgba(254,105,112,0.06);
-  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(1, 96, 180, 0.1);
 }
 
-/* Icono textual antes del texto del botón (no requiere cambio de HTML) */
-.btn-logout::before {
-  content: "⎋";
-  display: inline-block;
+.nav-user:hover {
+  background: #0160b4;
+  color: white;
+  box-shadow: 0 4px 8px rgba(1, 96, 180, 0.2);
+  /* ❌ REMOVIDO: transform: translateY(-2px); */
+}
+
+.nav-user svg:first-child {
+  font-size: 1.3rem;
+}
+
+.nav-user .chevron {
+  font-size: 0.75rem;
+  transition: transform 0.3s ease;
+  margin-left: 4px;
+}
+
+.nav-user .chevron.open {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  /* ✅ Reducido de 12px a 8px */
+  right: 0;
+  min-width: 240px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+  z-index: 1001;
+  /* ✅ Mayor que navbar */
+  animation: slideDown 0.2s ease;
+  border: 1px solid #e5e7eb;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  text-align: left;
+  color: #374151;
   font-size: 0.95rem;
-  line-height: 1;
-  transform: translateY(-1px);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  text-decoration: none;
 }
 
-/* Hover / foco para el botón, sutil y contrastado */
-.btn-logout:hover,
-.btn-logout:focus {
-  background: linear-gradient(90deg, rgba(254,105,112,0.08), rgba(1,96,180,0.04));
-  color: #000000;
-  border-color: rgba(254,105,112,0.18);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(254,105,112,0.12);
+.dropdown-item:hover {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+.dropdown-item svg {
+  font-size: 1.1rem;
+  color: #6b7280;
+  flex-shrink: 0;
+
+}
+
+.dropdown-item:hover svg {
+  color: #0160b4;
+}
+
+.dropdown-item.logout {
+  color: #dc2626;
+}
+
+.dropdown-item.logout:hover {
+  background: #fef2f2;
+}
+
+.dropdown-item.logout svg {
+  color: #dc2626;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 8px 4px;
+}
+
+/* Disabled state */
+.dropdown-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* --- Responsivo --- */
@@ -277,12 +338,23 @@
     box-sizing: border-box;
   }
 
-  .nav-user {
-    padding: 6px 10px;
-    font-size: 0.9rem;
+  .user-menu {
+    width: 100%;
+    margin-top: 16px;
   }
-  .btn-logout {
-    padding: 8px 14px;
-    font-size: 0.95rem;
+
+  .nav-user {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .dropdown-menu {
+    position: static;
+    width: 100%;
+    box-shadow: none;
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin-top: 8px;
+    border-radius: 0;
   }
 }

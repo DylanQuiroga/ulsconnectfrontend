@@ -9,7 +9,7 @@ const LoginSection: React.FC = () => {
   const [contrasena, setContrasena] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  
+
   const { setUser } = useAuthStore();
   const navigate = useNavigate();
 
@@ -17,21 +17,51 @@ const LoginSection: React.FC = () => {
     e.preventDefault();
     setError(null);
     setLoading(true);
+
     try {
+      console.log('🔐 Intentando login...');
+
       const res = await api.post("/login", {
         correoUniversitario: correo,
-        contrasena,
+        contrasena: contrasena,
       });
 
-      if (res.status >= 200 && res.status < 300) {
-        // Guardar usuario en Zustand
-        setUser(res.data?.user ?? null);
-        navigate("/perfil_voluntario");
-      } else {
-        setError("Credenciales inválidas");
+      console.log('✅ Login exitoso:', res.data);
+
+      if (res.data.success) {
+        const userData = res.data.user;
+
+        // Guardar usuario completo
+        setUser({
+          id: userData._id || userData.id,
+          nombre: userData.nombre,
+          correoUniversitario: userData.correoUniversitario,
+          telefono: userData.telefono,
+          intereses: userData.intereses,
+          role: userData.rol || userData.role,
+          edad: userData.edad,
+          carrera: userData.carrera,
+          comuna: userData.comuna,
+          direccion: userData.direccion,
+        });
+
+        console.log('✅ Usuario guardado en store:', userData);
+
+        // Redirigir según el rol
+        const userRole = userData.rol || userData.role;
+        if (userRole === "admin" || userRole === "staff") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/volunteer/panel");
+        }
       }
     } catch (err: any) {
-      setError(err?.response?.data?.error || "Error de autenticación");
+      console.error("❌ Error al iniciar sesión:", err);
+      setError(
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        "Error al iniciar sesión. Verifica tus credenciales."
+      );
     } finally {
       setLoading(false);
     }

@@ -1,48 +1,31 @@
 import "./css/ConvocatoriasDestacadas.css";
+import imagenInfancia from "../assets/imagesConvocatorias/image2_i.webp"
+import imagenAdulto from "../assets/imagesConvocatorias/image9_a.webp"
+import imagenMedioambiente from "../assets/imagesConvocatorias/image5_p.webp"
+import { Link } from "react-router-dom";
 
 const convocatorias = [
   {
-    imagen: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e",
+    imagen: imagenInfancia,
     categoria: "Infancia",
     titulo: "Apoyo escolar en comunidades rurales",
     descripcion:
       "Únete a nuestro programa para brindar refuerzo escolar a niños y niñas que más lo necesitan.",
   },
   {
-    imagen: "https://pañalesmo.cl/wp-content/uploads/2024/10/Copia-de-blog.jpg",
+    imagen: imagenAdulto,
     categoria: "Adulto Mayor",
     titulo: "Compañía y recreación para adultos mayores",
     descripcion:
       "Participa en actividades recreativas y de acompañamiento para mejorar su calidad de vida.",
   },
   {
-    imagen: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
+    imagen: imagenMedioambiente,
     categoria: "Medioambiente",
     titulo: "Reforestación y cuidado del entorno",
     descripcion:
       "Ayúdanos a plantar árboles y limpiar espacios naturales en distintas zonas del país.",
-  },
-  {
-    imagen: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
-    categoria: "Medioambiente",
-    titulo: "Reforestación y cuidado del entorno",
-    descripcion:
-      "Ayúdanos a plantar árboles y limpiar espacios naturales en distintas zonas del país.",
-  },
-  {
-    imagen: "https://pañalesmo.cl/wp-content/uploads/2024/10/Copia-de-blog.jpg",
-    categoria: "Adulto Mayor",
-    titulo: "Compañía y recreación para adultos mayores",
-    descripcion:
-      "Participa en actividades recreativas y de acompañamiento para mejorar su calidad de vida.",
-  },
-  {
-    imagen: "https://pañalesmo.cl/wp-content/uploads/2024/10/Copia-de-blog.jpg",
-    categoria: "Adulto Mayor",
-    titulo: "Compañía y recreación para adultos mayores",
-    descripcion:
-      "Participa en actividades recreativas y de acompañamiento para mejorar su calidad de vida.",
-  },
+  }
 ];
 
 export default function ConvocatoriasDestacadas() {
@@ -87,7 +70,7 @@ export default function ConvocatoriasDestacadas() {
         </div>
 
         <div className="conv-footer">
-          <button className="conv-vermas" aria-label="Ver más convocatorias">VER MÁS</button>
+          <Link to="/convocatorias_panel"><button className="conv-vermas" aria-label="Ver más convocatorias">VER MÁS</button></Link>
         </div>
       </div>
     </section>

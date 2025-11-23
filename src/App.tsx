@@ -10,7 +10,7 @@ function App() {
     <div className="flex flex-col min-h-screen">
       {!hideNavAndFooter && <Navbar />}
       <main className="flex-grow">
-        <AppRoutes/>
+        <AppRoutes />
       </main>
       {!hideNavAndFooter && <Footer />}
     </div>
