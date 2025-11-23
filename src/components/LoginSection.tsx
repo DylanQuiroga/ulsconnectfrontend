@@ -19,30 +19,35 @@ const LoginSection: React.FC = () => {
     setLoading(true);
 
     try {
-      // ✅ CORREGIDO: El endpoint es /login (sin /auth)
+      console.log('🔐 Intentando login...');
+
       const res = await api.post("/login", {
         correoUniversitario: correo,
         contrasena: contrasena,
       });
 
+      console.log('✅ Login exitoso:', res.data);
+
       if (res.data.success) {
         const userData = res.data.user;
 
-        // ✅ Guardar usuario completo con todos los campos
+        // Guardar usuario completo
         setUser({
           id: userData._id || userData.id,
           nombre: userData.nombre,
           correoUniversitario: userData.correoUniversitario,
           telefono: userData.telefono,
           intereses: userData.intereses,
-          role: userData.rol || userData.role, // El backend usa 'rol'
+          role: userData.rol || userData.role,
           edad: userData.edad,
           carrera: userData.carrera,
           comuna: userData.comuna,
           direccion: userData.direccion,
         });
 
-        // ✅ Redirigir según el rol
+        console.log('✅ Usuario guardado en store:', userData);
+
+        // Redirigir según el rol
         const userRole = userData.rol || userData.role;
         if (userRole === "admin" || userRole === "staff") {
           navigate("/admin/dashboard");
@@ -51,7 +56,7 @@ const LoginSection: React.FC = () => {
         }
       }
     } catch (err: any) {
-      console.error("Error al iniciar sesión:", err);
+      console.error("❌ Error al iniciar sesión:", err);
       setError(
         err.response?.data?.message ||
         err.response?.data?.error ||

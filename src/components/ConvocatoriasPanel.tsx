@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaCalendarAlt, FaMapMarkerAlt, FaStar } from "react-icons/fa";
+import { FaCalendarAlt, FaMapMarkerAlt, FaStar, FaCheckCircle } from "react-icons/fa";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import "./css/ConvocatoriasPanel.css";
@@ -11,14 +11,16 @@ type Convocatoria = {
     title: string;
     category: string;
     date: string;
-    dateObj: Date | null; // ✅ Para filtrar por fecha
+    dateObj: Date | null;
     location: string;
     excerpt: string;
     image?: string;
     recommended?: boolean;
+    enrolled?: boolean; // ✅ NUEVO
+    isClosed?: boolean; // ✅ NUEVO
 };
 
-const ConvocatoriaCard: React.FC<{ item: Convocatoria }> = ({ item }) => {
+const ConvocatoriaCard: React.FC<{ item: Convocatoria; onEnrollSuccess: (id: string) => void }> = ({ item, onEnrollSuccess }) => {
     const [enrolling, setEnrolling] = useState(false);
     const { user } = useAuthStore();
 
@@ -28,19 +30,48 @@ const ConvocatoriaCard: React.FC<{ item: Convocatoria }> = ({ item }) => {
             return;
         }
 
+        if (!user.id) {
+            console.error('Usuario sin ID:', user);
+            alert('Error: No se pudo obtener tu información de usuario. Por favor, cierra sesión e inicia sesión nuevamente.');
+            return;
+        }
+
         setEnrolling(true);
         try {
+            console.log('📤 Enviando inscripción a evento:', item.id);
+
             const res = await api.post(`/events/${item.id}/enroll`);
 
+            console.log('✅ Respuesta:', res.data);
+
             if (res.data.success) {
-                alert('¡Inscripción exitosa!');
+                onEnrollSuccess(item.id);
+                alert('¡Inscripción exitosa! Te hemos enviado un correo de confirmación.');
             }
         } catch (err: any) {
-            const errorMsg = err.response?.data?.error || 'Error al inscribirse';
-            alert(errorMsg);
+            console.error('❌ Error completo:', err);
+            console.error('❌ Response data:', err.response?.data);
+
+            const errorMsg =
+                err.response?.data?.error ||
+                err.response?.data?.message ||
+                'Error al inscribirse';
+
+            // Mensajes específicos según el error
+            if (errorMsg.includes('Ya estás inscrito')) {
+                onEnrollSuccess(item.id); // Marcar como inscrito
+                alert('Ya estás inscrito en esta actividad.');
+            } else if (errorMsg.includes('ID de usuario requerido') || errorMsg.includes('No autenticado')) {
+                alert('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.');
+                window.location.href = '/login';
+            } else if (errorMsg.includes('convocatoria está cerrada')) {
+                alert(`Esta convocatoria está cerrada. ${err.response?.data?.motivo || ''}`);
+            } else {
+                alert(`Error: ${errorMsg}`);
+            }
 
             if (err.response?.data?.motivo) {
-                console.log('Motivo de cierre:', err.response.data.motivo);
+                console.log('ℹ️ Motivo:', err.response.data.motivo);
             }
         } finally {
             setEnrolling(false);
@@ -48,10 +79,20 @@ const ConvocatoriaCard: React.FC<{ item: Convocatoria }> = ({ item }) => {
     };
 
     return (
-        <article className={`cv-card ${item.recommended ? 'cv-card-recommended' : ''}`}>
+        <article className={`cv-card ${item.recommended ? 'cv-card-recommended' : ''} ${item.enrolled ? 'cv-card-enrolled' : ''} ${item.isClosed ? 'cv-card-closed' : ''}`}>
             {item.recommended && (
                 <div className="cv-recommended-badge">
                     <FaStar /> Recomendado para ti
+                </div>
+            )}
+            {item.enrolled && (
+                <div className="cv-enrolled-badge">
+                    <FaCheckCircle /> Inscrito
+                </div>
+            )}
+            {item.isClosed && (
+                <div className="cv-closed-badge">
+                    Convocatoria Cerrada
                 </div>
             )}
             <div className="cv-body">
@@ -73,9 +114,13 @@ const ConvocatoriaCard: React.FC<{ item: Convocatoria }> = ({ item }) => {
                     <button
                         className="cv-btn cv-btn-primary"
                         onClick={handleEnroll}
-                        disabled={enrolling || !user}
+                        disabled={enrolling || !user || item.enrolled || item.isClosed}
                     >
-                        {enrolling ? 'Inscribiendo...' : 'Inscribirme'}
+                        {item.isClosed
+                            ? 'Cerrada'
+                            : item.enrolled
+                                ? '✓ Inscrito'
+                                : (enrolling ? 'Inscribiendo...' : 'Inscribirme')}
                     </button>
                 </div>
             </div>
@@ -90,16 +135,14 @@ const ConvocatoriasPanel: React.FC = () => {
     const [query, setQuery] = useState("");
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const ITEMS_PER_PAGE = 9; // ✅ Items por página
+    const ITEMS_PER_PAGE = 9;
 
-    // ✅ SOLO 3 FILTROS
     const [types, setTypes] = useState<{ [k: string]: boolean }>({
         "Medio Ambiente": false,
         "Infantil": false,
         "Adulto mayor": false,
     });
 
-    // ✅ Mapeo de intereses del usuario a áreas de actividades
     const INTEREST_TO_AREA: Record<string, string> = {
         "infantes": "Infantil",
         "adultos-mayores": "Adulto mayor",
@@ -112,11 +155,23 @@ const ConvocatoriasPanel: React.FC = () => {
                 const res = await api.get('/events');
 
                 if (res.data.success) {
-                    // ✅ Obtener áreas recomendadas del usuario (desde el login)
                     const userInterests = user?.intereses || [];
                     const recommendedAreas = userInterests
                         .map((i: string) => INTEREST_TO_AREA[i])
                         .filter(Boolean);
+
+                    // ✅ Obtener inscripciones del usuario
+                    let userEnrollments: string[] = [];
+                    if (user) {
+                        try {
+                            const enrollRes = await api.get('/volunteer/enrollments');
+                            if (enrollRes.data.success) {
+                                userEnrollments = enrollRes.data.data.map((e: any) => e.idActividad);
+                            }
+                        } catch (err) {
+                            console.error('Error al cargar inscripciones:', err);
+                        }
+                    }
 
                     const activities = res.data.data.map((act: any) => {
                         const dateObj = act.fechaInicio ? new Date(act.fechaInicio) : null;
@@ -138,17 +193,17 @@ const ConvocatoriasPanel: React.FC = () => {
                             excerpt: act.descripcion || '',
                             image: act.imagenUrl || '',
                             recommended: recommendedAreas.includes(act.area),
+                            enrolled: userEnrollments.includes(act._id), // ✅ Marcar si está inscrito
+                            isClosed: act.estado === 'closed', // ✅ Marcar si está cerrada
                         };
                     });
 
-                    // ✅ Ordenar: recomendados primero
                     activities.sort((a: Convocatoria, b: Convocatoria) =>
                         (b.recommended ? 1 : 0) - (a.recommended ? 1 : 0)
                     );
 
                     setItems(activities);
 
-                    // ✅ Pre-seleccionar filtros según intereses del usuario (desde login)
                     if (recommendedAreas.length > 0) {
                         const initialTypes: { [k: string]: boolean } = {
                             "Medio Ambiente": false,
@@ -174,22 +229,27 @@ const ConvocatoriasPanel: React.FC = () => {
         fetchActivities();
     }, [user]);
 
+    // ✅ Handler para actualizar estado cuando se inscribe
+    const handleEnrollSuccess = (activityId: string) => {
+        setItems(prevItems =>
+            prevItems.map(item =>
+                item.id === activityId ? { ...item, enrolled: true } : item
+            )
+        );
+    };
+
     const toggleType = (t: string) => setTypes((s) => ({ ...s, [t]: !s[t] }));
 
-    // ✅ Filtrado funcional (búsqueda, tipo, fecha)
     const filtered = items.filter((it) => {
-        // Filtro por texto
         if (query && !`${it.title} ${it.excerpt}`.toLowerCase().includes(query.toLowerCase())) {
             return false;
         }
 
-        // Filtro por tipo
         const activeTypes = Object.entries(types).filter(([, v]) => v).map(([k]) => k);
         if (activeTypes.length && !activeTypes.includes(it.category)) {
             return false;
         }
 
-        // ✅ Filtro por fecha (si hay fecha seleccionada)
         if (selectedDate && it.dateObj) {
             const itemDate = new Date(it.dateObj.getFullYear(), it.dateObj.getMonth(), it.dateObj.getDate());
             const filterDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
@@ -202,13 +262,11 @@ const ConvocatoriasPanel: React.FC = () => {
         return true;
     });
 
-    // ✅ Paginación funcional
     const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const currentItems = filtered.slice(startIndex, endIndex);
 
-    // ✅ Cambiar de página
     const goToPage = (page: number) => {
         if (page >= 1 && page <= totalPages) {
             setCurrentPage(page);
@@ -237,7 +295,7 @@ const ConvocatoriasPanel: React.FC = () => {
                         value={query}
                         onChange={(e) => {
                             setQuery(e.target.value);
-                            setCurrentPage(1); // ✅ Reiniciar paginación
+                            setCurrentPage(1);
                         }}
                     />
                 </label>
@@ -247,7 +305,7 @@ const ConvocatoriasPanel: React.FC = () => {
                     <Calendar
                         onChange={(value) => {
                             setSelectedDate(value as Date);
-                            setCurrentPage(1); // ✅ Reiniciar paginación
+                            setCurrentPage(1);
                         }}
                         value={selectedDate}
                         className="cv-calendar-widget"
@@ -274,7 +332,7 @@ const ConvocatoriasPanel: React.FC = () => {
                                 checked={!!types[t]}
                                 onChange={() => {
                                     toggleType(t);
-                                    setCurrentPage(1); // ✅ Reiniciar paginación
+                                    setCurrentPage(1);
                                 }}
                             />
                             <span>{t}</span>
@@ -317,11 +375,14 @@ const ConvocatoriasPanel: React.FC = () => {
                     <>
                         <div className="cv-grid">
                             {currentItems.map((it) => (
-                                <ConvocatoriaCard item={it} key={it.id} />
+                                <ConvocatoriaCard
+                                    item={it}
+                                    key={it.id}
+                                    onEnrollSuccess={handleEnrollSuccess}
+                                />
                             ))}
                         </div>
 
-                        {/* ✅ Paginación funcional */}
                         {totalPages > 1 && (
                             <div className="cv-pagination">
                                 <button
@@ -335,7 +396,6 @@ const ConvocatoriasPanel: React.FC = () => {
                                 <div className="cv-pages">
                                     {[...Array(totalPages)].map((_, i) => {
                                         const page = i + 1;
-                                        // Mostrar solo páginas relevantes
                                         if (
                                             page === 1 ||
                                             page === totalPages ||
