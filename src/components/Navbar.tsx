@@ -3,7 +3,7 @@ import "./css/Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import logo_souls from "../public/logo_souls.png";
 import { useAuthStore } from "../stores/sessionStore";
-import { FaUser, FaChartLine, FaSignOutAlt, FaUserCircle, FaChevronDown } from "react-icons/fa";
+import { FaUser, FaChartLine, FaSignOutAlt, FaUserCircle, FaChevronDown, FaClipboardList } from "react-icons/fa"; // ✅ Agregado FaClipboardList
 
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -103,14 +103,26 @@ const Navbar: React.FC = () => {
                       <span>Panel de Administrador</span>
                     </Link>
                   ) : (
-                    <Link
-                      to="/volunteer/panel"
-                      className="dropdown-item"
-                      onClick={() => setDropdownOpen(false)}
-                    >
-                      <FaChartLine />
-                      <span>Panel de Voluntario</span>
-                    </Link>
+                    <>
+                      <Link
+                        to="/volunteer/panel"
+                        className="dropdown-item"
+                        onClick={() => setDropdownOpen(false)}
+                      >
+                        <FaChartLine />
+                        <span>Panel de Voluntario</span>
+                      </Link>
+
+                      {/* ✅ NUEVO: Mis Inscripciones */}
+                      <Link
+                        to="/mis-inscripciones"
+                        className="dropdown-item"
+                        onClick={() => setDropdownOpen(false)}
+                      >
+                        <FaClipboardList />
+                        <span>Mis Inscripciones</span>
+                      </Link>
+                    </>
                   )}
 
                   <div className="dropdown-divider"></div>

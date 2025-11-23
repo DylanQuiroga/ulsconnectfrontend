@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import VolunteerProfile from "./pages/VolunteerProfile";
 import PerfilVoluntario from "./components/PerfilVoluntario";
 import ConvocatoriasPanel from "./components/ConvocatoriasPanel";
+import MisInscripciones from "./components/MisInscripciones"; // ✅ NUEVO
 import WhoWeAre from "./pages/whoweare";
 import NewsSection from "./components/Noticias";
 import ActivityManagement from "./pages/ActivityManagement";
@@ -25,17 +26,18 @@ const AppRoutes: React.FC = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
 
-        {/* ✅ NUEVA: Panel del Voluntario (conectado al navbar) */}
+        {/* ✅ Panel del Voluntario */}
         <Route path="/volunteer/panel" element={<VolunteerProfile />} />
-
-        {/* Ruta antigua mantenida por compatibilidad */}
         <Route path="/volunteer_dashboard" element={<VolunteerProfile />} />
 
-        {/* Perfil de usuario */}
+        {/* ✅ Perfil de usuario */}
         <Route path="/perfil_voluntario" element={<PerfilVoluntario />} />
 
-        {/* Convocatorias */}
+        {/* ✅ Convocatorias */}
         <Route path="/convocatorias_panel" element={<ConvocatoriasPanel />} />
+
+        {/* ✅ NUEVO: Mis Inscripciones */}
+        <Route path="/mis-inscripciones" element={<MisInscripciones />} />
 
         {/* Páginas institucionales */}
         <Route path="/quienes-somos" element={<WhoWeAre />} />
@@ -43,9 +45,10 @@ const AppRoutes: React.FC = () => {
         <Route path="/contacto" element={<ContactForm />} />
         <Route path="/success" element={<Success />} />
 
-        {/* ✅ Panel de Administrador (conectado al navbar) */}
+        {/* ✅ Panel de Administrador */}
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/activity-management" element={<ActivityManagement />} />
+
         {/* 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
