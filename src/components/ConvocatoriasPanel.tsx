@@ -177,11 +177,14 @@ const ConvocatoriasPanel: React.FC = () => {
                         .filter(Boolean);
 
                     let userEnrollments: string[] = [];
-                    if (user) {
+                    if (user?.id) { // ✅ Cambiar user a user?.id
                         try {
                             const enrollRes = await api.get(`/inscripciones/${user.id}/activas`);
                             if (enrollRes.data.success) {
-                                userEnrollments = enrollRes.data.data.map((e: any) => e.idActividad);
+                                // ✅ CORREGIDO: Extraer correctamente el ID de la actividad
+                                userEnrollments = enrollRes.data.data.map((e: any) =>
+                                    e.idActividad?._id || e.idActividad
+                                );
                             }
                         } catch (err) {
                             console.error('Error al cargar inscripciones:', err);
@@ -210,7 +213,7 @@ const ConvocatoriasPanel: React.FC = () => {
                             recommended: recommendedAreas.includes(act.area),
                             enrolled: userEnrollments.includes(act._id),
                             isClosed: act.estado === 'closed',
-                            fullData: act, // ✅ NUEVO: Guardar datos completos
+                            fullData: act,
                         };
                     });
 
