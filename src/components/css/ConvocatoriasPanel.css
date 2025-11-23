@@ -441,6 +441,45 @@
     margin-bottom: 10px;
 }
 
+/* ✅ Botón limpiar fecha */
+.cv-clear-date {
+    width: 100%;
+    margin-top: 10px;
+    padding: 8px 16px;
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cv-clear-date:hover {
+    background: #fecaca;
+    border-color: #f87171;
+}
+
+/* ✅ Botón en empty state */
+.cv-empty {
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, rgba(1, 96, 180, 0.03), rgba(254, 105, 112, 0.02));
+    border-radius: 16px;
+    border: 2px dashed rgba(1, 96, 180, 0.2);
+}
+
+.cv-empty p {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.cv-empty .cv-btn {
+    margin-top: 16px;
+}
+
 /* responsive */
 @media (max-width: 1100px) {
     .cv-grid {

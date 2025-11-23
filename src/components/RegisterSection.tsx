@@ -31,108 +31,65 @@ const RegisterSection: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setSuccess(false);
     setLoading(true);
 
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
-    const edad = formData.get("edad") as string;
-
-    // Validaciones
-    if (edad && parseInt(edad) < 0) {
-      setError("La edad no puede ser negativa");
-      setLoading(false);
-      return;
-    }
-
-    if (edad && (parseInt(edad) < 0 || parseInt(edad) > 100)) {
-      setError("Por favor ingresa una edad válida (0-100 años)");
-      setLoading(false);
-      return;
-    }
-
-    if (!email.endsWith('@userena.cl')) {
-      setError("Por favor ingresa un correo institucional válido (@userena.cl)");
-      setLoading(false);
-      return;
-    }
-
-    // validar contraseñas
-    if (!password || !confirmPassword) {
-      setError("Ingresa y confirma la contraseña.");
-      setLoading(false);
-      return;
-    }
-    if (password.length < 8) {
-      setError("La contraseña debe tener al menos 8 caracteres.");
-      setLoading(false);
-      return;
-    }
-    if (password !== confirmPassword) {
-      setError("Las contraseñas no coinciden.");
-      setLoading(false);
-      return;
-    }
-
-    // Preparar datos para enviar (manteniendo los campos del formulario)
-    const causas = formData.getAll("causes") as string[];
-
-    const submitData: FormData = {
-      nombreCompleto: formData.get("fullName") as string,
-      edad: edad,
-      telefono: formData.get("phone") as string,
-      email: email,
-      carrera: formData.get("career") as string,
-      comuna: formData.get("commune") as string,
-      direccion: formData.get("direccion") as string, // <-- añadido
-      causas: causas,
-      contrasena: password,
-      status: "pendiente"
-    };
-
     try {
+      const formData = new FormData(e.currentTarget as HTMLFormElement);
+
+      const email = (formData.get("email") as string).toLowerCase().trim();
+      const password = formData.get("password") as string;
+      const confirmPassword = formData.get("confirmPassword") as string;
+
+      // Validación de dominios institucionales
+      if (!email.endsWith('@userena.cl') && !email.endsWith('@alumnouls.cl')) {
+        setError("Por favor ingresa un correo institucional válido (@userena.cl o @alumnouls.cl)");
+        setLoading(false);
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        setError("Las contraseñas no coinciden");
+        setLoading(false);
+        return;
+      }
+
+      const edad = formData.get("edad") as string;
+      const causas = Array.from(formData.getAll("causas")) as string[];
+
       const payload = {
-        nombre: submitData.nombreCompleto,
-        correoUniversitario: submitData.email,
-        contrasena: submitData.contrasena,
-        status: "pendiente",
+        nombre: formData.get("fullName") as string,
+        correoUniversitario: email,
+        contrasena: password,
         rol: "estudiante",
-        edad: submitData.edad,
-        telefono: submitData.telefono,
-        carrera: submitData.carrera,
-        comuna: submitData.comuna,
-        direccion: submitData.direccion, // <-- añadido
-        intereses: submitData.causas
+        edad: edad ? parseInt(edad) : null,
+        telefono: (formData.get("phone") as string) || null,
+        carrera: (formData.get("career") as string) || '',
+        comuna: (formData.get("commune") as string) || '',
+        direccion: (formData.get("direccion") as string) || '',
+        intereses: causas || []
       };
 
-      const response = await api.post("/signup", payload);
+      // ✅ CORREGIDO: El endpoint es /register (sin /auth)
+      const response = await api.post("/register", payload);
 
-      // Si backend hace redirect a /profile, forzar navegación; si devuelve OK, también
-      if (response.status >= 200 && response.status < 300) {
+      if (response.data.success) {
         setSuccess(true);
-        (e.target as HTMLFormElement).reset();
-        setPassword("");
-        setConfirmPassword("");
-      } else {
-        setError("No se pudo registrar. Intenta nuevamente.");
-      }
+        setError("");
 
-    } catch (error) {
-      console.error("Error al enviar el formulario:", error);
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          setError(`Error del servidor: ${error.response.status} - ${error.response.data?.error || error.response.data?.message || 'Intenta nuevamente'}`);
-        } else if (error.request) {
-          setError("No se pudo conectar con el servidor. Verifica tu conexión a internet.");
-        } else {
-          setError("Error al configurar la petición: " + error.message);
-        }
-      } else {
-        setError("Error inesperado: " + (error as Error).message);
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 3000);
       }
+    } catch (err: any) {
+      console.error("Error en registro:", err);
+      setError(
+        err.response?.data?.error ||
+        err.response?.data?.message ||
+        "Error al registrar usuario"
+      );
     } finally {
       setLoading(false);
     }
@@ -212,8 +169,8 @@ const RegisterSection: React.FC = () => {
                   id="email"
                   name="email"
                   type="email"
-                  pattern="[a-zA-Z0-9._%+\-]+@userena\.cl"
-                  placeholder="nombre@userena.cl"
+                  pattern="[a-zA-Z0-9._%+\-]+@(userena|alumnouls)\.cl"
+                  placeholder="nombre@userena.cl o nombre@alumnouls.cl"
                   required
                   disabled={loading}
                 />

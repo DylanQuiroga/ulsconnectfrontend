@@ -20,18 +20,32 @@ const AppRoutes: React.FC = () => {
     <>
       <ScrollToTop />
       <Routes>
-
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+
+        {/* ✅ NUEVA: Panel del Voluntario (conectado al navbar) */}
+        <Route path="/volunteer/panel" element={<VolunteerProfile />} />
+
+        {/* Ruta antigua mantenida por compatibilidad */}
         <Route path="/volunteer_dashboard" element={<VolunteerProfile />} />
+
+        {/* Perfil de usuario */}
         <Route path="/perfil_voluntario" element={<PerfilVoluntario />} />
+
+        {/* Convocatorias */}
         <Route path="/convocatorias_panel" element={<ConvocatoriasPanel />} />
+
+        {/* Páginas institucionales */}
         <Route path="/quienes-somos" element={<WhoWeAre />} />
         <Route path="/noticias" element={<NewsSection />} />
         <Route path="/contacto" element={<ContactForm />} />
         <Route path="/success" element={<Success />} />
+
+        {/* ✅ Panel de Administrador (conectado al navbar) */}
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
+
+        {/* 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

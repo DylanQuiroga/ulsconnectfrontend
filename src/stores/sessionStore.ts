@@ -3,10 +3,16 @@ import { persist } from 'zustand/middleware';
 import api from '../services/api';
 
 interface User {
+  id: string; // ✅ AGREGAR ESTE CAMPO
   nombre: string;
   correoUniversitario: string;
   telefono?: string;
   intereses?: string[];
+  role?: string; // ✅ AGREGAR para validar permisos
+  edad?: number;
+  carrera?: string;
+  comuna?: string;
+  direccion?: string;
 }
 
 interface AuthState {
@@ -28,21 +34,44 @@ export const useAuthStore = create<AuthState>()(
       fetchUser: async () => {
         set({ isLoading: true });
         try {
-          const res = await api.get('/me');
-          set({ user: res.data?.user ?? null, isLoading: false });
+          // ✅ CORREGIDO: El endpoint es /profile (sin /auth)
+          const res = await api.get('/profile');
+          if (res.data.success) {
+            const userData = res.data.user;
+            set({
+              user: {
+                id: userData._id || userData.id,
+                nombre: userData.nombre,
+                correoUniversitario: userData.correoUniversitario,
+                telefono: userData.telefono,
+                intereses: userData.intereses,
+                role: userData.rol || userData.role,
+                edad: userData.edad,
+                carrera: userData.carrera,
+                comuna: userData.comuna,
+                direccion: userData.direccion,
+              },
+            });
+          }
         } catch (error) {
-          set({ user: null, isLoading: false });
+          console.error('Error fetching user:', error);
+          set({ user: null });
+        } finally {
+          set({ isLoading: false });
         }
       },
 
       logout: async () => {
         set({ isLoading: true });
         try {
-          await api.post('/logout');
-          set({ user: null, isLoading: false });
+          // ✅ CORREGIDO: El endpoint es /logout (sin /auth)
+          await api.get('/logout');
+          set({ user: null });
         } catch (error) {
-          console.error('Logout failed', error);
-          set({ user: null, isLoading: false });
+          console.error('Error logging out:', error);
+          set({ user: null });
+        } finally {
+          set({ isLoading: false });
         }
       },
     }),
