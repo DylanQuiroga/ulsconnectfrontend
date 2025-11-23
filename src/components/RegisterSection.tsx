@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // ✅ Agregar useEffect
 import api from "../services/api";
 import "./css/RegisterSection.css";
-import axios from "axios";
 
 // Importar los datos desde los archivos JSON
 import careersData from "../data/careers.json";
@@ -19,7 +18,6 @@ interface FormData {
   direccion: string;
   causas: string[];
   status: string;
-
 }
 
 const RegisterSection: React.FC = () => {
@@ -30,6 +28,29 @@ const RegisterSection: React.FC = () => {
   // nuevos estados para contraseña
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+
+  // ✅ NUEVO: Obtener token CSRF al montar el componente
+  useEffect(() => {
+    const fetchCsrfToken = async () => {
+      try {
+        const response = await api.get('/csrf-token');
+        console.log('✅ Token CSRF obtenido desde servidor:', response.data);
+        console.log('🍪 Cookies después de obtener token:', document.cookie);
+
+        // Verificar que la cookie se guardó
+        const hasCookie = document.cookie.includes('XSRF-TOKEN');
+        if (hasCookie) {
+          console.log('✅ Cookie XSRF-TOKEN presente');
+        } else {
+          console.warn('⚠️ Cookie XSRF-TOKEN NO se guardó');
+        }
+      } catch (err) {
+        console.error('❌ Error obteniendo token CSRF:', err);
+      }
+    };
+
+    fetchCsrfToken();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,13 +78,12 @@ const RegisterSection: React.FC = () => {
       }
 
       const edad = formData.get("edad") as string;
-      const causas = Array.from(formData.getAll("causas")) as string[];
+      const causas = Array.from(formData.getAll("causes")) as string[]; // ✅ Corregido: era "causas", debe ser "causes"
 
       const payload = {
         nombre: formData.get("fullName") as string,
         correoUniversitario: email,
         contrasena: password,
-        rol: "estudiante",
         edad: edad ? parseInt(edad) : null,
         telefono: (formData.get("phone") as string) || null,
         carrera: (formData.get("career") as string) || '',
@@ -72,10 +92,13 @@ const RegisterSection: React.FC = () => {
         intereses: causas || []
       };
 
-      // ✅ CORREGIDO: El endpoint es /register (sin /auth)
-      const response = await api.post("/register", payload);
+      console.log('📤 Enviando registro:', payload);
 
-      if (response.data.success) {
+      const response = await api.post("/auth/request", payload);
+
+      console.log('✅ Respuesta del servidor:', response.data);
+
+      if (response.data.message) {
         setSuccess(true);
         setError("");
 
@@ -84,7 +107,8 @@ const RegisterSection: React.FC = () => {
         }, 3000);
       }
     } catch (err: any) {
-      console.error("Error en registro:", err);
+      console.error("❌ Error en registro:", err);
+      console.error("❌ Response data:", err.response?.data);
       setError(
         err.response?.data?.error ||
         err.response?.data?.message ||
@@ -114,7 +138,7 @@ const RegisterSection: React.FC = () => {
               marginBottom: '16px',
               border: '1px solid #c3e6cb'
             }}>
-              ¡Registro exitoso! Te contactaremos pronto.
+              ¡Registro exitoso! Te contactaremos pronto. Redirigiendo al login...
             </div>
           )}
 
@@ -199,6 +223,7 @@ const RegisterSection: React.FC = () => {
                   disabled={loading}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  minLength={8}
                 />
               </div>
 
@@ -213,6 +238,7 @@ const RegisterSection: React.FC = () => {
                   disabled={loading}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  minLength={8}
                 />
               </div>
 

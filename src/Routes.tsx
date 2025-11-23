@@ -16,6 +16,7 @@ import ActivityManagement from "./pages/ActivityManagement";
 import ContactForm from "./pages/ContactForm";
 import Success from "./pages/Success";
 import AdminDashboard from "./pages/AdminDashboard";
+import GestionUsuarios from "./components/admin/GestionUsuarios"; // ✅ NUEVO
 
 const AppRoutes: React.FC = () => {
   return (
@@ -48,6 +49,7 @@ const AppRoutes: React.FC = () => {
         {/* ✅ Panel de Administrador */}
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/activity-management" element={<ActivityManagement />} />
+        <Route path="/admin/gestion-usuarios" element={<GestionUsuarios />} /> {/* ✅ NUEVO */}
 
         {/* 404 */}
         <Route path="*" element={<NotFound />} />

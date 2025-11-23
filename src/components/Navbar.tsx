@@ -3,7 +3,7 @@ import "./css/Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import logo_souls from "../public/logo_souls.png";
 import { useAuthStore } from "../stores/sessionStore";
-import { FaUser, FaChartLine, FaSignOutAlt, FaUserCircle, FaChevronDown, FaClipboardList } from "react-icons/fa"; // ✅ Agregado FaClipboardList
+import { FaUser, FaChartLine, FaSignOutAlt, FaUserCircle, FaChevronDown, FaClipboardList, FaUsers, FaCalendarAlt } from "react-icons/fa"; // ✅ Agregar FaUsers y FaCalendarAlt
 
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -14,13 +14,11 @@ const Navbar: React.FC = () => {
   const { user, fetchUser, logout, isLoading } = useAuthStore();
 
   useEffect(() => {
-    // Solo fetch si no hay user en el store
     if (!user) {
       fetchUser();
     }
   }, [user, fetchUser]);
 
-  // Cerrar dropdown al hacer click fuera
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -94,14 +92,36 @@ const Navbar: React.FC = () => {
                   </Link>
 
                   {isAdmin ? (
-                    <Link
-                      to="/admin/dashboard"
-                      className="dropdown-item"
-                      onClick={() => setDropdownOpen(false)}
-                    >
-                      <FaChartLine />
-                      <span>Panel de Administrador</span>
-                    </Link>
+                    <>
+                      <Link
+                        to="/admin/dashboard"
+                        className="dropdown-item"
+                        onClick={() => setDropdownOpen(false)}
+                      >
+                        <FaChartLine />
+                        <span>Panel de Administrador</span>
+                      </Link>
+
+                      {/* ✅ NUEVO: Gestión de Actividades */}
+                      <Link
+                        to="/admin/activity-management"
+                        className="dropdown-item"
+                        onClick={() => setDropdownOpen(false)}
+                      >
+                        <FaCalendarAlt />
+                        <span>Gestión de Actividades</span>
+                      </Link>
+
+                      {/* ✅ NUEVO: Gestión de Usuarios */}
+                      <Link
+                        to="/admin/gestion-usuarios"
+                        className="dropdown-item"
+                        onClick={() => setDropdownOpen(false)}
+                      >
+                        <FaUsers />
+                        <span>Gestión de Usuarios</span>
+                      </Link>
+                    </>
                   ) : (
                     <>
                       <Link
@@ -113,7 +133,6 @@ const Navbar: React.FC = () => {
                         <span>Panel de Voluntario</span>
                       </Link>
 
-                      {/* ✅ NUEVO: Mis Inscripciones */}
                       <Link
                         to="/mis-inscripciones"
                         className="dropdown-item"
