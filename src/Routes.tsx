@@ -11,6 +11,7 @@ import PerfilVoluntario from "./components/PerfilVoluntario";
 import ConvocatoriasPanel from "./components/ConvocatoriasPanel";
 import WhoWeAre from "./pages/whoweare";
 import NewsSection from "./components/Noticias";
+import ActivityManagement from "./pages/ActivityManagement";
 import ContactForm from "./pages/ContactForm";
 import Success from "./pages/Success";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -44,7 +45,7 @@ const AppRoutes: React.FC = () => {
 
         {/* ✅ Panel de Administrador (conectado al navbar) */}
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
-
+        <Route path="/admin/activity-management" element={<ActivityManagement />} />
         {/* 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>

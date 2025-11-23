@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom'; // ✅ Importar Link
+import { FaCalendarAlt } from 'react-icons/fa'; // ✅ Importar icono
 import { adminService, AdminPanelData } from '../services/adminService';
 import SummaryCards from '../components/admin/SummaryCards';
 import ActivityMetrics from '../components/admin/ActivityMetrics';
@@ -50,8 +52,17 @@ export default function AdminDashboard() {
     return (
         <div className="admin-dashboard">
             <header className="dashboard-header">
-                <h1>Panel de Administración</h1>
-                <ExportButtons />
+                <div className="header-content">
+                    <h1>Panel de Administración</h1>
+                    <p className="header-subtitle">Gestiona todas las actividades y usuarios</p>
+                </div>
+                <div className="header-actions">
+                    {/* ✅ NUEVO: Botón para ir a gestión de actividades */}
+                    <Link to="/admin/activity-management" className="btn-manage-activities">
+                        <FaCalendarAlt /> Gestionar Actividades
+                    </Link>
+                    <ExportButtons />
+                </div>
             </header>
 
             <SummaryCards summary={data.panel.summary} />

@@ -1,0 +1,48 @@
+.cm-modal {
+    max-width: 500px;
+}
+
+.cm-header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cm-icon {
+    font-size: 1.8rem;
+}
+
+.cm-icon-danger {
+    color: #ef4444;
+}
+
+.cm-icon-warning {
+    color: #f59e0b;
+}
+
+.cm-icon-info {
+    color: #3b82f6;
+}
+
+.cm-body {
+    padding: 24px;
+}
+
+.cm-body p {
+    margin: 0;
+    color: #4b5563;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+.cm-danger .modal-header {
+    border-bottom-color: #fecaca;
+}
+
+.cm-warning .modal-header {
+    border-bottom-color: #fde68a;
+}
+
+.cm-info .modal-header {
+    border-bottom-color: #bfdbfe;
+}

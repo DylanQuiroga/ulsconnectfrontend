@@ -1,0 +1,95 @@
+.cam-modal {
+    max-width: 600px;
+}
+
+.cam-header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cam-icon {
+    font-size: 1.8rem;
+    color: #f59e0b;
+}
+
+.cam-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.cam-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.cam-activity-name {
+    background: #f3f4f6;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 0;
+    color: #374151;
+}
+
+.cam-warning {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    border-radius: 8px;
+}
+
+.cam-warning svg {
+    color: #f59e0b;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.cam-warning strong {
+    display: block;
+    color: #92400e;
+    margin-bottom: 4px;
+}
+
+.cam-warning p {
+    margin: 0;
+    color: #78350f;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.cam-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cam-field label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.9rem;
+}
+
+.cam-select,
+.cam-textarea {
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease;
+    font-family: inherit;
+}
+
+.cam-select:focus,
+.cam-textarea:focus {
+    outline: none;
+    border-color: #0160b4;
+}
+
+.cam-textarea {
+    resize: vertical;
+}

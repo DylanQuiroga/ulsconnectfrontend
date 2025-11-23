@@ -38,22 +38,61 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 40px;
-    padding: 24px 32px;
-    background: linear-gradient(135deg, #ffffff, #ffffff);
-    border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(1, 96, 180, 0.08);
-    border: 1px solid rgba(1, 96, 180, 0.06);
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    gap: 16px;
 }
 
-.dashboard-header h1 {
+.header-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.header-content h1 {
     margin: 0;
-    font-size: 2.2rem;
-    font-weight: 900;
-    background: linear-gradient(90deg, #0160b4 0%, #fe6970 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #0160b4;
+    font-size: 2rem;
+}
+
+.header-subtitle {
+    margin: 0;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* ✅ NUEVO: Botón de gestionar actividades */
+.btn-manage-activities {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #0160b4, #0373d1);
+    /* ✅ Azul */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(1, 96, 180, 0.3);
+    /* ✅ Sombra azul */
+}
+
+.btn-manage-activities:hover {
+    background: linear-gradient(135deg, #014a8a, #0160b4);
+    /* ✅ Azul más oscuro */
+    box-shadow: 0 6px 16px rgba(1, 96, 180, 0.4);
+    transform: translateY(-2px);
 }
 
 /* Summary Cards - Estilo mejorado */
