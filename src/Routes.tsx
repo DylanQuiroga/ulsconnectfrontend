@@ -11,7 +11,7 @@ import PerfilVoluntario from "./components/PerfilVoluntario";
 import ConvocatoriasPanel from "./components/ConvocatoriasPanel";
 import MisInscripciones from "./components/MisInscripciones"; // ✅ NUEVO
 import WhoWeAre from "./pages/whoweare";
-import NewsSection from "./components/Noticias";
+import NewsSection from "./components/noticias";
 import ActivityManagement from "./pages/ActivityManagement";
 import ContactForm from "./pages/ContactForm";
 import Success from "./pages/Success";
