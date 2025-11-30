@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { FaPlus, FaEdit, FaTrash, FaLock, FaSearch, FaEye, FaClipboardList } from "react-icons/fa"; // ✅ Agregar FaEye y FaClipboardList
+import { FaPlus, FaEdit, FaTrash, FaLock, FaSearch, FaEye, FaClipboardList, FaChartLine } from "react-icons/fa"; // ✅ Agregar FaChartLine
 import "./css/ActivityManagement.css";
 import api from "../services/api";
 import ActivityFormModal from "../components/admin/ActivityFormModal";
 import ConfirmModal from "../components/admin/ConfirmModal";
 import CloseActivityModal from "../components/admin/CloseActivityModal";
-import ActivityDetailModal from "../components/ActivityDetailModal"; // ✅ NUEVO
-import AttendanceModal from "../components/admin/AttendanceModal"; // ✅ NUEVO
+import ActivityDetailModal from "../components/ActivityDetailModal";
+import AttendanceModal from "../components/admin/AttendanceModal";
+import GenerateReportModal from "../components/admin/GenerateReportModal"; // ✅ NUEVO
 
 interface Activity {
     _id: string;
@@ -48,6 +49,7 @@ export default function ActivityManagement() {
     // ✅ NUEVO: Estado para el modal de detalles
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [showAttendanceModal, setShowAttendanceModal] = useState(false);
+    const [showReportModal, setShowReportModal] = useState(false); // ✅ NUEVO
 
     useEffect(() => {
         loadActivities();
@@ -142,6 +144,11 @@ export default function ActivityManagement() {
     const handleAttendanceClick = (activity: Activity) => {
         setSelectedActivity(activity);
         setShowAttendanceModal(true);
+    };
+
+    const handleReportClick = (activity: Activity) => {
+        setSelectedActivity(activity);
+        setShowReportModal(true);
     };
 
     const handleFormSuccess = () => {
@@ -310,6 +317,18 @@ export default function ActivityManagement() {
                                                 <FaClipboardList />
                                             </button>
 
+                                            {/* ✅ NUEVO: Botón para generar reporte (solo si está cerrada o completada) */}
+                                            {(activity.estado === "closed" || activity.estado === "completada") && (
+                                                <button
+                                                    className="am-action-btn am-action-report"
+                                                    onClick={() => handleReportClick(activity)}
+                                                    title="Generar Reporte de Impacto"
+                                                    style={{ color: '#0891b2' }}
+                                                >
+                                                    <FaChartLine />
+                                                </button>
+                                            )}
+
                                             <button
                                                 className="am-action-btn am-action-edit"
                                                 onClick={() => handleEdit(activity)}
@@ -391,6 +410,21 @@ export default function ActivityManagement() {
                     onClose={() => {
                         setShowAttendanceModal(false);
                         setSelectedActivity(null);
+                    }}
+                />
+            )}
+
+            {/* ✅ NUEVO: Modal de reporte */}
+            {showReportModal && selectedActivity && (
+                <GenerateReportModal
+                    activity={selectedActivity}
+                    onClose={() => {
+                        setShowReportModal(false);
+                        setSelectedActivity(null);
+                    }}
+                    onSuccess={() => {
+                        setShowReportModal(false);
+                        // Opcional: recargar actividades o mostrar mensaje
                     }}
                 />
             )}
