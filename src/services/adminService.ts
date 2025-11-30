@@ -70,6 +70,7 @@ export interface AdminPanelData {
             enrollmentsCsv: string;
             attendanceCsv: string;
         };
+        leaderboard: LeaderboardEntry[];
     };
 }
 
