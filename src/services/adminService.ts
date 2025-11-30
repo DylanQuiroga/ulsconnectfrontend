@@ -92,7 +92,8 @@ export interface RegistrationRequest {
 }
 
 export interface Usuario {
-    _id: string;
+    _id?: string;  // Mantener por compatibilidad
+    id?: string;   // El backend devuelve 'id'
     nombre: string;
     correoUniversitario: string;
     correoPersonal?: string;
@@ -106,7 +107,8 @@ export interface Usuario {
     direccion?: string;
     edad?: number;
     bloqueado?: boolean;
-    createdAt: string;
+    createdAt?: string;
+    creadoEn?: string;
 }
 
 export interface VolunteerScore {
@@ -160,6 +162,15 @@ export interface AttendanceRecord {
     }>;
     fecha: string;
     registradoPor: string;
+}
+
+export interface CreateUserData {
+    correoUniversitario: string;
+    nombre: string;
+    contrasena: string;
+    rol: 'staff' | 'admin';
+    telefono?: string;
+    carrera?: string;
 }
 
 // ============== ADMIN SERVICE ==============
@@ -243,6 +254,12 @@ export const adminService = {
 
     async toggleUserBlock(userId: string, blocked: boolean): Promise<{ success: boolean; message: string }> {
         const response = await api.patch(`/admin/users/${userId}/block`, { blocked });
+        return response.data;
+    },
+
+    // ============== CREAR STAFF/ADMIN ==============
+    async createStaffOrAdmin(data: CreateUserData): Promise<{ success: boolean; message: string; usuario?: Usuario }> {
+        const response = await api.post('/admin/users/create', data);
         return response.data;
     },
 

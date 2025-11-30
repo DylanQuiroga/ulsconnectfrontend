@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { FaSearch, FaUser, FaEnvelope, FaPhone, FaGraduationCap, FaMapMarkerAlt, FaCalendar, FaCheck, FaTimes, FaEye, FaUserCog, FaLock, FaUnlock, FaUsers, FaHeart } from "react-icons/fa";
-import { adminService, RegistrationRequest, Usuario } from "../../services/adminService";
+import { FaSearch, FaUser, FaEnvelope, FaPhone, FaGraduationCap, FaMapMarkerAlt, FaCalendar, FaCheck, FaTimes, FaEye, FaUserCog, FaLock, FaUnlock, FaUsers, FaHeart, FaUserPlus, FaKey } from "react-icons/fa";
+import { adminService, RegistrationRequest, Usuario, CreateUserData } from "../../services/adminService";
 import ConfirmModal from "./ConfirmModal";
 import "./css/GestionUsuarios.css";
 
@@ -13,7 +13,7 @@ export default function GestionUsuarios() {
     const [activeTab, setActiveTab] = useState<TabType>('solicitudes');
 
     // Solicitudes de registro
-    const [allSolicitudes, setAllSolicitudes] = useState<RegistrationRequest[]>([]); // Para stats
+    const [allSolicitudes, setAllSolicitudes] = useState<RegistrationRequest[]>([]);
     const [solicitudes, setSolicitudes] = useState<RegistrationRequest[]>([]);
     const [loadingSolicitudes, setLoadingSolicitudes] = useState(true);
     const [solicitudFilter, setSolicitudFilter] = useState<FilterType>('pending');
@@ -33,8 +33,21 @@ export default function GestionUsuarios() {
     const [showRejectModal, setShowRejectModal] = useState(false);
     const [showRoleModal, setShowRoleModal] = useState(false);
     const [showBlockModal, setShowBlockModal] = useState(false);
+    const [showCreateModal, setShowCreateModal] = useState(false);
     const [rejectNotes, setRejectNotes] = useState("");
     const [newRole, setNewRole] = useState<'estudiante' | 'staff' | 'admin'>('estudiante');
+
+    // Formulario crear usuario
+    const [createForm, setCreateForm] = useState<CreateUserData>({
+        correoUniversitario: '',
+        nombre: '',
+        contrasena: '',
+        rol: 'staff',
+        telefono: '',
+        carrera: ''
+    });
+    const [showPassword, setShowPassword] = useState(false);
+    const [createErrors, setCreateErrors] = useState<Record<string, string>>({});
 
     // Estado de acciones
     const [actionLoading, setActionLoading] = useState(false);
@@ -61,11 +74,9 @@ export default function GestionUsuarios() {
     const fetchAllSolicitudes = async () => {
         setLoadingSolicitudes(true);
         try {
-            // Cargar todas las solicitudes para tener los stats correctos
             const data = await adminService.getRegistrationRequests();
             setAllSolicitudes(Array.isArray(data) ? data : []);
 
-            // Aplicar filtro inicial
             if (solicitudFilter === 'all') {
                 setSolicitudes(Array.isArray(data) ? data : []);
             } else {
@@ -113,7 +124,7 @@ export default function GestionUsuarios() {
         if (!selectedItem) return;
         setActionLoading(true);
         try {
-            await adminService.approveRegistration(selectedItem._id);
+            await adminService.approveRegistration(getUserId(selectedItem));
             alert("✅ Solicitud aprobada exitosamente. El usuario recibirá un correo de confirmación.");
             setShowApproveModal(false);
             setSelectedItem(null);
@@ -129,7 +140,7 @@ export default function GestionUsuarios() {
         if (!selectedItem) return;
         setActionLoading(true);
         try {
-            await adminService.rejectRegistration(selectedItem._id, rejectNotes);
+            await adminService.rejectRegistration(getUserId(selectedItem), rejectNotes);
             alert("❌ Solicitud rechazada");
             setShowRejectModal(false);
             setSelectedItem(null);
@@ -147,7 +158,7 @@ export default function GestionUsuarios() {
         if (!selectedItem || !('rol' in selectedItem)) return;
         setActionLoading(true);
         try {
-            await adminService.updateUserRole(selectedItem._id, newRole);
+            await adminService.updateUserRole(getUserId(selectedItem), newRole);
             alert(`✅ Rol actualizado a ${newRole}`);
             setShowRoleModal(false);
             setSelectedItem(null);
@@ -164,7 +175,7 @@ export default function GestionUsuarios() {
         const usuario = selectedItem as Usuario;
         setActionLoading(true);
         try {
-            await adminService.toggleUserBlock(usuario._id, !usuario.bloqueado);
+            await adminService.toggleUserBlock(getUserId(usuario), !usuario.bloqueado);
             alert(usuario.bloqueado ? "✅ Usuario desbloqueado" : "🚫 Usuario bloqueado");
             setShowBlockModal(false);
             setSelectedItem(null);
@@ -176,7 +187,78 @@ export default function GestionUsuarios() {
         }
     };
 
+    // ============== CREAR STAFF/ADMIN ==============
+    const validateCreateForm = (): boolean => {
+        const errors: Record<string, string> = {};
+
+        if (!createForm.nombre.trim()) {
+            errors.nombre = 'El nombre es requerido';
+        }
+
+        if (!createForm.correoUniversitario.trim()) {
+            errors.correoUniversitario = 'El correo es requerido';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(createForm.correoUniversitario)) {
+            errors.correoUniversitario = 'El correo no tiene un formato válido';
+        }
+
+        if (!createForm.contrasena) {
+            errors.contrasena = 'La contraseña es requerida';
+        } else if (createForm.contrasena.length < 6) {
+            errors.contrasena = 'La contraseña debe tener al menos 6 caracteres';
+        }
+
+        setCreateErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const handleCreateUser = async () => {
+        if (!validateCreateForm()) return;
+
+        setActionLoading(true);
+        try {
+            const response = await adminService.createStaffOrAdmin(createForm);
+            alert(`✅ ${response.message}`);
+            setShowCreateModal(false);
+            resetCreateForm();
+            fetchUsuarios();
+        } catch (err: any) {
+            const errorMsg = err.response?.data?.message || err.message;
+            alert("Error: " + errorMsg);
+        } finally {
+            setActionLoading(false);
+        }
+    };
+
+    const resetCreateForm = () => {
+        setCreateForm({
+            correoUniversitario: '',
+            nombre: '',
+            contrasena: '',
+            rol: 'staff',
+            telefono: '',
+            carrera: ''
+        });
+        setCreateErrors({});
+        setShowPassword(false);
+    };
+
+    const generateRandomPassword = () => {
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#$%';
+        let password = '';
+        for (let i = 0; i < 12; i++) {
+            password += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        setCreateForm({ ...createForm, contrasena: password });
+        setShowPassword(true);
+    };
+
     // ============== HELPERS ==============
+
+    // Helper para obtener el ID del usuario (backend puede devolver 'id' o '_id')
+    const getUserId = (user: Usuario | RegistrationRequest): string => {
+        return (user as any).id || user._id || '';
+    };
+
     const getStatusBadgeClass = (status: string) => {
         const classes: Record<string, string> = {
             pending: 'gu-badge gu-badge-pending',
@@ -240,7 +322,7 @@ export default function GestionUsuarios() {
             (user.carrera && user.carrera.toLowerCase().includes(term));
     }) : [];
 
-    // Stats - usar allSolicitudes para tener los números correctos
+    // Stats
     const solicitudesStats = {
         pending: allSolicitudes.filter(s => s.status === 'pending').length,
         approved: allSolicitudes.filter(s => s.status === 'approved').length,
@@ -305,21 +387,34 @@ export default function GestionUsuarios() {
                 </div>
             </header>
 
-            {/* Tabs */}
+            {/* Tabs y botón crear */}
             <div className="gu-controls">
-                <div className="gu-filters">
-                    <button
-                        className={`gu-filter-btn ${activeTab === 'solicitudes' ? 'active' : ''}`}
-                        onClick={() => { setActiveTab('solicitudes'); setSearchTerm(''); }}
-                    >
-                        📋 Solicitudes
-                    </button>
-                    <button
-                        className={`gu-filter-btn ${activeTab === 'usuarios' ? 'active' : ''}`}
-                        onClick={() => { setActiveTab('usuarios'); setSearchTerm(''); }}
-                    >
-                        👤 Usuarios
-                    </button>
+                <div className="gu-filters" style={{ justifyContent: 'space-between', width: '100%' }}>
+                    <div style={{ display: 'flex', gap: '12px' }}>
+                        <button
+                            className={`gu-filter-btn ${activeTab === 'solicitudes' ? 'active' : ''}`}
+                            onClick={() => { setActiveTab('solicitudes'); setSearchTerm(''); }}
+                        >
+                            📋 Solicitudes
+                        </button>
+                        <button
+                            className={`gu-filter-btn ${activeTab === 'usuarios' ? 'active' : ''}`}
+                            onClick={() => { setActiveTab('usuarios'); setSearchTerm(''); }}
+                        >
+                            👤 Usuarios
+                        </button>
+                    </div>
+
+                    {/* Botón crear Staff/Admin - solo visible en tab usuarios */}
+                    {activeTab === 'usuarios' && (
+                        <button
+                            className="gu-btn gu-btn-success"
+                            onClick={() => setShowCreateModal(true)}
+                            style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                        >
+                            <FaUserPlus /> Crear Staff/Admin
+                        </button>
+                    )}
                 </div>
 
                 {/* Search */}
@@ -435,7 +530,7 @@ export default function GestionUsuarios() {
                                 </thead>
                                 <tbody>
                                     {filteredSolicitudes.map((sol) => (
-                                        <tr key={sol._id}>
+                                        <tr key={getUserId(sol)}>
                                             <td>
                                                 <div className="gu-user-cell">
                                                     <div className="gu-user-avatar">
@@ -523,7 +618,7 @@ export default function GestionUsuarios() {
                                 </thead>
                                 <tbody>
                                     {filteredUsuarios.map((user) => (
-                                        <tr key={user._id} style={user.bloqueado ? { backgroundColor: '#fef2f2' } : {}}>
+                                        <tr key={getUserId(user)} style={user.bloqueado ? { backgroundColor: '#fef2f2' } : {}}>
                                             <td>
                                                 <div className="gu-user-cell">
                                                     <div className="gu-user-avatar">
@@ -648,7 +743,7 @@ export default function GestionUsuarios() {
                                         <FaCalendar />
                                         <div>
                                             <strong>Fecha de Registro</strong>
-                                            <span>{formatDate(selectedItem.createdAt)}</span>
+                                            <span>{selectedItem.createdAt ? formatDate(selectedItem.createdAt) : '-'}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -857,6 +952,168 @@ export default function GestionUsuarios() {
                     onCancel={() => { setShowBlockModal(false); setSelectedItem(null); }}
                     variant={(selectedItem as Usuario).bloqueado ? "info" : "danger"}
                 />
+            )}
+
+            {/* ============== MODAL CREAR STAFF/ADMIN ============== */}
+            {showCreateModal && (
+                <div className="gu-modal-overlay" onClick={() => { setShowCreateModal(false); resetCreateForm(); }}>
+                    <div className="gu-modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="gu-modal-header">
+                            <h2>
+                                <FaUserPlus />
+                                Crear Staff/Admin
+                            </h2>
+                            <button className="gu-modal-close" onClick={() => { setShowCreateModal(false); resetCreateForm(); }}>×</button>
+                        </div>
+                        <div className="gu-modal-body">
+                            <p style={{ marginBottom: '24px', color: '#6b7280', fontSize: '0.95rem' }}>
+                                Crea una cuenta con privilegios de Staff o Administrador. El usuario podrá iniciar sesión inmediatamente.
+                            </p>
+
+                            {/* Nombre */}
+                            <div className="gu-form-group">
+                                <label className="gu-form-label">
+                                    Nombre completo *
+                                </label>
+                                <input
+                                    type="text"
+                                    value={createForm.nombre}
+                                    onChange={(e) => setCreateForm({ ...createForm, nombre: e.target.value })}
+                                    placeholder="Ej: Juan Pérez González"
+                                    className={createErrors.nombre ? 'error' : ''}
+                                />
+                                {createErrors.nombre && (
+                                    <span className="gu-form-error">{createErrors.nombre}</span>
+                                )}
+                            </div>
+
+                            {/* Correo */}
+                            <div className="gu-form-group">
+                                <label className="gu-form-label">
+                                    Correo electrónico *
+                                </label>
+                                <input
+                                    type="email"
+                                    value={createForm.correoUniversitario}
+                                    onChange={(e) => setCreateForm({ ...createForm, correoUniversitario: e.target.value })}
+                                    placeholder="correo@ejemplo.com"
+                                    className={createErrors.correoUniversitario ? 'error' : ''}
+                                />
+                                {createErrors.correoUniversitario && (
+                                    <span className="gu-form-error">{createErrors.correoUniversitario}</span>
+                                )}
+                            </div>
+
+                            {/* Contraseña */}
+                            <div className="gu-form-group">
+                                <label className="gu-form-label">
+                                    Contraseña *
+                                </label>
+                                <div className="gu-password-container">
+                                    <div className="gu-password-input-wrapper">
+                                        <input
+                                            type={showPassword ? 'text' : 'password'}
+                                            value={createForm.contrasena}
+                                            onChange={(e) => setCreateForm({ ...createForm, contrasena: e.target.value })}
+                                            placeholder="Mínimo 6 caracteres"
+                                            className={createErrors.contrasena ? 'error' : ''}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            className="gu-password-toggle"
+                                        >
+                                            {showPassword ? '🙈' : '👁️'}
+                                        </button>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={generateRandomPassword}
+                                        className="gu-btn gu-btn-secondary"
+                                        style={{ whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px' }}
+                                        title="Generar contraseña aleatoria"
+                                    >
+                                        <FaKey /> Generar
+                                    </button>
+                                </div>
+                                {createErrors.contrasena && (
+                                    <span className="gu-form-error">{createErrors.contrasena}</span>
+                                )}
+                                {createForm.contrasena && showPassword && (
+                                    <div className="gu-warning-box">
+                                        ⚠️ Guarda esta contraseña y compártela de forma segura con el usuario.
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Rol */}
+                            <div className="gu-form-group">
+                                <label className="gu-form-label">
+                                    Rol *
+                                </label>
+                                <select
+                                    value={createForm.rol}
+                                    onChange={(e) => setCreateForm({ ...createForm, rol: e.target.value as 'staff' | 'admin' })}
+                                >
+                                    <option value="staff">Staff (Coordinador)</option>
+                                    <option value="admin">Administrador</option>
+                                </select>
+                                <span className="gu-form-hint">
+                                    {createForm.rol === 'admin'
+                                        ? '🔴 Acceso total al sistema: gestión de usuarios, actividades y configuraciones.'
+                                        : '🟡 Puede crear y gestionar actividades, tomar asistencia y ver reportes.'}
+                                </span>
+                            </div>
+
+                            {/* Teléfono (opcional) */}
+                            <div className="gu-form-group">
+                                <label className="gu-form-label">
+                                    Teléfono <span className="optional">(opcional)</span>
+                                </label>
+                                <input
+                                    type="tel"
+                                    value={createForm.telefono}
+                                    onChange={(e) => setCreateForm({ ...createForm, telefono: e.target.value })}
+                                    placeholder="+56 9 1234 5678"
+                                />
+                            </div>
+
+                            {/* Carrera/Departamento (opcional) */}
+                            <div className="gu-form-group">
+                                <label className="gu-form-label">
+                                    Departamento/Área <span className="optional">(opcional)</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    value={createForm.carrera}
+                                    onChange={(e) => setCreateForm({ ...createForm, carrera: e.target.value })}
+                                    placeholder="Ej: Dirección de Asuntos Estudiantiles"
+                                />
+                            </div>
+                        </div>
+                        <div className="gu-modal-footer">
+                            <button
+                                className="gu-btn gu-btn-secondary"
+                                onClick={() => { setShowCreateModal(false); resetCreateForm(); }}
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                className="gu-btn gu-btn-success"
+                                onClick={handleCreateUser}
+                                disabled={actionLoading}
+                            >
+                                {actionLoading ? (
+                                    <>Creando...</>
+                                ) : (
+                                    <>
+                                        <FaUserPlus /> Crear Usuario
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );
