@@ -43,7 +43,56 @@ const VolunteerProfile: React.FC = () => {
       try {
         const res = await api.get('/volunteer/panel');
         if (res.data.success) {
-          setData(res.data.panel);
+          const panel = res.data.panel || {};
+
+          // Normalizar summary
+          const summary = {
+            totalEnrollments:
+              panel.summary?.totalEnrollments ??
+              panel.summary?.totalInscripciones ??
+              0,
+            upcomingEnrollments:
+              panel.summary?.upcomingEnrollments ??
+              panel.summary?.upcomingInscripciones ??
+              0,
+            totalAttendances:
+              panel.summary?.totalAttendances ??
+              panel.summary?.totalAsistencias ??
+              0,
+          };
+
+          // Normalizar upcoming (backend usa inscripcionId / activityTitle / activityType / inscripcionStatus)
+          const upcoming = (panel.upcoming || []).map((it: any) => ({
+            enrollmentId: it.enrollmentId ?? it.inscripcionId ?? null,
+            activityTitle: it.activityTitle ?? it.titulo ?? 'Actividad no disponible',
+            activityType: it.activityType ?? it.tipo ?? null,
+            area: it.area ?? null,
+            location: it.location ?? it.ubicacion ?? null,
+            startDate: it.startDate ?? it.fechaInicio ?? null,
+            endDate: it.endDate ?? it.fechaFin ?? null,
+            enrollmentStatus:
+              it.enrollmentStatus ?? it.inscripcionStatus ?? it.activityStatus ?? null,
+          }));
+
+          // Normalizar enrollments/historial (backend devuelve "inscripciones")
+          const enrollmentsSource = panel.enrollments ?? panel.inscripciones ?? [];
+          const enrollments = (enrollmentsSource || []).map((e: any) => ({
+            enrollmentId: e.enrollmentId ?? e.inscripcionId ?? (e._id ? String(e._id) : null),
+            activityTitle:
+              e.activityTitle ??
+              (e.actividad && e.actividad.titulo) ??
+              (e.activity && e.activity.titulo) ??
+              'Actividad no disponible',
+            enrollmentStatus: e.enrollmentStatus ?? e.estado ?? e.inscripcionStatus ?? null,
+            attendanceCount: typeof e.attendanceCount === 'number' ? e.attendanceCount : 0,
+            lastAttendanceAt: e.lastAttendanceAt ?? null,
+          }));
+
+          setData({
+            summary,
+            upcoming,
+            enrollments,
+          });
         }
       } catch (err: any) {
         setError(err.response?.data?.message || 'Error al cargar el panel');

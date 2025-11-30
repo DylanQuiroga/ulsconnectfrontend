@@ -47,7 +47,8 @@ const ConvocatoriaCard: React.FC<{
         try {
             console.log('📤 Enviando inscripción a evento:', item.id);
 
-            const res = await api.post(`/events/${item.id}/enroll`);
+            // Usar endpoint backend existente
+            const res = await api.post(`/inscripciones/${item.id}`);
 
             console.log('✅ Respuesta:', res.data);
 

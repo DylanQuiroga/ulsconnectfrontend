@@ -68,7 +68,9 @@ export default function ActivityDetailModal({ activity, onClose, onEnrollSuccess
 
         setEnrolling(true);
         try {
-            const res = await api.post(`/events/${activity._id}/enroll`);
+            // Antes: POST /events/:id/enroll -> 404
+            // Usar endpoint backend existente para crear inscripción
+            const res = await api.post(`/inscripciones/${activity._id}`);
 
             if (res.data.success) {
                 setIsEnrolled(true);
