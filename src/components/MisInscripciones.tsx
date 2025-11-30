@@ -167,13 +167,13 @@ export default function MisInscripciones() {
         // Acceso seguro a fechaInicio
         const fechaStr = enrollment.idActividad?.fechaInicio;
         if (!fechaStr) {
-            // Si no hay fecha, incluir en "todas" y "activas" (evita crash)
-            return filter === "todas" || filter === "activas";
+            // Si no hay fecha, incluir en "activas" (evita crash)
+            return filter === "activas";
         }
 
         const activityDate = new Date(fechaStr);
         if (isNaN(activityDate.getTime())) {
-            return filter === "todas" || filter === "activas";
+            return filter === "activas";
         }
 
         const today = new Date();
