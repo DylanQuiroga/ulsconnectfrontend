@@ -141,7 +141,16 @@ export interface LeaderboardEntry {
 
 export interface ImpactReport {
     _id: string;
-    idActividad: string;
+    actividad?: { // Changed from idActividad to match populated response
+        _id: string;
+        titulo: string;
+        area: string;
+        tipo: string;
+        fechaInicio: string;
+        fechaFin: string;
+        estado: string;
+    };
+    idActividad?: string; // Keep for compatibility if needed
     metricas: {
         voluntariosInvitados: number;
         voluntariosConfirmados: number;
@@ -150,15 +159,24 @@ export interface ImpactReport {
         beneficiarios?: number;
         notas?: string;
     };
-    creadoPor: string;
+    creadoPor: string | { nombre: string; correo: string };
     creadoEn: string;
+}
+
+export interface ImpactReportsData {
+    success: boolean;
+    totals: {
+        totalHoras: number;
+        totalBeneficiarios: number;
+    };
+    reports: ImpactReport[];
 }
 
 export interface AttendanceRecord {
     _id: string;
     actividad: string;
     inscripciones: Array<{
-        usuario: string;
+        usuario: string | { _id: string; nombre: string; correoUniversitario: string; rut?: string };
         asistencia: 'presente' | 'ausente' | 'justificada';
     }>;
     fecha: string;
@@ -285,15 +303,21 @@ export const adminService = {
     },
 
     // ============== REPORTES DE IMPACTO ==============
-    async createImpactReport(actividadId: string, metricas: {
-        voluntariosInvitados: number;
-        voluntariosConfirmados: number;
-        voluntariosAsistieron: number;
-        horasTotales: number;
+    async createImpactReport(actividadId: string, data?: {
         beneficiarios?: number;
+        horasTotales?: number;
         notas?: string;
     }): Promise<{ success: boolean; report: ImpactReport }> {
-        const response = await api.post('/admin/impact-reports', { actividadId, metricas });
+        const response = await api.post('/admin/impact-reports', { actividadId, ...data });
+        return response.data;
+    },
+
+    async updateImpactReport(reportId: string, data: {
+        beneficiarios?: number;
+        horasTotales?: number;
+        notas?: string;
+    }): Promise<{ success: boolean; report: ImpactReport }> {
+        const response = await api.put(`/admin/impact-reports/${reportId}`, data);
         return response.data;
     },
 
@@ -305,10 +329,22 @@ export const adminService = {
         return [];
     },
 
+    async getAllImpactReports(): Promise<ImpactReportsData> {
+        const response = await api.get('/admin/impact-reports');
+        return response.data;
+    },
+
+    async exportImpactReports(): Promise<Blob> {
+        const response = await api.get('/admin/panel/export/impact-reports', {
+            responseType: 'blob'
+        });
+        return response.data;
+    },
+
     // ============== GESTIÓN DE ASISTENCIA ==============
     async createAttendanceList(actividadId: string): Promise<AttendanceRecord> {
         const response = await api.post('/attendance/create', { actividadId });
-        return response.data.attendance || response.data;
+        return response.data.data || response.data.attendance || response.data;
     },
 
     async takeAttendance(attendanceId: string, data: {
@@ -330,7 +366,7 @@ export const adminService = {
 
     async refreshAttendanceList(attendanceId: string): Promise<AttendanceRecord> {
         const response = await api.post('/attendance/refresh', { attendanceId });
-        return response.data.attendance || response.data;
+        return response.data.data || response.data.attendance || response.data;
     },
 
     // ============== CERRAR Y PUNTUAR ACTIVIDADES ==============

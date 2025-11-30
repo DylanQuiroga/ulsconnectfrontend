@@ -11,6 +11,7 @@ interface Activity {
     tipo: string;
     fechaInicio: string;
     fechaTermino?: string;
+    fechaFin?: string; // agregado para compatibilidad
     horaInicio?: string;
     horaTermino?: string;
     ubicacion: {
@@ -18,6 +19,7 @@ interface Activity {
         direccion: string;
         nombreComuna: string;
         nombreRegion: string;
+        lng?: number; // agregado
     };
     cuposDisponibles?: number;
     imagenUrl?: string;
@@ -85,8 +87,18 @@ export default function ActivityFormModal({ activity, onClose, onSuccess }: Acti
         setLoading(true);
 
         try {
+            // Asegurar nombre de campo 'fechaFin' y ubicacion.lng
+            const fechaFinValue = formData.fechaTermino || formData.fechaFin || formData.fechaInicio;
+            const ubicacionPayload = {
+                ...formData.ubicacion,
+                lng: typeof formData.ubicacion.lng === 'number' ? formData.ubicacion.lng : 0
+            };
+
             const payload = {
                 ...formData,
+                fechaFin: fechaFinValue,
+                fechaTermino: undefined, // evitar duplicados si backend no lo espera
+                ubicacion: ubicacionPayload,
                 cuposDisponibles: formData.cuposDisponibles ? Number(formData.cuposDisponibles) : null,
             };
 

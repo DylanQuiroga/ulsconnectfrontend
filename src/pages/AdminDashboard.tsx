@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaCalendarAlt, FaUsers } from 'react-icons/fa'; // ✅ Agregar FaUsers
+import { FaCalendarAlt, FaUsers, FaChartLine } from 'react-icons/fa'; // ✅ Agregar FaChartLine
 import { adminService, AdminPanelData } from '../services/adminService';
 import SummaryCards from '../components/admin/SummaryCards';
 import ActivityMetrics from '../components/admin/ActivityMetrics';
@@ -66,6 +66,11 @@ export default function AdminDashboard() {
                     {/* ✅ NUEVO: Botón para gestión de usuarios */}
                     <Link to="/admin/gestion-usuarios" className="btn-manage-users">
                         <FaUsers /> Gestionar Usuarios
+                    </Link>
+
+                    {/* ✅ NUEVO: Botón para reportes de impacto */}
+                    <Link to="/admin/impact-reports" className="btn-manage-users" style={{ backgroundColor: '#0891b2' }}>
+                        <FaChartLine /> Reportes de Impacto
                     </Link>
 
                     <ExportButtons />
