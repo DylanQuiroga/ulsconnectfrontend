@@ -157,7 +157,7 @@ export interface AttendanceRecord {
     _id: string;
     actividad: string;
     inscripciones: Array<{
-        usuario: string;
+        usuario: string | { _id: string; nombre: string; correoUniversitario: string; rut?: string };
         asistencia: 'presente' | 'ausente' | 'justificada';
     }>;
     fecha: string;
@@ -307,7 +307,7 @@ export const adminService = {
     // ============== GESTIÓN DE ASISTENCIA ==============
     async createAttendanceList(actividadId: string): Promise<AttendanceRecord> {
         const response = await api.post('/attendance/create', { actividadId });
-        return response.data.attendance || response.data;
+        return response.data.data || response.data.attendance || response.data;
     },
 
     async takeAttendance(attendanceId: string, data: {
@@ -329,7 +329,7 @@ export const adminService = {
 
     async refreshAttendanceList(attendanceId: string): Promise<AttendanceRecord> {
         const response = await api.post('/attendance/refresh', { attendanceId });
-        return response.data.attendance || response.data;
+        return response.data.data || response.data.attendance || response.data;
     },
 
     // ============== CERRAR Y PUNTUAR ACTIVIDADES ==============

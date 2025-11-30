@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { FaPlus, FaEdit, FaTrash, FaLock, FaSearch, FaEye } from "react-icons/fa"; // ✅ Agregar FaEye
+import { FaPlus, FaEdit, FaTrash, FaLock, FaSearch, FaEye, FaClipboardList } from "react-icons/fa"; // ✅ Agregar FaEye y FaClipboardList
 import "./css/ActivityManagement.css";
 import api from "../services/api";
 import ActivityFormModal from "../components/admin/ActivityFormModal";
 import ConfirmModal from "../components/admin/ConfirmModal";
 import CloseActivityModal from "../components/admin/CloseActivityModal";
 import ActivityDetailModal from "../components/ActivityDetailModal"; // ✅ NUEVO
+import AttendanceModal from "../components/admin/AttendanceModal"; // ✅ NUEVO
 
 interface Activity {
     _id: string;
@@ -46,6 +47,7 @@ export default function ActivityManagement() {
 
     // ✅ NUEVO: Estado para el modal de detalles
     const [showDetailModal, setShowDetailModal] = useState(false);
+    const [showAttendanceModal, setShowAttendanceModal] = useState(false);
 
     useEffect(() => {
         loadActivities();
@@ -135,6 +137,11 @@ export default function ActivityManagement() {
     const handleViewDetails = (activity: Activity) => {
         setSelectedActivity(activity);
         setShowDetailModal(true);
+    };
+
+    const handleAttendanceClick = (activity: Activity) => {
+        setSelectedActivity(activity);
+        setShowAttendanceModal(true);
     };
 
     const handleFormSuccess = () => {
@@ -296,6 +303,14 @@ export default function ActivityManagement() {
                                             </button>
 
                                             <button
+                                                className="am-action-btn am-action-attendance"
+                                                onClick={() => handleAttendanceClick(activity)}
+                                                title="Gestionar Asistencia"
+                                            >
+                                                <FaClipboardList />
+                                            </button>
+
+                                            <button
                                                 className="am-action-btn am-action-edit"
                                                 onClick={() => handleEdit(activity)}
                                                 title="Editar"
@@ -364,6 +379,17 @@ export default function ActivityManagement() {
                     activity={selectedActivity}
                     onClose={() => {
                         setShowDetailModal(false);
+                        setSelectedActivity(null);
+                    }}
+                />
+            )}
+
+            {showAttendanceModal && selectedActivity && (
+                <AttendanceModal
+                    activityId={selectedActivity._id}
+                    activityTitle={selectedActivity.titulo}
+                    onClose={() => {
+                        setShowAttendanceModal(false);
                         setSelectedActivity(null);
                     }}
                 />

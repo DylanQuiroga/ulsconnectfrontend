@@ -408,6 +408,16 @@
     }
 }
 
+.am-action-attendance {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.am-action-attendance:hover {
+    background: #a7f3d0;
+    transform: scale(1.05);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .am-container {
