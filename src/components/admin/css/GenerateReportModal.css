@@ -1,0 +1,91 @@
+.grm-modal {
+    max-width: 500px;
+    width: 90%;
+}
+
+.grm-header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.grm-icon {
+    color: #0891b2;
+    font-size: 1.5rem;
+}
+
+.grm-body {
+    padding: 20px 0;
+}
+
+.grm-activity-name {
+    margin-bottom: 20px;
+    padding: 12px;
+    background-color: #f8fafc;
+    border-radius: 8px;
+    border-left: 4px solid #0891b2;
+}
+
+.grm-info {
+    background-color: #ecfeff;
+    border: 1px solid #cffafe;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 12px;
+    color: #155e75;
+}
+
+.grm-info svg {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.grm-info strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #0e7490;
+}
+
+.grm-info p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.grm-field {
+    margin-bottom: 20px;
+}
+
+.grm-field label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #334155;
+}
+
+.grm-input,
+.grm-textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+}
+
+.grm-input:focus,
+.grm-textarea:focus {
+    outline: none;
+    border-color: #0891b2;
+    box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1);
+}
+
+.grm-help {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.85rem;
+    color: #64748b;
+}

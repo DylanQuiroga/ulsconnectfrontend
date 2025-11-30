@@ -47,7 +47,8 @@ const ConvocatoriaCard: React.FC<{
         try {
             console.log('📤 Enviando inscripción a evento:', item.id);
 
-            const res = await api.post(`/events/${item.id}/enroll`);
+            // Usar endpoint backend existente
+            const res = await api.post(`/inscripciones/${item.id}`);
 
             console.log('✅ Respuesta:', res.data);
 
@@ -177,14 +178,27 @@ const ConvocatoriasPanel: React.FC = () => {
                         .filter(Boolean);
 
                     let userEnrollments: string[] = [];
-                    if (user?.id) { // ✅ Cambiar user a user?.id
+                    if (user?.id) {
                         try {
                             const enrollRes = await api.get(`/inscripciones/${user.id}/activas`);
-                            if (enrollRes.data.success) {
-                                // ✅ CORREGIDO: Extraer correctamente el ID de la actividad
-                                userEnrollments = enrollRes.data.data.map((e: any) =>
-                                    e.idActividad?._id || e.idActividad
-                                );
+                            if (enrollRes.data && (enrollRes.data.success || enrollRes.data.data)) {
+                                // ✅ Normalizar la forma real de la respuesta y forzar string
+                                const enrollData = (enrollRes.data.data ?? enrollRes.data.inscripciones ?? enrollRes.data) || [];
+                                console.log('DEBUG enrollData shape:', enrollData);
+                                userEnrollments = enrollData
+                                    .map((e: any) => {
+                                        // varios posibles caminos en el backend
+                                        const candidate =
+                                            e.idActividad?._id ??
+                                            e.idActividad?._id?._id ??
+                                            e.idActividad ??
+                                            e.actividad?._id ??
+                                            e.actividad ??
+                                            e._id;
+                                        return candidate ? String(candidate) : null;
+                                    })
+                                    .filter(Boolean);
+                                console.log('DEBUG normalized userEnrollments:', userEnrollments);
                             }
                         } catch (err) {
                             console.error('Error al cargar inscripciones:', err);
@@ -194,7 +208,8 @@ const ConvocatoriasPanel: React.FC = () => {
                     const activities = res.data.data.map((act: any) => {
                         const dateObj = act.fechaInicio ? new Date(act.fechaInicio) : null;
                         return {
-                            id: act._id,
+                            // ✅ Normalizar id como string
+                            id: act._id ? String(act._id) : String(act.id ?? ''),
                             title: act.titulo,
                             category: act.area,
                             date: dateObj
@@ -211,7 +226,7 @@ const ConvocatoriasPanel: React.FC = () => {
                             excerpt: act.descripcion?.substring(0, 150) + '...' || '',
                             image: act.imagenUrl || '',
                             recommended: recommendedAreas.includes(act.area),
-                            enrolled: userEnrollments.includes(act._id),
+                            enrolled: userEnrollments.includes(act._id ? String(act._id) : String(act.id ?? '')),
                             isClosed: act.estado === 'closed',
                             fullData: act,
                         };

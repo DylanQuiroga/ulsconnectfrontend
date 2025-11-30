@@ -61,7 +61,16 @@ export default function MisInscripciones() {
             const res = await api.get(`/inscripciones/${user.id}/activas`);
 
             if (res.data.success) {
-                setEnrollments(res.data.data);
+                // Normalizar: aceptar objetos con 'actividad' o 'idActividad'
+                const normalized = (res.data.data || []).map((ins: any) => {
+                    const idActividad = ins.idActividad ?? ins.actividad ?? null;
+                    return {
+                        ...ins,
+                        idActividad,
+                    };
+                });
+
+                setEnrollments(normalized);
             }
         } catch (err: any) {
             console.error("Error al cargar inscripciones:", err);
@@ -155,7 +164,18 @@ export default function MisInscripciones() {
     const filteredEnrollments = enrollments.filter((enrollment) => {
         if (filter === "todas") return true;
 
-        const activityDate = new Date(enrollment.idActividad.fechaInicio);
+        // Acceso seguro a fechaInicio
+        const fechaStr = enrollment.idActividad?.fechaInicio;
+        if (!fechaStr) {
+            // Si no hay fecha, incluir en "activas" (evita crash)
+            return filter === "activas";
+        }
+
+        const activityDate = new Date(fechaStr);
+        if (isNaN(activityDate.getTime())) {
+            return filter === "activas";
+        }
+
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
