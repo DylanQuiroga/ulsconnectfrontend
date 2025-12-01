@@ -8,7 +8,6 @@ import EnrollmentsTable from '../components/admin/EnrollmentsTable';
 import AttendanceTable from '../components/admin/AttendanceTable';
 import ExportButtons from '../components/admin/ExportButtons';
 import '../components/css/AdminDashboard.css';
-import LeaderboardTable from "../components/admin/LeaderboardTable";
 
 export default function AdminDashboard() {
     const [data, setData] = useState<AdminPanelData | null>(null);
@@ -80,11 +79,6 @@ export default function AdminDashboard() {
             <SummaryCards summary={data.panel.summary} />
 
             <ActivityMetrics metrics={data.panel.metrics} />
-
-            <section className="dashboard-section">
-                <h2>🏆 Leaderboard de Voluntarios</h2>
-                <LeaderboardTable leaderboard={data.panel.leaderboard} />
-            </section>
 
             <section className="dashboard-section">
                 <h2>Inscripciones Recientes</h2>

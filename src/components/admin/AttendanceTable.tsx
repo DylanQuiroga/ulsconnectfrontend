@@ -73,16 +73,23 @@ export default function AttendanceTable({ attendance, topActivities }: Attendanc
                         </tr>
                     </thead>
                     <tbody>
-                        {attendance.map((record) => (
-                            <tr key={record.attendanceId}>
-                                <td>{formatDate(record.recordedAt)}</td>
-                                <td>{record.activityTitle}</td>
-                                <td>{record.userName}</td>
-                                <td>{record.userEmail}</td>
-                                <td>{record.evento || '-'}</td>
-                                <td>{record.recordedByName}</td>
-                            </tr>
-                        ))}
+                        {attendance.map((record) => {
+                            // Helper para obtener datos de forma segura, soportando diferentes estructuras
+                            const userName = record.userName || (record as any).usuario?.nombre || (record as any).user?.name || 'Sin nombre';
+                            const userEmail = record.userEmail || (record as any).usuario?.correoUniversitario || (record as any).usuario?.email || 'Sin correo';
+                            const eventoNombre = record.evento || (record as any).actividad?.titulo || '-';
+
+                            return (
+                                <tr key={record.attendanceId}>
+                                    <td>{formatDate(record.recordedAt)}</td>
+                                    <td>{record.activityTitle}</td>
+                                    <td>{userName}</td>
+                                    <td>{userEmail}</td>
+                                    <td>{eventoNombre}</td>
+                                    <td>{record.recordedByName}</td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             </div>

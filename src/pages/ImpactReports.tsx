@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { adminService, ImpactReport } from '../services/adminService';
 import { FaFileDownload, FaClock, FaUsers, FaChartLine } from 'react-icons/fa';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import './css/ImpactReports.css';
 
 const ImpactReports: React.FC = () => {
