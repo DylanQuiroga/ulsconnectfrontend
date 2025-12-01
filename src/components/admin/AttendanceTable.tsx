@@ -74,10 +74,28 @@ export default function AttendanceTable({ attendance, topActivities }: Attendanc
                     </thead>
                     <tbody>
                         {attendance.map((record) => {
+                            // Debug para ver qué está llegando realmente
+                            console.log('Registro de asistencia:', record);
+
                             // Helper para obtener datos de forma segura, soportando diferentes estructuras
-                            const userName = record.userName || (record as any).usuario?.nombre || (record as any).user?.name || 'Sin nombre';
-                            const userEmail = record.userEmail || (record as any).usuario?.correoUniversitario || (record as any).usuario?.email || 'Sin correo';
-                            const eventoNombre = record.evento || (record as any).actividad?.titulo || '-';
+                            // A veces userId viene poblado con el objeto del usuario
+                            const userObj = (record as any).userId || (record as any).usuario || (record as any).user;
+                            
+                            const userName = record.userName || 
+                                           userObj?.nombre || 
+                                           userObj?.name || 
+                                           'Sin nombre';
+                                           
+                            const userEmail = record.userEmail || 
+                                            userObj?.correoUniversitario || 
+                                            userObj?.email || 
+                                            userObj?.correo ||
+                                            'Sin correo';
+
+                            const eventoNombre = record.evento || 
+                                               (record as any).actividad?.titulo || 
+                                               (record as any).activityId?.titulo || 
+                                               '-';
 
                             return (
                                 <tr key={record.attendanceId}>
