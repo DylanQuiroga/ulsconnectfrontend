@@ -126,8 +126,8 @@ export default function ActivityFormModal({ activity, onClose, onSuccess }: Acti
     };
 
     return (
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content afm-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-overlay">
+            <div className="modal-content afm-modal">
                 <div className="modal-header">
                     <h2>{activity ? "Editar Actividad" : "Nueva Actividad"}</h2>
                     <button className="modal-close" onClick={onClose}>

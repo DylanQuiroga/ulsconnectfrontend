@@ -33,8 +33,8 @@ export default function GenerateReportModal({ activity, onClose, onSuccess }: Ge
             // Esto no es ideal para muchos datos, pero funciona con la API actual
             const response = await adminService.getAllImpactReports();
             if (response.success && response.reports) {
-                const report = response.reports.find(r => 
-                    (r.actividad && r.actividad._id === activity._id) || 
+                const report = response.reports.find(r =>
+                    (r.actividad && r.actividad._id === activity._id) ||
                     (r.idActividad === activity._id)
                 );
 
@@ -60,7 +60,7 @@ export default function GenerateReportModal({ activity, onClose, onSuccess }: Ge
         try {
             const beneficiariosNum = beneficiarios ? parseInt(beneficiarios) : undefined;
             const horasNum = horasTotales ? parseFloat(horasTotales) : undefined;
-            
+
             if (existingReportId) {
                 await adminService.updateImpactReport(existingReportId, {
                     beneficiarios: beneficiariosNum,
@@ -100,8 +100,8 @@ export default function GenerateReportModal({ activity, onClose, onSuccess }: Ge
     }
 
     return (
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content grm-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-overlay">
+            <div className="modal-content grm-modal">
                 <div className="modal-header">
                     <div className="grm-header-content">
                         <FaChartLine className="grm-icon" />
@@ -123,7 +123,7 @@ export default function GenerateReportModal({ activity, onClose, onSuccess }: Ge
                             <div>
                                 <strong>{existingReportId ? "Edición de Reporte" : "Generación Automática"}</strong>
                                 <p>
-                                    {existingReportId 
+                                    {existingReportId
                                         ? "Puedes modificar los valores del reporte existente."
                                         : "El sistema calculará automáticamente las horas totales y voluntarios basándose en los registros de asistencia. Puedes sobrescribir estos valores si es necesario."
                                     }

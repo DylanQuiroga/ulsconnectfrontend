@@ -74,7 +74,6 @@
     gap: 8px;
     padding: 12px 24px;
     background: linear-gradient(135deg, #0160b4, #0373d1);
-    /* ✅ Azul */
     color: white;
     border: none;
     border-radius: 8px;
@@ -82,15 +81,13 @@
     font-size: 0.95rem;
     text-decoration: none;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     white-space: nowrap;
     box-shadow: 0 4px 12px rgba(1, 96, 180, 0.3);
-    /* ✅ Sombra azul */
 }
 
 .btn-manage-activities:hover {
     background: linear-gradient(135deg, #014a8a, #0160b4);
-    /* ✅ Azul más oscuro */
     box-shadow: 0 6px 16px rgba(1, 96, 180, 0.4);
     transform: translateY(-2px);
 }
@@ -185,6 +182,9 @@
 }
 
 .export-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     padding: 12px 24px;
     background: linear-gradient(135deg, #fe6970 0%, #ff8a8f 100%);
     color: white;
@@ -200,7 +200,7 @@
 .export-btn:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 18px rgba(254, 105, 112, 0.4);
-    background: linear-gradient(135deg, #0160b4 0%, #0373d1 100%);
+    background: linear-gradient(135deg, #e5555c 0%, #fe6970 100%);
 }
 
 /* Dashboard Sections */

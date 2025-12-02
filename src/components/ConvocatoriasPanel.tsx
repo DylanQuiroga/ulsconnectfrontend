@@ -5,7 +5,7 @@ import "react-calendar/dist/Calendar.css";
 import "./css/ConvocatoriasPanel.css";
 import api from "../services/api";
 import { useAuthStore } from "../stores/sessionStore";
-import ActivityDetailModal from "./ActivityDetailModal"; // ✅ NUEVO
+import ActivityDetailModal from "./ActivityDetailModal";
 
 type Convocatoria = {
     id: string;
@@ -19,14 +19,13 @@ type Convocatoria = {
     recommended?: boolean;
     enrolled?: boolean;
     isClosed?: boolean;
-    // ✅ NUEVO: Datos completos para el modal
     fullData?: any;
 };
 
 const ConvocatoriaCard: React.FC<{
     item: Convocatoria;
     onEnrollSuccess: (id: string) => void;
-    onShowDetails: (item: Convocatoria) => void; // ✅ NUEVO
+    onShowDetails: (item: Convocatoria) => void;
 }> = ({ item, onEnrollSuccess, onShowDetails }) => {
     const [enrolling, setEnrolling] = useState(false);
     const { user } = useAuthStore();
@@ -132,7 +131,7 @@ const ConvocatoriaCard: React.FC<{
                         {item.isClosed
                             ? 'Cerrada'
                             : item.enrolled
-                                ? '✓ Inscrito'
+                                ? 'Inscrito'
                                 : (enrolling ? 'Inscribiendo...' : 'Inscribirme')}
                     </button>
                 </div>
@@ -322,7 +321,39 @@ const ConvocatoriasPanel: React.FC = () => {
         }
     };
 
-    if (loading) return <div className="cv-loading">Cargando actividades...</div>;
+    if (loading) {
+        return (
+            <main className="cv-container">
+                <aside className="cv-sidebar cv-sidebar-loading">
+                    <h3>Filtros</h3>
+                    <div className="cv-skeleton cv-skeleton-input"></div>
+                    <div className="cv-skeleton cv-skeleton-calendar"></div>
+                    <div className="cv-skeleton cv-skeleton-checks"></div>
+                </aside>
+                <section className="cv-main">
+                    <header className="cv-hero">
+                        <h2>Encuentra tu Próxima Oportunidad</h2>
+                        <p className="cv-sub">Cargando actividades...</p>
+                    </header>
+                    <div className="cv-loading-container">
+                        <div className="cv-loading-spinner"></div>
+                        <p>Cargando convocatorias...</p>
+                    </div>
+                    <div className="cv-grid cv-grid-skeleton">
+                        {[1, 2, 3, 4, 5, 6].map((i) => (
+                            <div key={i} className="cv-card-skeleton">
+                                <div className="cv-skeleton cv-skeleton-badge"></div>
+                                <div className="cv-skeleton cv-skeleton-title"></div>
+                                <div className="cv-skeleton cv-skeleton-text"></div>
+                                <div className="cv-skeleton cv-skeleton-text short"></div>
+                                <div className="cv-skeleton cv-skeleton-meta"></div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            </main>
+        );
+    }
 
     return (
         <main className="cv-container">
@@ -331,7 +362,7 @@ const ConvocatoriasPanel: React.FC = () => {
 
                 {user && user.intereses && user.intereses.length > 0 && (
                     <div className="cv-user-hint">
-                        <p>✨ Mostrando actividades basadas en tus intereses</p>
+                        <p>Mostrando actividades basadas en tus intereses</p>
                     </div>
                 )}
 

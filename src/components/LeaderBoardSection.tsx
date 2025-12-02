@@ -10,9 +10,9 @@ type Volunteer = {
 };
 
 const volunteers: Volunteer[] = [
-  { id: 1, name: "Ana Martínez", points: 120, activities: 12, recognition: "🥇 Voluntaria del mes" },
-  { id: 2, name: "Pedro López", points: 95, activities: 9, recognition: "💪 Compromiso total" },
-  { id: 3, name: "Sofía Torres", points: 80, activities: 8, recognition: "🌱 Nuevo talento" },
+  { id: 1, name: "Ana Martínez", points: 120, activities: 12, recognition: "Voluntaria del mes" },
+  { id: 2, name: "Pedro López", points: 95, activities: 9, recognition: "Compromiso total" },
+  { id: 3, name: "Sofía Torres", points: 80, activities: 8, recognition: "Nuevo talento" },
   { id: 4, name: "Juan Pérez", points: 65, activities: 7 },
   { id: 5, name: "Carla Rivas", points: 50, activities: 5 },
 ];
@@ -20,7 +20,7 @@ const volunteers: Volunteer[] = [
 const LeaderBoard: React.FC = () => {
   return (
     <div className="dashboard-section leaderboard-section">
-      <h2>🏆 Leaderboard de Voluntarios</h2>
+      <h2>Leaderboard de Voluntarios</h2>
       <table className="leaderboard-table">
         <thead>
           <tr>
@@ -39,10 +39,10 @@ const LeaderBoard: React.FC = () => {
                 index === 0
                   ? "first-place"
                   : index === 1
-                  ? "second-place"
-                  : index === 2
-                  ? "third-place"
-                  : ""
+                    ? "second-place"
+                    : index === 2
+                      ? "third-place"
+                      : ""
               }
             >
               <td>{index + 1}</td>

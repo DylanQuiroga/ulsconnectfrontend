@@ -1,6 +1,6 @@
 .news-section {
   padding: 80px 60px;
-  background: #f5f7f9;
+  background: var(--bg-border);
 }
 
 .news-title {
@@ -8,7 +8,7 @@
   font-weight: 700;
   margin-bottom: 40px;
   text-align: left;
-  color: #222;
+  color: var(--text-900);
 }
 
 .news-list {
@@ -20,18 +20,26 @@
 /* Tarjeta horizontal */
 .news-card {
   display: flex;
-  background: white;
+  background: var(--white);
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px var(--shadow-blue-1);
   min-height: 180px;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.news-card:hover {
+  box-shadow: 0 8px 24px var(--shadow-blue-2);
+  transform: translateY(-2px);
 }
 
 
 .news-image {
-  width: 260px;        /* Tamaño fijo */
+  width: 260px;
+  /* Tamaño fijo */
   object-fit: cover;
-  flex-shrink: 0;      /* Evita que la imagen se encoja */
+  flex-shrink: 0;
+  /* Evita que la imagen se encoja */
   border-radius: 10px 0 0 10px;
 }
 
@@ -45,40 +53,42 @@
   font-size: 1.6rem;
   font-weight: 700;
   margin-bottom: 5px;
+  color: var(--text-900);
 }
 
 .news-subtitle {
   font-size: 1rem;
-  color: #777;
+  color: var(--text-700);
   margin-bottom: 15px;
 }
 
 .news-description {
   font-size: 1rem;
   margin-bottom: 20px;
-  color: #444;
+  color: var(--text-700);
 }
 
 /* Botón */
 .btn-green {
-  background: #16a34a;
-  color: white;
+  background: var(--blue-700);
+  color: var(--white);
   border: none;
   padding: 10px 16px;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 600;
+  transition: background 0.2s ease;
 }
 
 .btn-green:hover {
-  background: #128a3f;
+  background: var(--blue-600);
 }
 
 /* Modal */
 .news-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--overlay-dark);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -86,12 +96,12 @@
 }
 
 .news-modal {
-  background: white;
+  background: var(--white);
   padding: 30px;
   width: 90%;
   max-width: 600px;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 20px var(--shadow-dark);
   animation: fadeIn 0.2s ease;
 }
 
@@ -103,32 +113,40 @@
 
 .modal-subtitle {
   font-size: 1rem;
-  color: #888;
+  color: var(--text-700);
 }
 
 .modal-text {
   margin-top: 10px;
-  color: #444;
+  color: var(--text-700);
 }
 
 .btn-close {
   margin-top: 20px;
   padding: 10px 16px;
   border: none;
-  background: #222;
-  color: white;
+  background: var(--pink-600);
+  color: var(--white);
   border-radius: 6px;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .btn-close:hover {
-  background: #444;
+  background: var(--pink-400);
 }
 
 /* Animación */
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.97); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* 📱 RESPONSIVO */
@@ -140,7 +158,8 @@
 
   .news-image {
     width: 100%;
-    height: 200px;   /* altura fija también en mobile */
+    height: 200px;
+    /* altura fija también en mobile */
     border-radius: 10px 10px 0 0;
   }
 

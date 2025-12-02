@@ -2,6 +2,7 @@
     max-width: 1600px;
     margin: 0 auto;
     padding: 32px 24px;
+    background: var(--bg-border, #f5f6fa);
 }
 
 /* Header */
@@ -18,12 +19,12 @@
     margin: 0;
     font-size: 2rem;
     font-weight: 700;
-    color: #1f2937;
+    color: var(--blue-700, #0160b4);
 }
 
 .gu-subtitle {
     margin: 8px 0 0 0;
-    color: #6b7280;
+    color: #666;
     font-size: 1rem;
 }
 
@@ -831,4 +832,81 @@
     .gu-password-container {
         flex-direction: column;
     }
+
+    .gu-pagination {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .gu-pagination-controls {
+        justify-content: center;
+    }
+}
+
+/* ============== PAGINACIÓN ============== */
+.gu-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: #f9fafb;
+    border-top: 1px solid #e5e7eb;
+    border-radius: 0 0 12px 12px;
+    margin-top: 0;
+}
+
+.gu-pagination-info {
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.gu-pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.gu-pagination-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    padding: 0 12px;
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #374151;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.gu-pagination-btn:hover:not(:disabled) {
+    background: var(--blue-700, #0160b4);
+    border-color: var(--blue-700, #0160b4);
+    color: white;
+}
+
+.gu-pagination-btn.active {
+    background: var(--blue-700, #0160b4);
+    border-color: var(--blue-700, #0160b4);
+    color: white;
+}
+
+.gu-pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f3f4f6;
+}
+
+.gu-pagination-ellipsis {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    color: #9ca3af;
+    font-weight: 500;
 }

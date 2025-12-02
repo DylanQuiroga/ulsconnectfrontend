@@ -3,7 +3,7 @@ import "./css/Navbar.css";
 import { Link, useNavigate } from "react-router-dom";
 import logo_souls from "../public/logo_souls.png";
 import { useAuthStore } from "../stores/sessionStore";
-import { FaUser, FaChartLine, FaSignOutAlt, FaUserCircle, FaChevronDown, FaClipboardList, FaUsers, FaCalendarAlt } from "react-icons/fa"; // ✅ Agregar FaUsers y FaCalendarAlt
+import { FaUser, FaChartLine, FaSignOutAlt, FaUserCircle, FaChevronDown, FaClipboardList, FaUsers, FaCalendarAlt, FaBars, FaTimes } from "react-icons/fa";
 
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
@@ -55,7 +55,7 @@ const Navbar: React.FC = () => {
           onClick={() => setMenuOpen(!menuOpen)}
           aria-label="Abrir menú"
         >
-          {menuOpen ? "✕" : "☰"}
+          {menuOpen ? <FaTimes /> : <FaBars />}
         </button>
 
         <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
