@@ -47,22 +47,6 @@ export default function EnrollmentsTable({ enrollments, byStatus, topActivities 
 
     return (
         <div className="enrollments-container">
-            {/* Resumen por Estado */}
-            <div className="status-summary">
-                <div className="status-card confirmed">
-                    <h4>Confirmadas</h4>
-                    <p>{byStatus.confirmed}</p>
-                </div>
-                <div className="status-card pending">
-                    <h4>Pendientes</h4>
-                    <p>{byStatus.pending}</p>
-                </div>
-                <div className="status-card cancelled">
-                    <h4>Canceladas</h4>
-                    <p>{byStatus.cancelled}</p>
-                </div>
-            </div>
-
             {/* Top Actividades */}
             <div className="top-activities">
                 <h4>Top 5 Actividades con Más Inscripciones</h4>

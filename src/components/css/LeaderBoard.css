@@ -1,0 +1,100 @@
+/* Sección con estilo consistente */
+.leaderboard-section {
+  margin-bottom: 48px;
+  padding: 32px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(1, 96, 180, 0.08);
+  border: 1px solid rgba(1, 96, 180, 0.06);
+}
+
+/* Título con estilo similar al dashboard */
+.leaderboard-section h2 {
+  margin: 0 0 28px 0;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #0160b4;
+  padding-bottom: 12px;
+  border-bottom: 3px solid #fe6970;
+  text-align: center;   /* 👈 centra el título */
+}
+
+/* Tabla con estética similar a activity-table */
+.leaderboard-table {
+  width: 100%;
+  max-width: 900px;   /* límite de ancho */
+  margin: 0 auto;     /* centra la tabla */
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(1, 96, 180, 0.06);
+}
+
+.leaderboard-table thead {
+  background: linear-gradient(90deg, #0160b4 0%, #0373d1 100%);
+}
+
+.leaderboard-table th {
+  padding: 16px 14px;
+  text-align: left;
+  font-weight: 700;
+  color: white;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.leaderboard-table tbody {
+  background: white;
+}
+
+.leaderboard-table td {
+  padding: 14px;
+  border-bottom: 1px solid rgba(1, 96, 180, 0.08);
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.leaderboard-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.leaderboard-table tbody tr:hover {
+  background: linear-gradient(90deg, rgba(1, 96, 180, 0.04), rgba(254, 105, 112, 0.02));
+  transform: scale(1.01);
+}
+
+.leaderboard-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Colores especiales para los primeros lugares */
+.first-place {
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.05));
+  font-weight: 700;
+}
+
+.second-place {
+  background: linear-gradient(90deg, rgba(192, 192, 192, 0.15), rgba(192, 192, 192, 0.05));
+}
+
+.third-place {
+  background: linear-gradient(90deg, rgba(205, 127, 50, 0.15), rgba(205, 127, 50, 0.05));
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .leaderboard-table {
+    font-size: 0.8rem;
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .leaderboard-table th,
+  .leaderboard-table td {
+    padding: 10px 8px;
+    white-space: nowrap;
+  }
+}

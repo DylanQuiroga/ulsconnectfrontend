@@ -26,6 +26,7 @@ interface Activity {
         nombreRegion: string;
     };
     cuposDisponibles?: number;
+    capacidad?: number;
     estado: string;
     imagenUrl?: string;
     motivoCierre?: string;
@@ -288,7 +289,7 @@ export default function ActivityManagement() {
                                     </td>
                                     <td>
                                         <span className="am-cupos">
-                                            {activity.cuposDisponibles || "Ilimitado"}
+                                            {activity.capacidad || "Ilimitado"}
                                         </span>
                                     </td>
                                     <td>

@@ -70,6 +70,7 @@ export interface AdminPanelData {
             enrollmentsCsv: string;
             attendanceCsv: string;
         };
+        leaderboard: LeaderboardEntry[];
     };
 }
 
@@ -197,7 +198,50 @@ export const adminService = {
     // ============== PANEL ==============
     async getPanelData(): Promise<AdminPanelData> {
         const response = await api.get('/admin/panel');
-        return response.data;
+        const data = response.data;
+
+        // Transformar attendance.recent de hojas a lista plana de usuarios
+        // El backend devuelve "hojas de asistencia" con un array de inscripciones
+        // El frontend espera una lista plana de "registros" (usuario X asistió a actividad Y)
+        if (data.success && data.panel?.attendance?.recent) {
+            const flatAttendance: any[] = [];
+            
+            data.panel.attendance.recent.forEach((sheet: any) => {
+                // Si el registro ya viene plano (por si el backend cambia), lo usamos tal cual
+                if (!sheet.inscripciones && sheet.userName) {
+                    flatAttendance.push(sheet);
+                    return;
+                }
+
+                // Si viene anidado en inscripciones
+                if (sheet.inscripciones && Array.isArray(sheet.inscripciones)) {
+                    sheet.inscripciones.forEach((ins: any) => {
+                        // Solo mostrar presentes si se desea, o todos. 
+                        // Asumimos que queremos ver quién asistió.
+                        if (ins.asistencia === 'presente') {
+                            flatAttendance.push({
+                                attendanceId: `${sheet.attendanceId}-${ins.usuarioId}`, // ID único compuesto
+                                activityId: sheet.activityId,
+                                activityTitle: sheet.activityTitle,
+                                userId: ins.usuarioId,
+                                userName: ins.usuarioNombre,
+                                userEmail: ins.usuarioEmail,
+                                recordedAt: sheet.recordedAt,
+                                recordedBy: sheet.recordedBy,
+                                recordedByName: sheet.recordedByName,
+                                evento: sheet.activityTitle
+                            });
+                        }
+                    });
+                }
+            });
+
+            // Ordenar por fecha más reciente (aunque las hojas ya vienen ordenadas, los items dentro no necesariamente)
+            // Y limitar a los últimos 20 registros individuales
+            data.panel.attendance.recent = flatAttendance.slice(0, 20);
+        }
+
+        return data;
     },
 
     // ============== EXPORTACIONES ==============
