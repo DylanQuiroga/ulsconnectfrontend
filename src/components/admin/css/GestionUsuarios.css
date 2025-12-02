@@ -2,6 +2,7 @@
     max-width: 1600px;
     margin: 0 auto;
     padding: 32px 24px;
+    background: var(--bg-border, #f5f6fa);
 }
 
 /* Header */
@@ -18,12 +19,12 @@
     margin: 0;
     font-size: 2rem;
     font-weight: 700;
-    color: #1f2937;
+    color: var(--blue-700, #0160b4);
 }
 
 .gu-subtitle {
     margin: 8px 0 0 0;
-    color: #6b7280;
+    color: #666;
     font-size: 1rem;
 }
 
