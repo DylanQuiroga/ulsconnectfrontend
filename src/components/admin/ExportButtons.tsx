@@ -1,4 +1,5 @@
 import { adminService } from '../../services/adminService';
+import { FaDownload } from 'react-icons/fa';
 
 export default function ExportButtons() {
     const handleExportEnrollments = async () => {
@@ -38,10 +39,10 @@ export default function ExportButtons() {
     return (
         <div className="export-buttons">
             <button onClick={handleExportEnrollments} className="export-btn">
-                📥 Exportar Inscripciones
+                <FaDownload /> Exportar Inscripciones
             </button>
             <button onClick={handleExportAttendance} className="export-btn">
-                📥 Exportar Asistencias
+                <FaDownload /> Exportar Asistencias
             </button>
         </div>
     );
