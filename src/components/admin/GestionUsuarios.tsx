@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaSearch, FaUser, FaEnvelope, FaPhone, FaGraduationCap, FaMapMarkerAlt, FaCalendar, FaCheck, FaTimes, FaEye, FaUserCog, FaLock, FaUnlock, FaUsers, FaHeart, FaUserPlus, FaKey } from "react-icons/fa";
 import { adminService, RegistrationRequest, Usuario, CreateUserData } from "../../services/adminService";
 import ConfirmModal from "./ConfirmModal";
+import careersData from "../../data/careers.json";
 import "./css/GestionUsuarios.css";
 
 type TabType = 'solicitudes' | 'usuarios';
@@ -16,7 +17,7 @@ export default function GestionUsuarios() {
     const [allSolicitudes, setAllSolicitudes] = useState<RegistrationRequest[]>([]);
     const [solicitudes, setSolicitudes] = useState<RegistrationRequest[]>([]);
     const [loadingSolicitudes, setLoadingSolicitudes] = useState(true);
-    const [solicitudFilter, setSolicitudFilter] = useState<FilterType>('pending');
+    const [solicitudFilter, setSolicitudFilter] = useState<FilterType>('all');
 
     // Usuarios existentes
     const [usuarios, setUsuarios] = useState<Usuario[]>([]);
@@ -207,6 +208,14 @@ export default function GestionUsuarios() {
             errors.contrasena = 'La contraseña debe tener al menos 6 caracteres';
         }
 
+        if (!createForm.telefono?.trim()) {
+            errors.telefono = 'El teléfono es requerido';
+        }
+
+        if (!createForm.carrera?.trim()) {
+            errors.carrera = 'La carrera/departamento es requerida';
+        }
+
         setCreateErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -353,22 +362,7 @@ export default function GestionUsuarios() {
                     </p>
                 </div>
                 <div className="gu-stats">
-                    {activeTab === 'solicitudes' ? (
-                        <>
-                            <div className="gu-stat-card">
-                                <span className="gu-stat-number">{solicitudesStats.pending}</span>
-                                <span className="gu-stat-label">Pendientes</span>
-                            </div>
-                            <div className="gu-stat-card success">
-                                <span className="gu-stat-number">{solicitudesStats.approved}</span>
-                                <span className="gu-stat-label">Aprobadas</span>
-                            </div>
-                            <div className="gu-stat-card danger">
-                                <span className="gu-stat-number">{solicitudesStats.rejected}</span>
-                                <span className="gu-stat-label">Rechazadas</span>
-                            </div>
-                        </>
-                    ) : (
+                    {activeTab === 'usuarios' && (
                         <>
                             <div className="gu-stat-card">
                                 <span className="gu-stat-number">{usuariosStats.total}</span>
@@ -434,30 +428,7 @@ export default function GestionUsuarios() {
                 <div className="gu-filters">
                     {activeTab === 'solicitudes' ? (
                         <>
-                            <button
-                                className={`gu-filter-btn ${solicitudFilter === 'all' ? 'active' : ''}`}
-                                onClick={() => setSolicitudFilter('all')}
-                            >
-                                Todas ({allSolicitudes.length})
-                            </button>
-                            <button
-                                className={`gu-filter-btn ${solicitudFilter === 'pending' ? 'active' : ''}`}
-                                onClick={() => setSolicitudFilter('pending')}
-                            >
-                                Pendientes ({solicitudesStats.pending})
-                            </button>
-                            <button
-                                className={`gu-filter-btn ${solicitudFilter === 'approved' ? 'active' : ''}`}
-                                onClick={() => setSolicitudFilter('approved')}
-                            >
-                                Aprobadas ({solicitudesStats.approved})
-                            </button>
-                            <button
-                                className={`gu-filter-btn ${solicitudFilter === 'rejected' ? 'active' : ''}`}
-                                onClick={() => setSolicitudFilter('rejected')}
-                            >
-                                Rechazadas ({solicitudesStats.rejected})
-                            </button>
+                            {/* Filtros de solicitudes eliminados para mostrar todas por defecto */}
                         </>
                     ) : (
                         <>
@@ -1065,30 +1036,43 @@ export default function GestionUsuarios() {
                                 </span>
                             </div>
 
-                            {/* Teléfono (opcional) */}
+                            {/* Teléfono */}
                             <div className="gu-form-group">
                                 <label className="gu-form-label">
-                                    Teléfono <span className="optional">(opcional)</span>
+                                    Teléfono *
                                 </label>
                                 <input
                                     type="tel"
                                     value={createForm.telefono}
                                     onChange={(e) => setCreateForm({ ...createForm, telefono: e.target.value })}
                                     placeholder="+56 9 1234 5678"
+                                    className={createErrors.telefono ? 'error' : ''}
                                 />
+                                {createErrors.telefono && (
+                                    <span className="gu-form-error">{createErrors.telefono}</span>
+                                )}
                             </div>
 
-                            {/* Carrera/Departamento (opcional) */}
+                            {/* Carrera/Departamento */}
                             <div className="gu-form-group">
                                 <label className="gu-form-label">
-                                    Departamento/Área <span className="optional">(opcional)</span>
+                                    Departamento/Área *
                                 </label>
-                                <input
-                                    type="text"
+                                <select
                                     value={createForm.carrera}
                                     onChange={(e) => setCreateForm({ ...createForm, carrera: e.target.value })}
-                                    placeholder="Ej: Dirección de Asuntos Estudiantiles"
-                                />
+                                    className={createErrors.carrera ? 'error' : ''}
+                                >
+                                    <option value="">Seleccione una opción</option>
+                                    {careersData.careers.map((career) => (
+                                        <option key={career.value} value={career.label}>
+                                            {career.label}
+                                        </option>
+                                    ))}
+                                </select>
+                                {createErrors.carrera && (
+                                    <span className="gu-form-error">{createErrors.carrera}</span>
+                                )}
                             </div>
                         </div>
                         <div className="gu-modal-footer">
