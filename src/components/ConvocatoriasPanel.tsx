@@ -131,7 +131,7 @@ const ConvocatoriaCard: React.FC<{
                         {item.isClosed
                             ? 'Cerrada'
                             : item.enrolled
-                                ? '✓ Inscrito'
+                                ? 'Inscrito'
                                 : (enrolling ? 'Inscribiendo...' : 'Inscribirme')}
                     </button>
                 </div>

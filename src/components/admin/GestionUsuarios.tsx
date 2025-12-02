@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { FaSearch, FaUser, FaEnvelope, FaPhone, FaGraduationCap, FaMapMarkerAlt, FaCalendar, FaCheck, FaTimes, FaEye, FaUserCog, FaLock, FaUnlock, FaUsers, FaHeart, FaUserPlus, FaKey, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaSearch, FaUser, FaEnvelope, FaPhone, FaGraduationCap, FaMapMarkerAlt, FaCalendar, FaCheck, FaTimes, FaEye, FaEyeSlash, FaUserCog, FaLock, FaUnlock, FaUsers, FaHeart, FaUserPlus, FaKey, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { adminService, RegistrationRequest, Usuario, CreateUserData } from "../../services/adminService";
 import ConfirmModal from "./ConfirmModal";
 import careersData from "../../data/careers.json";
@@ -140,7 +140,7 @@ export default function GestionUsuarios() {
         setActionLoading(true);
         try {
             await adminService.approveRegistration(getUserId(selectedItem));
-            alert("✅ Solicitud aprobada exitosamente. El usuario recibirá un correo de confirmación.");
+            alert("Solicitud aprobada exitosamente. El usuario recibirá un correo de confirmación.");
             setShowApproveModal(false);
             setSelectedItem(null);
             fetchAllSolicitudes();
@@ -156,7 +156,7 @@ export default function GestionUsuarios() {
         setActionLoading(true);
         try {
             await adminService.rejectRegistration(getUserId(selectedItem), rejectNotes);
-            alert("❌ Solicitud rechazada");
+            alert("Solicitud rechazada");
             setShowRejectModal(false);
             setSelectedItem(null);
             setRejectNotes("");
@@ -174,7 +174,7 @@ export default function GestionUsuarios() {
         setActionLoading(true);
         try {
             await adminService.updateUserRole(getUserId(selectedItem), newRole);
-            alert(`✅ Rol actualizado a ${newRole}`);
+            alert(`Rol actualizado a ${newRole}`);
             setShowRoleModal(false);
             setSelectedItem(null);
             fetchUsuarios();
@@ -191,7 +191,7 @@ export default function GestionUsuarios() {
         setActionLoading(true);
         try {
             await adminService.toggleUserBlock(getUserId(usuario), !usuario.bloqueado);
-            alert(usuario.bloqueado ? "✅ Usuario desbloqueado" : "🚫 Usuario bloqueado");
+            alert(usuario.bloqueado ? "Usuario desbloqueado" : "Usuario bloqueado");
             setShowBlockModal(false);
             setSelectedItem(null);
             fetchUsuarios();
@@ -240,7 +240,7 @@ export default function GestionUsuarios() {
         setActionLoading(true);
         try {
             const response = await adminService.createStaffOrAdmin(createForm);
-            alert(`✅ ${response.message}`);
+            alert(`${response.message}`);
             setShowCreateModal(false);
             resetCreateForm();
             fetchUsuarios();
@@ -464,7 +464,7 @@ export default function GestionUsuarios() {
             <header className="gu-header">
                 <div>
                     <h1 className="gu-title">
-                        {activeTab === 'solicitudes' ? '📋 Solicitudes de Registro' : '👥 Gestión de Usuarios'}
+                        {activeTab === 'solicitudes' ? 'Solicitudes de Registro' : 'Gestión de Usuarios'}
                     </h1>
                     <p className="gu-subtitle">
                         {activeTab === 'solicitudes'
@@ -500,13 +500,13 @@ export default function GestionUsuarios() {
                             className={`gu-filter-btn ${activeTab === 'solicitudes' ? 'active' : ''}`}
                             onClick={() => { setActiveTab('solicitudes'); setSearchTerm(''); }}
                         >
-                            📋 Solicitudes
+                            Solicitudes
                         </button>
                         <button
                             className={`gu-filter-btn ${activeTab === 'usuarios' ? 'active' : ''}`}
                             onClick={() => { setActiveTab('usuarios'); setSearchTerm(''); }}
                         >
-                            👤 Usuarios
+                            Usuarios
                         </button>
                     </div>
 
@@ -593,7 +593,7 @@ export default function GestionUsuarios() {
                                 {searchTerm
                                     ? 'No se encontraron solicitudes que coincidan con la búsqueda'
                                     : solicitudFilter === 'pending'
-                                        ? '¡No hay solicitudes pendientes! 🎉'
+                                        ? '¡No hay solicitudes pendientes!'
                                         : 'No hay solicitudes en esta categoría'}
                             </p>
                         </div>
@@ -1117,7 +1117,7 @@ export default function GestionUsuarios() {
                                             onClick={() => setShowPassword(!showPassword)}
                                             className="gu-password-toggle"
                                         >
-                                            {showPassword ? '🙈' : '👁️'}
+                                            {showPassword ? <FaEyeSlash /> : <FaEye />}
                                         </button>
                                     </div>
                                     <button
@@ -1135,7 +1135,7 @@ export default function GestionUsuarios() {
                                 )}
                                 {createForm.contrasena && showPassword && (
                                     <div className="gu-warning-box">
-                                        ⚠️ Guarda esta contraseña y compártela de forma segura con el usuario.
+                                        Guarda esta contraseña y compártela de forma segura con el usuario.
                                     </div>
                                 )}
                             </div>
@@ -1154,8 +1154,8 @@ export default function GestionUsuarios() {
                                 </select>
                                 <span className="gu-form-hint">
                                     {createForm.rol === 'admin'
-                                        ? '🔴 Acceso total al sistema: gestión de usuarios, actividades y configuraciones.'
-                                        : '🟡 Puede crear y gestionar actividades, tomar asistencia y ver reportes.'}
+                                        ? 'Acceso total al sistema: gestión de usuarios, actividades y configuraciones.'
+                                        : 'Puede crear y gestionar actividades, tomar asistencia y ver reportes.'}
                                 </span>
                             </div>
 

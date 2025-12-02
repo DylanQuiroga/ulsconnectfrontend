@@ -95,7 +95,7 @@ const PerfilVoluntario: React.FC = () => {
             if (res.data.success) {
                 setOriginalForm(form);
                 setEditing(false);
-                setSuccessMsg('✅ Perfil actualizado correctamente');
+                setSuccessMsg('Perfil actualizado correctamente');
 
                 // ✅ Recargar datos del usuario
                 await fetchUser();
