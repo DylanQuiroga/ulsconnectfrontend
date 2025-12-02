@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "./css/HeroSection.css";
 import { Link } from "react-router-dom";
+import image1 from "../assets/imagesConvocatorias/image10_a.webp";
+import image2 from "../assets/imagesConvocatorias/image15_i.webp";
+import image3 from "../assets/imagesConvocatorias/image6_p.webp";
 
 const HeroSection: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
-    "/src/assets/imagesConvocatorias/image10_a.webp",
-    "/src/assets/imagesConvocatorias/image15_i.webp ",
-    "/src/assets/imagesConvocatorias/image6_p.webp",
+    image1,
+    image2,
+    image3
   ];
 
   useEffect(() => {
