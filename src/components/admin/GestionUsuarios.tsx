@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { FaSearch, FaUser, FaEnvelope, FaPhone, FaGraduationCap, FaMapMarkerAlt, FaCalendar, FaCheck, FaTimes, FaEye, FaUserCog, FaLock, FaUnlock, FaUsers, FaHeart, FaUserPlus, FaKey } from "react-icons/fa";
+import React, { useEffect, useState, useMemo } from "react";
+import { FaSearch, FaUser, FaEnvelope, FaPhone, FaGraduationCap, FaMapMarkerAlt, FaCalendar, FaCheck, FaTimes, FaEye, FaUserCog, FaLock, FaUnlock, FaUsers, FaHeart, FaUserPlus, FaKey, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { adminService, RegistrationRequest, Usuario, CreateUserData } from "../../services/adminService";
 import ConfirmModal from "./ConfirmModal";
 import careersData from "../../data/careers.json";
@@ -53,6 +53,11 @@ export default function GestionUsuarios() {
     // Estado de acciones
     const [actionLoading, setActionLoading] = useState(false);
 
+    // Paginación
+    const [currentPageSolicitudes, setCurrentPageSolicitudes] = useState(1);
+    const [currentPageUsuarios, setCurrentPageUsuarios] = useState(1);
+    const itemsPerPage = 10;
+
     // Cargar datos iniciales
     useEffect(() => {
         if (activeTab === 'solicitudes') {
@@ -61,6 +66,15 @@ export default function GestionUsuarios() {
             fetchUsuarios();
         }
     }, [activeTab]);
+
+    // Resetear página cuando cambia el filtro o búsqueda
+    useEffect(() => {
+        setCurrentPageSolicitudes(1);
+    }, [solicitudFilter, searchTerm]);
+
+    useEffect(() => {
+        setCurrentPageUsuarios(1);
+    }, [userFilter, searchTerm]);
 
     // Filtrar solicitudes cuando cambia el filtro
     useEffect(() => {
@@ -331,6 +345,103 @@ export default function GestionUsuarios() {
             (user.carrera && user.carrera.toLowerCase().includes(term));
     }) : [];
 
+    // Paginación - calcular datos paginados
+    const totalPagesSolicitudes = Math.ceil(filteredSolicitudes.length / itemsPerPage);
+    const totalPagesUsuarios = Math.ceil(filteredUsuarios.length / itemsPerPage);
+
+    const paginatedSolicitudes = useMemo(() => {
+        const startIndex = (currentPageSolicitudes - 1) * itemsPerPage;
+        return filteredSolicitudes.slice(startIndex, startIndex + itemsPerPage);
+    }, [filteredSolicitudes, currentPageSolicitudes, itemsPerPage]);
+
+    const paginatedUsuarios = useMemo(() => {
+        const startIndex = (currentPageUsuarios - 1) * itemsPerPage;
+        return filteredUsuarios.slice(startIndex, startIndex + itemsPerPage);
+    }, [filteredUsuarios, currentPageUsuarios, itemsPerPage]);
+
+    // Componente de paginación reutilizable
+    const Pagination = ({
+        currentPage,
+        totalPages,
+        onPageChange,
+        totalItems
+    }: {
+        currentPage: number;
+        totalPages: number;
+        onPageChange: (page: number) => void;
+        totalItems: number;
+    }) => {
+        if (totalPages <= 1) return null;
+
+        const getPageNumbers = () => {
+            const pages: (number | string)[] = [];
+            const maxVisible = 5;
+
+            if (totalPages <= maxVisible) {
+                for (let i = 1; i <= totalPages; i++) pages.push(i);
+            } else {
+                if (currentPage <= 3) {
+                    for (let i = 1; i <= 4; i++) pages.push(i);
+                    pages.push('...');
+                    pages.push(totalPages);
+                } else if (currentPage >= totalPages - 2) {
+                    pages.push(1);
+                    pages.push('...');
+                    for (let i = totalPages - 3; i <= totalPages; i++) pages.push(i);
+                } else {
+                    pages.push(1);
+                    pages.push('...');
+                    for (let i = currentPage - 1; i <= currentPage + 1; i++) pages.push(i);
+                    pages.push('...');
+                    pages.push(totalPages);
+                }
+            }
+            return pages;
+        };
+
+        const startItem = (currentPage - 1) * itemsPerPage + 1;
+        const endItem = Math.min(currentPage * itemsPerPage, totalItems);
+
+        return (
+            <div className="gu-pagination">
+                <div className="gu-pagination-info">
+                    Mostrando {startItem}-{endItem} de {totalItems} registros
+                </div>
+                <div className="gu-pagination-controls">
+                    <button
+                        className="gu-pagination-btn"
+                        onClick={() => onPageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                    >
+                        <FaChevronLeft />
+                    </button>
+
+                    {getPageNumbers().map((page, index) => (
+                        typeof page === 'number' ? (
+                            <button
+                                key={index}
+                                className={`gu-pagination-btn ${currentPage === page ? 'active' : ''}`}
+                                onClick={() => onPageChange(page)}
+                            >
+                                {page}
+                            </button>
+                        ) : (
+                            <span key={index} className="gu-pagination-ellipsis">{page}</span>
+                        )
+                    ))}
+
+                    <button
+                        className="gu-pagination-btn"
+                        onClick={() => onPageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                    >
+                        <FaChevronRight />
+                    </button>
+                </div>
+            </div>
+        );
+    };
+
     // Stats
     const solicitudesStats = {
         pending: allSolicitudes.filter(s => s.status === 'pending').length,
@@ -500,7 +611,7 @@ export default function GestionUsuarios() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {filteredSolicitudes.map((sol) => (
+                                    {paginatedSolicitudes.map((sol) => (
                                         <tr key={getUserId(sol)}>
                                             <td>
                                                 <div className="gu-user-cell">
@@ -556,6 +667,12 @@ export default function GestionUsuarios() {
                                     ))}
                                 </tbody>
                             </table>
+                            <Pagination
+                                currentPage={currentPageSolicitudes}
+                                totalPages={totalPagesSolicitudes}
+                                onPageChange={setCurrentPageSolicitudes}
+                                totalItems={filteredSolicitudes.length}
+                            />
                         </div>
                     )}
                 </>
@@ -588,7 +705,7 @@ export default function GestionUsuarios() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {filteredUsuarios.map((user) => (
+                                    {paginatedUsuarios.map((user) => (
                                         <tr key={getUserId(user)} style={user.bloqueado ? { backgroundColor: '#fef2f2' } : {}}>
                                             <td>
                                                 <div className="gu-user-cell">
@@ -648,6 +765,12 @@ export default function GestionUsuarios() {
                                     ))}
                                 </tbody>
                             </table>
+                            <Pagination
+                                currentPage={currentPageUsuarios}
+                                totalPages={totalPagesUsuarios}
+                                onPageChange={setCurrentPageUsuarios}
+                                totalItems={filteredUsuarios.length}
+                            />
                         </div>
                     )}
                 </>
@@ -927,8 +1050,8 @@ export default function GestionUsuarios() {
 
             {/* ============== MODAL CREAR STAFF/ADMIN ============== */}
             {showCreateModal && (
-                <div className="gu-modal-overlay" onClick={() => { setShowCreateModal(false); resetCreateForm(); }}>
-                    <div className="gu-modal" onClick={(e) => e.stopPropagation()}>
+                <div className="gu-modal-overlay">
+                    <div className="gu-modal">
                         <div className="gu-modal-header">
                             <h2>
                                 <FaUserPlus />
@@ -1056,7 +1179,7 @@ export default function GestionUsuarios() {
                             {/* Carrera/Departamento */}
                             <div className="gu-form-group">
                                 <label className="gu-form-label">
-                                    Departamento/Área *
+                                    Carrera
                                 </label>
                                 <select
                                     value={createForm.carrera}

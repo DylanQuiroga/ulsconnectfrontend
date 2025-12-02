@@ -324,7 +324,6 @@ export default function ActivityManagement() {
                                                     className="am-action-btn am-action-report"
                                                     onClick={() => handleReportClick(activity)}
                                                     title="Generar Reporte de Impacto"
-                                                    style={{ color: '#0891b2' }}
                                                 >
                                                     <FaChartLine />
                                                 </button>

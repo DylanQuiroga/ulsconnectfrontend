@@ -367,6 +367,28 @@
     transform: scale(1.05);
 }
 
+/* Botón de generar reporte */
+.am-action-report {
+    background: #dbeafe;
+    color: var(--blue-700, #0160b4);
+}
+
+.am-action-report:hover {
+    background: #bfdbfe;
+    transform: scale(1.05);
+}
+
+/* Botón de asistencia */
+.am-action-attendance {
+    background: #d1fae5;
+    color: #047857;
+}
+
+.am-action-attendance:hover {
+    background: #a7f3d0;
+    transform: scale(1.05);
+}
+
 /* Empty state */
 .am-empty {
     text-align: center;
