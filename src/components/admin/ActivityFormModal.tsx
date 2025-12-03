@@ -62,6 +62,14 @@ export default function ActivityFormModal({ activity, onClose, onSuccess }: Acti
         }
     }, [activity]);
 
+    // Bloquear scroll del body cuando el modal está abierto
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = "unset";
+        };
+    }, []);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
 

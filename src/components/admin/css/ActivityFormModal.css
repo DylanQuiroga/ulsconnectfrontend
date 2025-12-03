@@ -2,7 +2,7 @@
     max-width: 900px;
     /* ✅ Más ancho */
     max-height: 90vh;
-    overflow-y: auto;
+    overflow-y: auto !important;
 }
 
 .afm-form {
