@@ -74,9 +74,18 @@ export default function ActivityFormModal({ activity, onClose, onSuccess }: Acti
                 ...activity,
                 fechaInicio: activity.fechaInicio ? activity.fechaInicio.split('T')[0] : "",
                 fechaTermino: activity.fechaTermino ? activity.fechaTermino.split('T')[0] : "",
+                cuposDisponibles: (activity as any).capacidad ?? activity.cuposDisponibles,
             });
         }
     }, [activity]);
+
+    // Bloquear scroll del body cuando el modal está abierto
+    useEffect(() => {
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = "unset";
+        };
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -115,7 +124,8 @@ export default function ActivityFormModal({ activity, onClose, onSuccess }: Acti
                 fechaFin: fechaFinValue,
                 fechaTermino: undefined, // evitar duplicados si backend no lo espera
                 ubicacion: ubicacionPayload,
-                cuposDisponibles: formData.cuposDisponibles ? Number(formData.cuposDisponibles) : null,
+                capacidad: formData.cuposDisponibles ? Number(formData.cuposDisponibles) : null,
+                cuposDisponibles: undefined, // evitar enviar campo incorrecto
             };
 
             if (activity?._id) {

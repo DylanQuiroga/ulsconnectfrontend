@@ -149,6 +149,7 @@ export interface ImpactReport {
         fechaInicio: string;
         fechaFin: string;
         estado: string;
+        capacidad?: number | null;
     };
     idActividad?: string; // Keep for compatibility if needed
     metricas: {
@@ -205,7 +206,7 @@ export const adminService = {
         // El frontend espera una lista plana de "registros" (usuario X asistió a actividad Y)
         if (data.success && data.panel?.attendance?.recent) {
             const flatAttendance: any[] = [];
-            
+
             data.panel.attendance.recent.forEach((sheet: any) => {
                 // Si el registro ya viene plano (por si el backend cambia), lo usamos tal cual
                 if (!sheet.inscripciones && sheet.userName) {
