@@ -144,6 +144,10 @@
     gap: 20px;
 }
 
+.adm-info-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
 .adm-info-item {
     display: flex;
     flex-direction: column;
@@ -175,6 +179,50 @@
     color: #0160b4;
     font-size: 0.9rem;
     font-weight: 500;
+}
+
+/* Info Cards (para tipo, área, estado, capacidad) */
+.adm-info-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px;
+    background: #f9fafb;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+    transition: all 0.2s ease;
+}
+
+.adm-info-card:hover {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+}
+
+.adm-info-card-label {
+    color: #6b7280;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.adm-info-card-value {
+    color: #1f2937;
+    font-size: 1rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.adm-estado-activa {
+    color: #059669;
+}
+
+.adm-estado-cerrada {
+    color: #dc2626;
 }
 
 /* Location Card */
@@ -331,13 +379,53 @@
 
     .adm-body {
         padding: 20px;
+        gap: 24px;
     }
 
     .adm-info-grid {
         grid-template-columns: 1fr;
     }
 
+    .adm-info-grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .adm-info-card {
+        padding: 12px;
+    }
+
+    .adm-info-card-value {
+        font-size: 0.9rem;
+    }
+
     .adm-footer {
         padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .adm-info-grid-2 {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .adm-info-card {
+        padding: 10px;
+    }
+
+    .adm-info-card-label {
+        font-size: 0.7rem;
+    }
+
+    .adm-info-card-value {
+        font-size: 0.85rem;
+    }
+
+    .adm-section-header {
+        font-size: 1rem;
+    }
+
+    .adm-section-header svg {
+        font-size: 1.1rem;
     }
 }

@@ -70,10 +70,47 @@ export default function ActivityFormModal({ activity, onClose, onSuccess }: Acti
 
     useEffect(() => {
         if (activity) {
+            // Obtener la fecha de fin (puede venir como fechaFin o fechaTermino)
+            const fechaFinRaw = (activity as any).fechaFin || activity.fechaTermino;
+
+            // Convertir a objetos Date para manejar zona horaria correctamente
+            const fechaInicioDate = activity.fechaInicio ? new Date(activity.fechaInicio) : null;
+            const fechaFinDate = fechaFinRaw ? new Date(fechaFinRaw) : null;
+
+            // Extraer fecha en formato YYYY-MM-DD (en hora local)
+            const fechaInicioStr = fechaInicioDate
+                ? fechaInicioDate.toLocaleDateString('en-CA') // formato YYYY-MM-DD
+                : "";
+            const fechaTerminoStr = fechaFinDate
+                ? fechaFinDate.toLocaleDateString('en-CA')
+                : "";
+
+            // Extraer hora en formato HH:MM (en hora local)
+            let horaInicioStr = activity.horaInicio || "";
+            let horaTerminoStr = activity.horaTermino || "";
+
+            if (fechaInicioDate) {
+                const hours = fechaInicioDate.getHours().toString().padStart(2, '0');
+                const minutes = fechaInicioDate.getMinutes().toString().padStart(2, '0');
+                // Solo asignar si no es medianoche (00:00)
+                if (hours !== '00' || minutes !== '00') {
+                    horaInicioStr = `${hours}:${minutes}`;
+                }
+            }
+            if (fechaFinDate) {
+                const hours = fechaFinDate.getHours().toString().padStart(2, '0');
+                const minutes = fechaFinDate.getMinutes().toString().padStart(2, '0');
+                if (hours !== '00' || minutes !== '00') {
+                    horaTerminoStr = `${hours}:${minutes}`;
+                }
+            }
+
             setFormData({
                 ...activity,
-                fechaInicio: activity.fechaInicio ? activity.fechaInicio.split('T')[0] : "",
-                fechaTermino: activity.fechaTermino ? activity.fechaTermino.split('T')[0] : "",
+                fechaInicio: fechaInicioStr,
+                fechaTermino: fechaTerminoStr,
+                horaInicio: horaInicioStr,
+                horaTermino: horaTerminoStr,
                 cuposDisponibles: (activity as any).capacidad ?? activity.cuposDisponibles,
             });
         }
@@ -112,20 +149,40 @@ export default function ActivityFormModal({ activity, onClose, onSuccess }: Acti
         setLoading(true);
 
         try {
-            // Asegurar nombre de campo 'fechaFin' y ubicacion.lng
-            const fechaFinValue = formData.fechaTermino || formData.fechaFin || formData.fechaInicio;
+            // Combinar fecha y hora en formato ISO
+            let fechaInicioISO = formData.fechaInicio;
+            let fechaFinISO = formData.fechaTermino || formData.fechaFin || formData.fechaInicio;
+
+            // Si hay hora de inicio, combinarla con la fecha
+            if (formData.fechaInicio && formData.horaInicio) {
+                fechaInicioISO = `${formData.fechaInicio}T${formData.horaInicio}:00`;
+            } else if (formData.fechaInicio) {
+                fechaInicioISO = `${formData.fechaInicio}T00:00:00`;
+            }
+
+            // Si hay hora de término, combinarla con la fecha de fin
+            const fechaFinBase = formData.fechaTermino || formData.fechaFin || formData.fechaInicio;
+            if (fechaFinBase && formData.horaTermino) {
+                fechaFinISO = `${fechaFinBase}T${formData.horaTermino}:00`;
+            } else if (fechaFinBase) {
+                fechaFinISO = `${fechaFinBase}T00:00:00`;
+            }
+
             const ubicacionPayload = {
                 ...formData.ubicacion,
                 lng: typeof formData.ubicacion.lng === 'number' ? formData.ubicacion.lng : 0
             };
 
             const payload = {
-                ...formData,
-                fechaFin: fechaFinValue,
-                fechaTermino: undefined, // evitar duplicados si backend no lo espera
+                titulo: formData.titulo,
+                descripcion: formData.descripcion,
+                area: formData.area,
+                tipo: formData.tipo,
+                fechaInicio: fechaInicioISO,
+                fechaFin: fechaFinISO,
                 ubicacion: ubicacionPayload,
                 capacidad: formData.cuposDisponibles ? Number(formData.cuposDisponibles) : null,
-                cuposDisponibles: undefined, // evitar enviar campo incorrecto
+                imagenUrl: formData.imagenUrl,
             };
 
             if (activity?._id) {

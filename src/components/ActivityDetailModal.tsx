@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaTimes, FaCalendarAlt, FaMapMarkerAlt, FaClock, FaUsers, FaInfoCircle, FaCheckCircle } from "react-icons/fa";
+import { FaTimes, FaCalendarAlt, FaMapMarkerAlt, FaClock, FaUsers, FaInfoCircle, FaCheckCircle, FaTag, FaBuilding } from "react-icons/fa";
 import "./css/ActivityDetailModal.css";
 import api from "../services/api";
 import { useAuthStore } from "../stores/sessionStore";
@@ -12,15 +12,17 @@ interface Activity {
     tipo: string;
     fechaInicio: string;
     fechaTermino?: string;
+    fechaFin?: string;
     horaInicio?: string;
     horaTermino?: string;
     ubicacion: {
         nombreLugar: string;
-        direccion: string;
+        direccion?: string;
         nombreComuna: string;
-        nombreRegion: string;
+        nombreRegion?: string;
     };
     cuposDisponibles?: number;
+    capacidad?: number;
     estado: string;
     imagenUrl?: string;
     requisitos?: string[];
@@ -63,10 +65,21 @@ export default function ActivityDetailModal({ activity, onClose, onEnrollSuccess
         });
     };
 
-    const formatTime = (time: string) => {
-        if (!time) return "";
-        return time.substring(0, 5); // HH:MM
+    const formatTime = (dateString: string) => {
+        if (!dateString) return "";
+        const date = new Date(dateString);
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        // No mostrar si es medianoche (probablemente no se asignó hora)
+        if (hours === '00' && minutes === '00') return "";
+        return `${hours}:${minutes}`;
     };
+
+    // Obtener fechaFin (puede venir como fechaFin o fechaTermino)
+    const fechaFin = (activity as any).fechaFin || activity.fechaTermino;
+
+    // Obtener cupos (puede venir como capacidad o cuposDisponibles)
+    const cupos = (activity as any).capacidad || activity.cuposDisponibles;
 
     const handleEnroll = async () => {
         if (!user) {
@@ -158,23 +171,57 @@ export default function ActivityDetailModal({ activity, onClose, onEnrollSuccess
                         </div>
                         <div className="adm-info-grid">
                             <div className="adm-info-item">
-                                <span className="adm-info-label">Inicio:</span>
+                                <span className="adm-info-label">Fecha de inicio:</span>
                                 <span className="adm-info-value">{formatDate(activity.fechaInicio)}</span>
-                                {activity.horaInicio && (
+                                {formatTime(activity.fechaInicio) && (
                                     <span className="adm-info-time">
-                                        <FaClock /> {formatTime(activity.horaInicio)}
+                                        <FaClock /> {formatTime(activity.fechaInicio)} hrs
                                     </span>
                                 )}
                             </div>
-                            {activity.fechaTermino && (
+                            {fechaFin && (
                                 <div className="adm-info-item">
-                                    <span className="adm-info-label">Término:</span>
-                                    <span className="adm-info-value">{formatDate(activity.fechaTermino)}</span>
-                                    {activity.horaTermino && (
+                                    <span className="adm-info-label">Fecha de término:</span>
+                                    <span className="adm-info-value">{formatDate(fechaFin)}</span>
+                                    {formatTime(fechaFin) && (
                                         <span className="adm-info-time">
-                                            <FaClock /> {formatTime(activity.horaTermino)}
+                                            <FaClock /> {formatTime(fechaFin)} hrs
                                         </span>
                                     )}
+                                </div>
+                            )}
+                        </div>
+                    </section>
+
+                    {/* Tipo y Área */}
+                    <section className="adm-section">
+                        <div className="adm-section-header">
+                            <FaTag />
+                            <h3>Información de la Actividad</h3>
+                        </div>
+                        <div className="adm-info-grid adm-info-grid-2">
+                            <div className="adm-info-card">
+                                <span className="adm-info-card-label">Área</span>
+                                <span className="adm-info-card-value">{activity.area}</span>
+                            </div>
+                            <div className="adm-info-card">
+                                <span className="adm-info-card-label">Modalidad</span>
+                                <span className="adm-info-card-value">{activity.tipo}</span>
+                            </div>
+                            <div className="adm-info-card">
+                                <span className="adm-info-card-label">Estado</span>
+                                <span className={`adm-info-card-value adm-estado-${activity.estado}`}>
+                                    {activity.estado === 'activa' ? '🟢 Activa' :
+                                        activity.estado === 'cerrada' ? '🔴 Cerrada' :
+                                            activity.estado}
+                                </span>
+                            </div>
+                            {cupos && (
+                                <div className="adm-info-card">
+                                    <span className="adm-info-card-label">Capacidad</span>
+                                    <span className="adm-info-card-value">
+                                        <FaUsers /> {cupos} personas
+                                    </span>
                                 </div>
                             )}
                         </div>
@@ -187,15 +234,18 @@ export default function ActivityDetailModal({ activity, onClose, onEnrollSuccess
                             <h3>Ubicación</h3>
                         </div>
                         <div className="adm-location-card">
-                            <h4>{activity.ubicacion.nombreLugar}</h4>
-                            <p>{activity.ubicacion.direccion}</p>
+                            <h4>{activity.ubicacion?.nombreLugar || "Por definir"}</h4>
+                            {activity.ubicacion?.direccion && (
+                                <p>{activity.ubicacion.direccion}</p>
+                            )}
                             <p className="adm-location-region">
-                                {activity.ubicacion.nombreComuna}, {activity.ubicacion.nombreRegion}
+                                {activity.ubicacion?.nombreComuna}
+                                {activity.ubicacion?.nombreRegion && `, ${activity.ubicacion.nombreRegion}`}
                             </p>
-                            {activity.ubicacion.nombreLugar && activity.ubicacion.nombreComuna && (
+                            {activity.ubicacion?.nombreLugar && activity.ubicacion?.nombreComuna && (
                                 <a
                                     href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                                        `${activity.ubicacion.nombreLugar}, ${activity.ubicacion.direccion}, ${activity.ubicacion.nombreComuna}`
+                                        `${activity.ubicacion.nombreLugar}, ${activity.ubicacion.direccion || ''}, ${activity.ubicacion.nombreComuna}`
                                     )}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -206,20 +256,6 @@ export default function ActivityDetailModal({ activity, onClose, onEnrollSuccess
                             )}
                         </div>
                     </section>
-
-                    {/* Cupos */}
-                    {activity.cuposDisponibles && (
-                        <section className="adm-section">
-                            <div className="adm-section-header">
-                                <FaUsers />
-                                <h3>Cupos Disponibles</h3>
-                            </div>
-                            <div className="adm-cupos-card">
-                                <span className="adm-cupos-number">{activity.cuposDisponibles}</span>
-                                <span className="adm-cupos-label">lugares disponibles</span>
-                            </div>
-                        </section>
-                    )}
 
                     {/* Requisitos */}
                     {activity.requisitos && activity.requisitos.length > 0 && (
