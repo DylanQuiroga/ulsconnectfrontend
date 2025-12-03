@@ -8,7 +8,9 @@ import { FaUser, FaChartLine, FaSignOutAlt, FaUserCircle, FaChevronDown, FaClipb
 const Navbar: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+  const [mobileDropdownOpen, setMobileDropdownOpen] = useState<boolean>(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const mobileDropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   const { user, fetchUser, logout, isLoading } = useAuthStore();
@@ -24,21 +26,31 @@ const Navbar: React.FC = () => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
       }
+      if (mobileDropdownRef.current && !mobileDropdownRef.current.contains(event.target as Node)) {
+        setMobileDropdownOpen(false);
+      }
     };
 
-    if (dropdownOpen) {
+    if (dropdownOpen || mobileDropdownOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [dropdownOpen]);
+  }, [dropdownOpen, mobileDropdownOpen]);
 
   const handleLogout = async () => {
     setDropdownOpen(false);
+    setMobileDropdownOpen(false);
     await logout();
     navigate("/");
+  };
+
+  const handleMobileNavigation = (path: string) => {
+    setMobileDropdownOpen(false);
+    setMenuOpen(false);
+    navigate(path);
   };
 
   const isAdmin = user?.role === "admin" || user?.role === "staff";
@@ -59,11 +71,107 @@ const Navbar: React.FC = () => {
         </button>
 
         <ul className={`nav-links ${menuOpen ? "active" : ""}`}>
-          <li><Link to="/">Inicio</Link></li>
-          <li><Link to="/convocatorias_panel">Convocatorias</Link></li>
-          <li><Link to="/quienes-somos">Quiénes Somos</Link></li>
-          <li><Link to="/noticias">Noticias</Link></li>
-          <li><Link to="/contacto">Contacto</Link></li>
+          <li><Link to="/" onClick={() => setMenuOpen(false)}>Inicio</Link></li>
+          <li><Link to="/convocatorias_panel" onClick={() => setMenuOpen(false)}>Convocatorias</Link></li>
+          <li><Link to="/quienes-somos" onClick={() => setMenuOpen(false)}>Quiénes Somos</Link></li>
+          <li><Link to="/noticias" onClick={() => setMenuOpen(false)}>Noticias</Link></li>
+          <li><Link to="/contacto" onClick={() => setMenuOpen(false)}>Contacto</Link></li>
+
+          {/* Mobile user menu */}
+          <div className="mobile-buttons">
+            {user ? (
+              <div className="user-menu" ref={mobileDropdownRef}>
+                <button
+                  className="nav-user"
+                  onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
+                  aria-expanded={mobileDropdownOpen}
+                  aria-haspopup="true"
+                >
+                  <FaUserCircle />
+                  <span>{user.nombre || user.correoUniversitario}</span>
+                  <FaChevronDown className={`chevron ${mobileDropdownOpen ? "open" : ""}`} />
+                </button>
+
+                {mobileDropdownOpen && (
+                  <div className="dropdown-menu">
+                    <button
+                      className="dropdown-item"
+                      onClick={() => handleMobileNavigation("/perfil_voluntario")}
+                    >
+                      <FaUser />
+                      <span>Mi Perfil</span>
+                    </button>
+
+                    {isAdmin ? (
+                      <>
+                        <button
+                          className="dropdown-item"
+                          onClick={() => handleMobileNavigation("/admin/dashboard")}
+                        >
+                          <FaChartLine />
+                          <span>Panel de Administrador</span>
+                        </button>
+
+                        <button
+                          className="dropdown-item"
+                          onClick={() => handleMobileNavigation("/admin/activity-management")}
+                        >
+                          <FaCalendarAlt />
+                          <span>Gestión de Actividades</span>
+                        </button>
+
+                        <button
+                          className="dropdown-item"
+                          onClick={() => handleMobileNavigation("/admin/gestion-usuarios")}
+                        >
+                          <FaUsers />
+                          <span>Gestión de Usuarios</span>
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          className="dropdown-item"
+                          onClick={() => handleMobileNavigation("/volunteer/panel")}
+                        >
+                          <FaChartLine />
+                          <span>Panel de Voluntario</span>
+                        </button>
+
+                        <button
+                          className="dropdown-item"
+                          onClick={() => handleMobileNavigation("/mis-inscripciones")}
+                        >
+                          <FaClipboardList />
+                          <span>Mis Inscripciones</span>
+                        </button>
+                      </>
+                    )}
+
+                    <div className="dropdown-divider"></div>
+
+                    <button
+                      className="dropdown-item logout"
+                      onClick={() => { handleLogout(); setMenuOpen(false); }}
+                      disabled={isLoading}
+                    >
+                      <FaSignOutAlt />
+                      <span>{isLoading ? "Cerrando..." : "Cerrar sesión"}</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <>
+                <button className="btn-login" onClick={() => { navigate("/login"); setMenuOpen(false); }}>
+                  Inicio de sesión
+                </button>
+                <button className="btn-register" onClick={() => { navigate("/register"); setMenuOpen(false); }}>
+                  Registrarse
+                </button>
+              </>
+            )}
+          </div>
         </ul>
 
         <div className="nav-buttons">
