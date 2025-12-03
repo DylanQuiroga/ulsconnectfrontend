@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaTimes, FaCalendarAlt, FaMapMarkerAlt, FaClock, FaUsers, FaInfoCircle, FaCheckCircle } from "react-icons/fa";
 import "./css/ActivityDetailModal.css";
 import api from "../services/api";
@@ -43,6 +43,14 @@ export default function ActivityDetailModal({ activity, onClose, onEnrollSuccess
     const { user } = useAuthStore();
     const [enrolling, setEnrolling] = useState(false);
     const [isEnrolled, setIsEnrolled] = useState(activity.enrolled || false);
+
+    // Bloquear scroll del body cuando el modal está abierto
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, []);
 
     const formatDate = (dateString: string) => {
         if (!dateString) return "Por definir";
