@@ -3,6 +3,19 @@ import { FaTimes } from "react-icons/fa";
 import "./css/ActivityFormModal.css";
 import api from "../../services/api";
 
+// Hook para bloquear el scroll del body
+const useBodyScrollLock = (isLocked: boolean) => {
+    useEffect(() => {
+        if (isLocked) {
+            const originalStyle = window.getComputedStyle(document.body).overflow;
+            document.body.style.overflow = 'hidden';
+            return () => {
+                document.body.style.overflow = originalStyle;
+            };
+        }
+    }, [isLocked]);
+};
+
 interface Activity {
     _id?: string;
     titulo: string;
@@ -32,6 +45,9 @@ interface ActivityFormModalProps {
 }
 
 export default function ActivityFormModal({ activity, onClose, onSuccess }: ActivityFormModalProps) {
+    // Bloquear scroll del body cuando el modal está abierto
+    useBodyScrollLock(true);
+
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState<Activity>({
         titulo: "",

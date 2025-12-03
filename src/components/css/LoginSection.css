@@ -129,15 +129,135 @@
 
 /* Responsivo */
 @media (max-width: 768px) {
+  .login-section {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .login-overlay {
+    padding: 20px 16px;
+    align-items: flex-start;
+    padding-top: 60px;
+  }
+
   .login-content {
-    padding: 28px;
+    position: relative;
+    padding: 32px 24px;
+    max-width: 100%;
+    margin: 0 auto;
+    border-radius: 12px;
   }
 
   .login-title {
     font-size: 1.6rem;
+    margin-bottom: 8px;
   }
 
   .login-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+  }
+
+  .login-form {
+    gap: 14px;
+  }
+
+  .login-form input {
+    padding: 14px 12px;
+    font-size: 16px;
+    /* Previene zoom en iOS */
+    border-radius: 10px;
+  }
+
+  .login__btn {
+    padding: 14px 16px;
     font-size: 1rem;
+    border-radius: 10px;
+    margin-top: 4px;
+  }
+
+  .login-error {
+    margin-top: 8px;
+    padding: 10px;
+    font-size: 0.85rem;
+    border-radius: 8px;
+  }
+
+  .login-register {
+    margin-top: 20px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-overlay {
+    padding: 16px 12px;
+    padding-top: 40px;
+  }
+
+  .login-content {
+    padding: 28px 20px;
+    border-radius: 10px;
+  }
+
+  .login-title {
+    font-size: 1.4rem;
+  }
+
+  .login-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+  }
+
+  .login-form {
+    gap: 12px;
+  }
+
+  .login-form input {
+    padding: 12px 10px;
+    border-radius: 8px;
+  }
+
+  .login__btn {
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    border-radius: 8px;
+  }
+
+  .login-error {
+    padding: 8px;
+    font-size: 0.8rem;
+  }
+
+  .login-register {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .login-overlay {
+    padding: 12px 10px;
+    padding-top: 30px;
+  }
+
+  .login-content {
+    padding: 24px 16px;
+  }
+
+  .login-title {
+    font-size: 1.3rem;
+  }
+
+  .login-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .login-form input {
+    padding: 11px 10px;
+  }
+
+  .login__btn {
+    padding: 11px 12px;
+    font-size: 0.9rem;
   }
 }

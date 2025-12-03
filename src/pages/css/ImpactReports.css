@@ -176,3 +176,68 @@
     min-height: 400px;
     color: #64748b;
 }
+
+/* Responsive */
+@media (max-width: 992px) {
+    .impact-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .impact-container {
+        padding: 16px;
+    }
+
+    .impact-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .impact-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .impact-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .export-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .impact-stat-card {
+        padding: 20px;
+    }
+
+    .stat-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+
+    .stat-value {
+        font-size: 1.8rem;
+    }
+
+    .stat-label {
+        font-size: 0.85rem;
+    }
+
+    .impact-table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .impact-table {
+        min-width: 700px;
+    }
+
+    .impact-table th,
+    .impact-table td {
+        padding: 12px 10px;
+        font-size: 0.85rem;
+    }
+}

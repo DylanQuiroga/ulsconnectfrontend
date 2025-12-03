@@ -781,34 +781,107 @@
         padding: 20px 16px;
     }
 
+    .gu-header {
+        padding-bottom: 16px;
+        margin-bottom: 24px;
+    }
+
     .gu-title {
         font-size: 1.5rem;
     }
 
+    .gu-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .gu-stats {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
     .gu-stat-card {
-        padding: 12px 20px;
+        padding: 12px 16px;
         min-width: auto;
+        flex: 1;
+        min-width: 100px;
     }
 
     .gu-stat-number {
-        font-size: 2rem;
+        font-size: 1.8rem;
+    }
+
+    .gu-stat-label {
+        font-size: 0.75rem;
+    }
+
+    /* Tabs móviles */
+    .gu-tabs {
+        width: 100%;
+    }
+
+    .gu-tab {
+        flex: 1;
+        justify-content: center;
+        padding: 12px 8px;
+        font-size: 0.85rem;
+    }
+
+    /* Filtros móviles */
+    .gu-controls {
+        gap: 12px;
+    }
+
+    .gu-filters {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 8px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .gu-filter-btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+        white-space: nowrap;
+        flex-shrink: 0;
     }
 
     .gu-table-container {
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .gu-table {
         min-width: 800px;
     }
 
+    .gu-table th,
+    .gu-table td {
+        padding: 12px 10px;
+        font-size: 0.85rem;
+    }
+
+    .gu-actions {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .gu-btn-sm {
+        padding: 8px 10px;
+    }
+
     .gu-modal {
         max-height: 95vh;
         margin: 10px;
+        width: calc(100% - 20px);
     }
 
     .gu-modal-header {
         padding: 16px 20px;
+    }
+
+    .gu-modal-header h3 {
+        font-size: 1.2rem;
     }
 
     .gu-modal-body {
@@ -838,8 +911,13 @@
         gap: 12px;
     }
 
+    .gu-pagination-info {
+        text-align: center;
+    }
+
     .gu-pagination-controls {
         justify-content: center;
+        flex-wrap: wrap;
     }
 }
 

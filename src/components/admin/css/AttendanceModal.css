@@ -29,6 +29,7 @@
         transform: translateY(20px);
         opacity: 0;
     }
+
     to {
         transform: translateY(0);
         opacity: 1;
@@ -224,6 +225,69 @@
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .attendance-modal {
+        width: 100%;
+        max-width: 100%;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+
+    .attendance-modal-header {
+        padding: 1rem;
+        border-radius: 0;
+    }
+
+    .attendance-modal-header h2 {
+        font-size: 1.2rem;
+    }
+
+    .attendance-modal-content {
+        padding: 1rem;
+    }
+
+    .attendance-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .attendance-table th,
+    .attendance-table td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .status-controls {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .status-btn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.8rem;
+        justify-content: center;
+    }
+
+    .attendance-modal-footer {
+        padding: 1rem;
+        flex-direction: column;
+        border-radius: 0;
+    }
+
+    .cancel-btn,
+    .save-btn {
+        width: 100%;
+        justify-content: center;
+    }
 }
