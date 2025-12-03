@@ -107,7 +107,8 @@ export default function ActivityFormModal({ activity, onClose, onSuccess }: Acti
                 fechaFin: fechaFinValue,
                 fechaTermino: undefined, // evitar duplicados si backend no lo espera
                 ubicacion: ubicacionPayload,
-                cuposDisponibles: formData.cuposDisponibles ? Number(formData.cuposDisponibles) : null,
+                capacidad: formData.cuposDisponibles ? Number(formData.cuposDisponibles) : null,
+                cuposDisponibles: undefined, // evitar enviar campo incorrecto
             };
 
             if (activity?._id) {

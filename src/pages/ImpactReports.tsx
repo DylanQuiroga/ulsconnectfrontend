@@ -17,7 +17,7 @@ const ImpactReports: React.FC = () => {
         try {
             setLoading(true);
             const response = await adminService.getAllImpactReports();
-            
+
             if (response.success) {
                 setReports(response.reports || []);
                 if (response.totals) {
@@ -137,7 +137,7 @@ const ImpactReports: React.FC = () => {
                                                 {report.metricas.beneficiarios || 0}
                                             </span>
                                         </td>
-                                        <td>{report.metricas.voluntariosAsistieron} / {report.metricas.voluntariosConfirmados}</td>
+                                        <td>{report.metricas.voluntariosAsistieron} / {report.actividad?.capacidad ?? report.metricas.voluntariosConfirmados}</td>
                                     </tr>
                                 ))
                             ) : (
