@@ -58,6 +58,7 @@ export default function ActivityFormModal({ activity, onClose, onSuccess }: Acti
                 ...activity,
                 fechaInicio: activity.fechaInicio ? activity.fechaInicio.split('T')[0] : "",
                 fechaTermino: activity.fechaTermino ? activity.fechaTermino.split('T')[0] : "",
+                cuposDisponibles: (activity as any).capacidad ?? activity.cuposDisponibles,
             });
         }
     }, [activity]);
