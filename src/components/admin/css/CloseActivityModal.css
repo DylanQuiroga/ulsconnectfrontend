@@ -93,3 +93,24 @@
 .cam-textarea {
     resize: vertical;
 }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cam-modal {
+        max-width: calc(100% - 32px);
+        margin: 16px;
+    }
+
+    .cam-body {
+        padding: 20px 16px;
+    }
+
+    .cam-warning {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .cam-icon {
+        font-size: 1.5rem;
+    }
+}

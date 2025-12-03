@@ -270,52 +270,245 @@
 
 @media (max-width: 768px) {
   .volunteer-dashboard {
-    padding: 20px 16px;
+    padding: 16px 12px;
   }
 
   .dashboard-title {
-    font-size: 1.6rem;
-    padding: 20px;
+    font-size: 1.4rem;
+    padding: 16px;
+    margin-bottom: 24px;
+    text-align: center;
   }
 
-  .dashboard-section {
-    padding: 20px 16px;
+  .dashboard-stats {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .stat-card {
+    padding: 16px 10px;
+    border-radius: 12px;
+  }
+
+  .stat-card p {
+    font-size: 0.65rem;
+    margin-bottom: 8px;
+    letter-spacing: 0;
   }
 
   .stat-card h2 {
-    font-size: 2.2rem;
+    font-size: 1.6rem;
+  }
+
+  .dashboard-section {
+    padding: 20px 14px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+  }
+
+  .dashboard-section h2 {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
   }
 
   .initiative-list {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 14px;
+    margin-top: 16px;
+  }
+
+  .initiative-list>p {
+    padding: 24px 16px;
+    font-size: 0.9rem;
   }
 
   .initiative-card {
-    padding: 20px;
+    padding: 16px;
+    border-radius: 12px;
   }
 
-  /* Tabla responsive */
+  .initiative-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+  }
+
+  .initiative-card p {
+    font-size: 0.85rem;
+    margin: 6px 0;
+  }
+
+  /* Tabla responsive - Convertir a cards */
   .activity-table {
-    font-size: 0.8rem;
     display: block;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    border-radius: 0;
+    box-shadow: none;
   }
 
-  .activity-table th,
+  .activity-table thead {
+    display: none;
+  }
+
+  .activity-table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: transparent;
+  }
+
+  .activity-table tbody tr {
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #ffffff 0%, #fafbfd 100%);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(1, 96, 180, 0.08);
+    border: 1px solid rgba(1, 96, 180, 0.06);
+    gap: 8px;
+  }
+
+  .activity-table tbody tr:hover {
+    transform: none;
+  }
+
   .activity-table td {
-    padding: 10px 8px;
-    white-space: nowrap;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(1, 96, 180, 0.06);
+    font-size: 0.9rem;
+  }
+
+  .activity-table td:last-child {
+    border-bottom: none;
+  }
+
+  .activity-table td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: #0160b4;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+    margin-right: 12px;
+  }
+
+  .activity-table td:first-child {
+    font-weight: 600;
+    color: #333;
+    font-size: 1rem;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(254, 105, 112, 0.3);
+  }
+
+  .activity-table td:first-child::before {
+    display: none;
+  }
+
+  .btn-green {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 0.9rem;
   }
 }
 
 @media (max-width: 480px) {
+  .volunteer-dashboard {
+    padding: 12px 10px;
+  }
+
+  .dashboard-title {
+    font-size: 1.2rem;
+    padding: 14px 12px;
+    margin-bottom: 20px;
+  }
+
   .dashboard-stats {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
   }
 
   .stat-card {
-    min-width: 100%;
+    padding: 12px 8px;
+    border-radius: 10px;
+    min-width: unset;
+  }
+
+  .stat-card p {
+    font-size: 0.55rem;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+
+  .stat-card h2 {
+    font-size: 1.3rem;
+  }
+
+  .dashboard-section {
+    padding: 16px 12px;
+    border-radius: 10px;
+  }
+
+  .dashboard-section h2 {
+    font-size: 1.1rem;
+  }
+
+  .initiative-card {
+    padding: 14px;
+  }
+
+  .initiative-card h3 {
+    font-size: 1rem;
+  }
+
+  .initiative-card p {
+    font-size: 0.8rem;
+  }
+
+  .activity-table tbody tr {
+    padding: 14px;
+  }
+
+  .activity-table td {
+    font-size: 0.85rem;
+  }
+
+  .activity-table td:first-child {
+    font-size: 0.95rem;
+  }
+
+  .activity-table td::before {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .dashboard-title {
+    font-size: 1.1rem;
+    padding: 12px 10px;
+  }
+
+  .dashboard-stats {
+    gap: 6px;
+  }
+
+  .stat-card {
+    padding: 10px 6px;
+  }
+
+  .stat-card p {
+    font-size: 0.5rem;
+  }
+
+  .stat-card h2 {
+    font-size: 1.1rem;
+  }
+
+  .dashboard-section h2 {
+    font-size: 1rem;
   }
 }

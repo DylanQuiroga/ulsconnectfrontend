@@ -46,3 +46,23 @@
 .cm-info .modal-header {
     border-bottom-color: #bfdbfe;
 }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cm-modal {
+        max-width: calc(100% - 32px);
+        margin: 16px;
+    }
+
+    .cm-body {
+        padding: 20px;
+    }
+
+    .cm-body p {
+        font-size: 0.95rem;
+    }
+
+    .cm-icon {
+        font-size: 1.5rem;
+    }
+}

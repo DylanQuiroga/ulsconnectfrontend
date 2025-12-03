@@ -164,10 +164,10 @@ const VolunteerProfile: React.FC = () => {
           <tbody>
             {data.enrollments.map((enroll) => (
               <tr key={enroll.enrollmentId}>
-                <td>{enroll.activityTitle}</td>
-                <td>{enroll.enrollmentStatus}</td>
-                <td>{enroll.attendanceCount}</td>
-                <td>
+                <td data-label="Iniciativa">{enroll.activityTitle}</td>
+                <td data-label="Estado">{enroll.enrollmentStatus}</td>
+                <td data-label="Asistencias">{enroll.attendanceCount}</td>
+                <td data-label="Última Asistencia">
                   {enroll.lastAttendanceAt
                     ? new Date(enroll.lastAttendanceAt).toLocaleDateString()
                     : 'N/A'}

@@ -441,6 +441,12 @@
 }
 
 /* Responsive */
+@media (max-width: 992px) {
+    .am-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media (max-width: 768px) {
     .am-container {
         padding: 16px;
@@ -452,6 +458,19 @@
         gap: 16px;
     }
 
+    .am-header-content h1 {
+        font-size: 1.5rem;
+    }
+
+    .am-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .am-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
     .am-filters {
         flex-direction: column;
     }
@@ -460,11 +479,48 @@
         min-width: 100%;
     }
 
+    .am-filter-select {
+        width: 100%;
+    }
+
+    .am-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .am-stat-card {
+        padding: 16px;
+    }
+
+    .am-stat-value {
+        font-size: 1.5rem;
+    }
+
+    .am-stat-label {
+        font-size: 0.8rem;
+    }
+
     .am-table-container {
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .am-table {
         min-width: 800px;
+    }
+
+    /* Vista de tarjetas para móvil */
+    .am-actions {
+        flex-wrap: wrap;
+    }
+
+    .am-action-btn {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .am-stats {
+        grid-template-columns: 1fr;
     }
 }

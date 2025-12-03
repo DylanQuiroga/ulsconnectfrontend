@@ -248,7 +248,7 @@ export default function MisInscripciones() {
             {filteredEnrollments.length === 0 ? (
                 <div className="mi-empty">
                     <p>No tienes inscripciones {filter === "todas" ? "" : filter === "activas" ? "próximas" : "pasadas"}.</p>
-                    <a href="/voluntario/convocatorias" className="mi-btn mi-btn-primary">
+                    <a href="/convocatorias_panel" className="mi-btn mi-btn-primary">
                         Explorar Convocatorias
                     </a>
                 </div>

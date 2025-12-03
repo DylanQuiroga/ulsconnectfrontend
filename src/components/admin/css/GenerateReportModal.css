@@ -146,3 +146,36 @@
         transform: rotate(360deg);
     }
 }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .grm-modal {
+        max-width: calc(100% - 32px);
+        width: calc(100% - 32px);
+        margin: 16px;
+    }
+
+    .grm-modal .modal-body {
+        padding: 16px;
+        max-height: 70vh;
+    }
+
+    .grm-body {
+        padding: 16px;
+    }
+
+    .grm-info {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .grm-field label {
+        font-size: 0.9rem;
+    }
+
+    .grm-input,
+    .grm-textarea {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+}
