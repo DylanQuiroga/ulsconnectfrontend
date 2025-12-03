@@ -5,16 +5,15 @@
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
-
+    background: white;
 }
 
 .afm-form {
     display: flex;
     flex-direction: column;
     gap: 32px;
-    /* ✅ Más espacio entre secciones */
     padding: 24px;
-    /* ✅ Padding interno */
+    background: white;
 }
 
 .afm-section {
